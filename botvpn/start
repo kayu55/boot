@@ -60,8 +60,8 @@ setup_bot() {
     rm -rf app.js
     wget kayu55/botvpn/app.js
     cd assets
-    wget https://raw.githubusercontent.com/kayu55/botvpn/main/qris.png
-    wget https://raw.githubusercontent.com/kayu55/botvpn/main/topup_success.png
+    wget https://raw.githubusercontent.com/kayu55/boot/main/botvpn/qris.png
+    wget https://raw.githubusercontent.com/kayu55/boot/main/botvpn/topup_success.png
     cd 
     cd /root/BotVPN2
     npm install sqlite3 express crypto telegraf axios dotenv canvas node-fetch form-data
