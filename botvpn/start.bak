@@ -58,7 +58,7 @@ setup_bot() {
     cd /root/BotVPN2
     mkdir -p assets
     rm -rf app.js
-    wget kayu55/botvpn/app.js
+    wget https://raw.githubusercontent.com/kayu55/botvpn/main/app.js
     cd assets
     wget kayu55/botvpn/qris.png
     cd 
