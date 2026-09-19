@@ -48,5 +48,3 @@ apt install -y curl && \
 curl -L -k -sS https://raw.githubusercontent.com/kayu55/boot/main/botvpn/start -o start && \
 bash start sellvpn && \
 [ $? -eq 0 ] && rm -f start
-
-https://github.com/kayu55/boot
