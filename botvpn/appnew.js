@@ -1013,7 +1013,7 @@ async function sendMainMenu(ctx) {
     else statusText = `👤 <b>ꜱᴛᴀᴛᴜꜱ:</b> <code>Member</code>`;
 
     const messageText = `
-<blockquote>ꜱᴇʟᴀᴍᴀᴛ ᴅᴀᴛᴀɴɢ ᴅɪ <b>${NAMA_STORE}</b> 💎
+<blockquote>ꜱᴇʟᴀᴍᴀᴛ ᴅᴀᴛᴀɴɢ 💎
 ɴɪᴋᴍᴀᴛɪ ᴘᴇɴɢᴀʟᴀᴍᴀɴ ᴍᴇᴍʙᴇʟɪ ᴀᴋᴜɴ ᴠᴘɴ ᴛᴇʀᴄᴇᴘᴀᴛ, ᴀᴍᴀɴ, ᴅᴀɴ ᴀᴜᴛᴏᴍᴀᴛɪꜱ 🚀</blockquote>
 
 🧭 <b>ɪɴꜰᴏʀᴍᴀꜱɪ ᴀᴋᴜɴ</b>
@@ -1036,7 +1036,7 @@ async function sendMainMenu(ctx) {
 <a href="https://t.me/${adminUsername}">╰📨 @${adminUsername}</a>
 
 📦━━━━━━━━━━━━━━━━━━━━━📦
-     <code>🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ ${NAMA_STORE} ɴᴇᴛᴡᴏʀᴋ</code>
+     <code>🌐 Di Kelola Oleh Wisanggeni </code>
 📦━━━━━━━━━━━━━━━━━━━━━📦
 `;
 
