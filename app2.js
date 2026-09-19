@@ -1669,6 +1669,7 @@ bot.command('helpadmin', async (ctx) => {
 26. /setdiskonreseller - Mengatur persentase diskon untuk reseller.
 27. /resetdiskonreseller - Mereset persentase diskon reseller ke 0%.
 28. /helpadmin - Menampilkan daftar perintah admin.
+29. /paymet - Mengubah metode pembayaran (GOPAY, ORKUT, atau SHOPEEPAY).
 
 📝 *Catatan:* Gunakan perintah ini dengan format yang benar untuk menghindari kesalahan.
 `;

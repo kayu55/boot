@@ -97,7 +97,7 @@ const SAWERIA_EMAIL = vars.SAWERIA_EMAIL;
 const BOT_TOKEN = vars.BOT_TOKEN;
 const port = vars.PORT || 50123;
 const ADMIN = vars.USER_ID;
-const NAMA_STORE = vars.NAMA_STORE || 'XWANSTORE';
+const NAMA_STORE = vars.NAMA_STORE || 'ARYAVPN';
 const DATA_QRIS = vars.DATA_QRIS;
 const DATA_QRIS_GOPAY = vars.DATA_QRIS_GOPAY;
 const MERCHANT_ID = vars.MERCHANT_ID;
@@ -1013,7 +1013,7 @@ async function sendMainMenu(ctx) {
     else statusText = `👤 <b>ꜱᴛᴀᴛᴜꜱ:</b> <code>Member</code>`;
 
     const messageText = `
-<blockquote>ꜱᴇʟᴀᴍᴀᴛ ᴅᴀᴛᴀɴɢ ᴅɪ <b>${NAMA_STORE}</b> 💎
+<blockquote>ꜱᴇʟᴀᴍᴀᴛ ᴅᴀᴛᴀɴɢ 💎
 ɴɪᴋᴍᴀᴛɪ ᴘᴇɴɢᴀʟᴀᴍᴀɴ ᴍᴇᴍʙᴇʟɪ ᴀᴋᴜɴ ᴠᴘɴ ᴛᴇʀᴄᴇᴘᴀᴛ, ᴀᴍᴀɴ, ᴅᴀɴ ᴀᴜᴛᴏᴍᴀᴛɪꜱ 🚀</blockquote>
 
 🧭 <b>ɪɴꜰᴏʀᴍᴀꜱɪ ᴀᴋᴜɴ</b>
@@ -1036,7 +1036,7 @@ async function sendMainMenu(ctx) {
 <a href="https://t.me/${adminUsername}">╰📨 @${adminUsername}</a>
 
 📦━━━━━━━━━━━━━━━━━━━━━📦
-     <code>🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ ${NAMA_STORE} ɴᴇᴛᴡᴏʀᴋ</code>
+     <code>🌐 Di Kelola Oleh Wisanggeni </code>
 📦━━━━━━━━━━━━━━━━━━━━━📦
 `;
 
@@ -1718,6 +1718,7 @@ bot.command('helpadmin', async (ctx) => {
 26. /setdiskonreseller - Mengatur persentase diskon untuk reseller.
 27. /resetdiskonreseller - Mereset persentase diskon reseller ke 0%.
 28. /helpadmin - Menampilkan daftar perintah admin.
+29. /paymet - Mengubah metode pembayaran (GOPAY, ORKUT, atau SHOPEEPAY).
 
 📝 *Catatan:* Gunakan perintah ini dengan format yang benar untuk menghindari kesalahan.
 `;
