@@ -3725,16 +3725,6 @@ if (bolehLihatTrial) {
   ]);
 }
 
-if (tombolSewaScriptAktif) {
-  finalKeyboard.push([
-    {
-      text: '🛒 Sewa Script',
-      callback_data: 'service_sewascript',
-      style: 'primary'
-    }
-  ]);
-}
-
 finalKeyboard.push([
   {
     text: '📜 Riwayat Transaksi',
