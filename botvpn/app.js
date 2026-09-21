@@ -117,9 +117,6 @@ if (process.env.NODE_ENV !== 'production') {
 const {
   trialssh,
   trialvmess,
-  trialvless,
-  trialtrojan,
-  trialshadowsocks
 } = require("./modules/create");
 
 
@@ -127,9 +124,6 @@ const {
 const {
   createssh,
   createvmess,
-  createvless,
-  createtrojan,
-  createshadowsocks
 } = require('./modules/create');
 
 
@@ -140,9 +134,6 @@ const {
 const {
   renewssh,
   renewvmess,
-  renewvless,
-  renewtrojan,
-  renewshadowsocks
 } = require('./modules/renew');
 
 
@@ -198,7 +189,7 @@ const groupId = vars.GROUP_CHAT_ID;
 
 
 // ---------- Store ----------
-const NAMA_STORE = vars.NAMA_STORE || 'XWANSTORE';
+const NAMA_STORE = vars.NAMA_STORE || 'ARYABLITAR';
 
 
 // ---------- Admin ----------
@@ -1140,303 +1131,6 @@ function parseVMessLink(link) {
     }
 }
 
-
-// ============================================================
-// 🔗 PARSE VLESS LINK
-// ============================================================
-
-function parseVLessLink(link) {
-
-    try {
-
-        console.log(
-            '🔗 Parsing VLESS link:',
-            link
-        );
-
-
-        // ========================================================
-        // 🌐 PARSE URL
-        // ========================================================
-
-        const url =
-            new URL(link);
-
-
-        const params =
-            new URLSearchParams(
-                url.search
-            );
-
-
-        // ========================================================
-        // 🔄 BUILD VLESS CONFIGURATION
-        // ========================================================
-
-        const config = {
-
-            id:
-                url.username ||
-                "66ce30e3-4c14-42f6-b708-2f4dd60a161f",
-
-
-            add:
-                url.hostname ||
-                "server.example.com",
-
-
-            port:
-                parseInt(url.port) ||
-                443,
-
-
-            type:
-                'vless',
-
-
-            ps:
-                url.hash
-                    ? decodeURIComponent(
-                        url.hash.substring(1)
-                    )
-                    : 'vless-proxy',
-
-
-            tls:
-                params.get('security') === 'tls' ||
-                params.get('encryption') === 'tls'
-                    ? 'tls'
-                    : 'none',
-
-
-            sni:
-                params.get('sni') ||
-                params.get('host') ||
-                url.hostname,
-
-
-            host:
-                params.get('host') ||
-                params.get('sni') ||
-                url.hostname,
-
-
-            net:
-                params.get('type') ||
-                params.get('network') ||
-                'tcp',
-
-
-            path:
-                params.get('path') ||
-                '/',
-
-
-            aid:
-                0,
-
-
-            cipher:
-                'auto',
-
-
-            udp:
-                true,
-
-
-            skipCertVerify:
-                true,
-
-
-            flow:
-                params.get('flow') ||
-                ''
-
-        };
-
-
-        // ========================================================
-        // ✅ VLESS PARSING SUCCESS
-        // ========================================================
-
-        console.log(
-            '✅ VLESS config parsed:',
-            config
-        );
-
-
-        return config;
-
-
-    } catch (error) {
-
-        // ========================================================
-        // ❌ VLESS PARSING ERROR
-        // ========================================================
-
-        console.error(
-            '❌ VLESS parsing error:',
-            error
-        );
-
-
-        throw new Error(
-            'Format link VLESS tidak valid: ' +
-            error.message
-        );
-
-    }
-}
-
-
-// ============================================================
-// 🔗 PARSE TROJAN LINK
-// ============================================================
-
-function parseTrojanLink(link) {
-
-    try {
-
-        console.log(
-            '🔗 Parsing Trojan link:',
-            link
-        );
-
-
-        // ========================================================
-        // 🌐 PARSE URL
-        // ========================================================
-
-        const url =
-            new URL(link);
-
-
-        const params =
-            new URLSearchParams(
-                url.search
-            );
-
-
-        // ========================================================
-        // 📍 DECODE PATH
-        // ========================================================
-
-        let path =
-            params.get('path') ||
-            '/';
-
-
-        try {
-
-            path =
-                decodeURIComponent(path);
-
-        } catch (e) {
-
-            // Jika decode gagal,
-            // gunakan path asli
-
-        }
-
-
-        // ========================================================
-        // 🔄 BUILD TROJAN CONFIGURATION
-        // ========================================================
-
-        const config = {
-
-            password:
-                url.username ||
-                "password",
-
-
-            server:
-                url.hostname ||
-                "server.example.com",
-
-
-            port:
-                parseInt(url.port) ||
-                443,
-
-
-            sni:
-                params.get('sni') ||
-                params.get('host') ||
-                url.hostname,
-
-
-            allowInsecure:
-                params.get('allowInsecure') === '1' ||
-                true,
-
-
-            name:
-                url.hash
-                    ? decodeURIComponent(
-                        url.hash.substring(1)
-                    )
-                    : 'trojan-proxy',
-
-
-            type:
-                'trojan',
-
-
-            network:
-                params.get('type') ||
-                params.get('network') ||
-                'tcp',
-
-
-            path:
-                path,
-
-
-            host:
-                params.get('host') ||
-                params.get('sni') ||
-                url.hostname,
-
-
-            udp:
-                true
-
-        };
-
-
-        // ========================================================
-        // ✅ TROJAN PARSING SUCCESS
-        // ========================================================
-
-        console.log(
-            '✅ Trojan config parsed:',
-            config
-        );
-
-
-        return config;
-
-
-    } catch (error) {
-
-        // ========================================================
-        // ❌ TROJAN PARSING ERROR
-        // ========================================================
-
-        console.error(
-            '❌ Trojan parsing error:',
-            error
-        );
-
-
-        throw new Error(
-            'Format link Trojan tidak valid: ' +
-            error.message
-        );
-
-    }
-}
 // ============================================================
 // 🔍 DETECT CONFIGURATION TYPE
 // ============================================================
@@ -1463,42 +1157,6 @@ function detectConfigType(link) {
             config: parseVMessLink(link)
         };
     }
-
-
-    // ========================================================
-    // 🛡️ DETECT VLESS
-    // ========================================================
-
-    if (link.startsWith("vless://")) {
-
-        return {
-            type: "vless",
-            config: parseVLessLink(link)
-        };
-    }
-
-
-    // ========================================================
-    // 🐎 DETECT TROJAN
-    // ========================================================
-
-    if (link.startsWith("trojan://")) {
-
-        return {
-            type: "trojan",
-            config: parseTrojanLink(link)
-        };
-    }
-
-
-    // ========================================================
-    // ❌ UNSUPPORTED CONFIGURATION
-    // ========================================================
-
-    throw new Error(
-        "Format config tidak didukung."
-    );
-}
 
 
 // ============================================================
@@ -3686,7 +3344,7 @@ async function sendMainMenu(ctx) {
     else statusText = `👤 <b>ꜱᴛᴀᴛᴜꜱ:</b> <code>Member</code>`;
 
     const messageText = `
-<blockquote>ꜱᴇʟᴀᴍᴀᴛ ᴅᴀᴛᴀɴɢ 💎
+<blockquote>ꜱᴇʟᴀᴍᴀᴛ ᴅᴀᴛᴀɴɢ ᴅɪ <b>${NAMA_STORE}</b> 💎
 ɴɪᴋᴍᴀᴛɪ ᴘᴇɴɢᴀʟᴀᴍᴀɴ ᴍᴇᴍʙᴇʟɪ ᴀᴋᴜɴ ᴠᴘɴ ᴛᴇʀᴄᴇᴘᴀᴛ, ᴀᴍᴀɴ, ᴅᴀɴ ᴀᴜᴛᴏᴍᴀᴛɪꜱ 🚀</blockquote>
 
 🧭 <b>ɪɴꜰᴏʀᴍᴀꜱɪ ᴀᴋᴜɴ</b>
@@ -3709,7 +3367,7 @@ async function sendMainMenu(ctx) {
 <a href="https://t.me/${adminUsername}">╰📨 @${adminUsername}</a>
 
 📦━━━━━━━━━━━━━━━━━━━━━📦
-     <code>🌐 Di Kelola Oleh Wisanggeni </code>
+     <code>🌐 UPLOAD BY ARYA BLITAR </code>
 📦━━━━━━━━━━━━━━━━━━━━━📦
 `;
 
@@ -4264,162 +3922,6 @@ https://${vmessData.domain}:81/vmess-${vmessData.username}.txt
 
 }
 
-
-
-case "vless": {
-
-    const vlessData = data;
-    const cloudfront = server.cloudfront || "-";
-
-    const msg = `
-╭━━━━━━━━━━━━━━━━━━━━━━╮
-      🛡 *ᴠʟᴇꜱꜱ ᴀᴄᴄᴏᴜɴᴛ*
-╰━━━━━━━━━━━━━━━━━━━━━━╯
-
-┌〔 📄 *ᴀᴄᴄᴏᴜɴᴛ ɪɴꜰᴏ* 〕
-├ 👤 ᴜꜱᴇʀɴᴀᴍᴇ : \`${vlessData.username}\`
-├ 🆔 ᴜᴜɪᴅ      : \`${vlessData.uuid}\`
-├ 📅 ᴇxᴘɪʀᴇᴅ   : \`${vlessData.expired || account.expired_at}\`
-├ 📦 Qᴜᴏᴛᴀ     : \`${vlessData.quota === '0 GB' ? 'Unlimited' : vlessData.quota}\`
-├ 🌐 ɪᴘ ʟɪᴍɪᴛ  : \`${vlessData.ip_limit === '0' ? 'Unlimited' : vlessData.ip_limit} IP\`
-└ 🟢 ꜱᴛᴀᴛᴜꜱ    : \`${account.status.toUpperCase()}\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-┌〔 🌍 *ꜱᴇʀᴠᴇʀ* 〕
-├ 🌐 ᴅᴏᴍᴀɪɴ      : \`${vlessData.domain}\`
-├ ☁️ ᴄʟᴏᴜᴅꜰʀᴏɴᴛ  : \`${server.cloudfront || "-"}\`
-├ 🔐 ᴛʟꜱ ᴘᴏʀᴛ    : \`443,8443\`
-├ 🌍 ʜᴛᴛᴘ ᴘᴏʀᴛ   : \`80,8080,2086,8880\`
-├ 📂 ᴘᴀᴛʜ        : \`/vless\`
-└ 🚀 ɢʀᴘᴄ ᴘᴀᴛʜ   : \`vless-grpc\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-🔗 *ᴜʀʟ ᴛʟꜱ*
-
-\`\`\`
-${vlessData.vless_tls_link}
-\`\`\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-🔗 *ᴜʀʟ ʜᴛᴛᴘ*
-
-\`\`\`
-${vlessData.vless_nontls_link}
-\`\`\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-🔗 *ᴜʀʟ ɢʀᴘᴄ*
-
-\`\`\`
-${vlessData.vless_grpc_link}
-\`\`\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
-
-https://${vlessData.domain}:81/vless-${vlessData.username}.txt
-`;
-
-    return ctx.reply(msg, {
-        parse_mode: "Markdown",
-        reply_markup: {
-            inline_keyboard: [
-                [
-                    {
-                        text: "🔙 Kembali",
-                        callback_data: "menu_akun_saya"
-                    }
-                ]
-            ]
-        }
-    });
-
-}
-
-
-case "trojan": {
-
-    const trojanData = data;
-    const cloudfront = server.cloudfront || "-";
-
-    const msg = `
-╭━━━━━━━━━━━━━━━━━━━━━━╮
-     🐎 *ᴛʀᴏᴊᴀɴ ᴀᴄᴄᴏᴜɴᴛ*
-╰━━━━━━━━━━━━━━━━━━━━━━╯
-
-┌〔 📄 *ᴀᴄᴄᴏᴜɴᴛ ɪɴꜰᴏ* 〕
-├ 👤 ᴜꜱᴇʀɴᴀᴍᴇ : \`${trojanData.username}\`
-├ 🆔 ᴜᴜɪᴅ      : \`${trojanData.uuid}\`
-├ 📅 ᴇxᴘɪʀᴇᴅ   : \`${trojanData.expired || account.expired_at}\`
-├ 📦 Qᴜᴏᴛᴀ     : \`${trojanData.quota === '0 GB' ? 'Unlimited' : trojanData.quota}\`
-├ 🌐 ɪᴘ ʟɪᴍɪᴛ  : \`${trojanData.ip_limit === '0' ? 'Unlimited' : trojanData.ip_limit} IP\`
-└ 🟢 ꜱᴛᴀᴛᴜꜱ    : \`${account.status.toUpperCase()}\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-┌〔 🌍 *ꜱᴇʀᴠᴇʀ* 〕
-├ 🌐 ᴅᴏᴍᴀɪɴ      : \`${trojanData.domain}\`
-├ ☁️ ᴄʟᴏᴜᴅꜰʀᴏɴᴛ  : \`${server.cloudfront || "-"}\`
-├ 🔐 ᴛʟꜱ ᴘᴏʀᴛ    : \`443,8443\`
-├ 🌍 ʜᴛᴛᴘ ᴘᴏʀᴛ   : \`80,8080,2086,8880\`
-├ 📂 ᴘᴀᴛʜ        : \`/trojan-ws\`
-└ 🚀 ɢʀᴘᴄ ᴘᴀᴛʜ   : \`trojan-grpc\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-🔗 *ᴜʀʟ ᴛʟꜱ*
-
-\`\`\`
-${trojanData.trojan_tls_link}
-\`\`\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-🔗 *ᴜʀʟ ɢʀᴘᴄ*
-
-\`\`\`
-${trojanData.trojan_grpc_link}
-\`\`\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
-
-https://${trojanData.domain}:81/trojan-${trojanData.username}.txt
-`;
-
-    return ctx.reply(msg, {
-        parse_mode: "Markdown",
-        reply_markup: {
-            inline_keyboard: [
-                [
-                    {
-                        text: "🔙 Kembali",
-                        callback_data: "menu_akun_saya"
-                    }
-                ]
-            ]
-        }
-    });
-
-}
-
-
-
-case "shadowsocks": {
-
-    const shadowsocksData = data;
-
-    // Tempel template SHADOWSOCKS di sini
-    return ctx.reply("🚧 Menu Shadowsocks belum dibuat.");
-
-}
-
 default:
     return ctx.reply("❌ Tipe akun tidak dikenali.");
         } // tutup switch
@@ -4448,9 +3950,6 @@ bot.action('menu_trial', async (ctx) => {
 ⚡ <b>Daftar Trial:</b>
 • SSH
 • VMESS
-• VLESS
-• TROJAN
-• SHADOWSOCKS
 `;
 
 const keyboard = [
@@ -4468,25 +3967,7 @@ const keyboard = [
   ],
   [
     {
-      text: '🛡️ VLESS Trial',
-      callback_data: 'trial_vless',
-      style: 'primary'
-    },
-    {
-      text: '🔥 TROJAN Trial',
-      callback_data: 'trial_trojan',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🌙 SHADOWSOCKS Trial',
-      callback_data: 'trial_shadowsocks',
-      style: 'primary'
-    }
-  ],
-  [
-    {
+
       text: '🔙 Kembali ke Menu VPN',
       callback_data: 'menu_vpn',
       style: 'danger'
@@ -4528,9 +4009,6 @@ bot.action('menu_create', async (ctx) => {
 🚀 <b>Tersedia:</b>
 • SSH
 • VMESS
-• VLESS
-• TROJAN
-• SHADOWSOCKS
 `;
 
 const keyboard = [
@@ -4548,25 +4026,7 @@ const keyboard = [
   ],
   [
     {
-      text: '🛡️ VLESS',
-      callback_data: 'create_vless',
-      style: 'primary'
-    },
-    {
-      text: '🔥 TROJAN',
-      callback_data: 'create_trojan',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🌙 SHADOWSOCKS',
-      callback_data: 'create_shadowsocks',
-      style: 'primary'
-    }
-  ],
-  [
-    {
+
       text: '🔙 Kembali ke Menu VPN',
       callback_data: 'menu_vpn',
       style: 'danger'
@@ -4608,9 +4068,6 @@ bot.action('menu_renew', async (ctx) => {
 🔄 <b>Tersedia:</b>
 • SSH
 • VMESS
-• VLESS
-• TROJAN
-• SHADOWSOCKS
 `;
 
 const keyboard = [
@@ -4628,25 +4085,7 @@ const keyboard = [
   ],
   [
     {
-      text: '🛡️ VLESS',
-      callback_data: 'renew_vless',
-      style: 'primary'
-    },
-    {
-      text: '🔥 TROJAN',
-      callback_data: 'renew_trojan',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🌙 SHADOWSOCKS',
-      callback_data: 'renew_shadowsocks',
-      style: 'primary'
-    }
-  ],
-  [
-    {
+
       text: '🔙 Kembali ke Menu VPN',
       callback_data: 'menu_vpn',
       style: 'danger'
@@ -5054,7 +4493,6 @@ bot.command('helpadmin', async (ctx) => {
 26. /setdiskonreseller - Mengatur persentase diskon untuk reseller.
 27. /resetdiskonreseller - Mereset persentase diskon reseller ke 0%.
 28. /helpadmin - Menampilkan daftar perintah admin.
-29. /paymet - Mengubah metode pembayaran (GOPAY, ORKUT, atau SHOPEEPAY).
 
 📝 *Catatan:* Gunakan perintah ini dengan format yang benar untuk menghindari kesalahan.
 `;
@@ -6934,23 +6372,6 @@ async function handleServiceAction(ctx, action) {
           text: '✨ Vmess',
           callback_data: 'create_vmess',
           style: 'primary'
-        },
-        {
-          text: '✨ Vless',
-          callback_data: 'create_vless',
-          style: 'primary'
-        }
-      ],
-      [
-        {
-          text: '✨ Trojan',
-          callback_data: 'create_trojan',
-          style: 'primary'
-        },
-        {
-          text: '✨ Shadowsocks',
-          callback_data: 'create_shadowsocks',
-          style: 'primary'
         }
       ],
       [
@@ -6998,23 +6419,6 @@ async function handleServiceAction(ctx, action) {
         {
           text: '♻️ Vmess',
           callback_data: 'renew_vmess',
-          style: 'success'
-        },
-        {
-          text: '♻️ Vless',
-          callback_data: 'renew_vless',
-          style: 'success'
-        }
-      ],
-      [
-        {
-          text: '♻️ Trojan',
-          callback_data: 'renew_trojan',
-          style: 'success'
-        },
-        {
-          text: '♻️ Shadowsocks',
-          callback_data: 'renew_shadowsocks',
           style: 'success'
         }
       ],
@@ -7658,20 +7062,6 @@ bot.action('trial_vmess', async (ctx) => {
   await startSelectServer(ctx, 'trial', 'vmess');
 });
 
-bot.action('trial_vless', async (ctx) => {
-  if (!ctx || !ctx.match) { return ctx.reply('❌ *GAGAL!* Terjadi kesalahan saat memproses permintaan Anda. Silahkan coba lagi nanti.', { parse_mode: 'Markdown' }); }
-  await startSelectServer(ctx, 'trial', 'vless');
-});
-
-bot.action('trial_trojan', async (ctx) => {
-  if (!ctx || !ctx.match) { return ctx.reply('❌ *GAGAL!* Terjadi kesalahan saat memproses permintaan Anda. Silahkan coba lagi nanti.', { parse_mode: 'Markdown' }); }
-  await startSelectServer(ctx, 'trial', 'trojan');
-});
-
-bot.action('trial_shadowsocks', async (ctx) => {
-  if (!ctx || !ctx.match) { return ctx.reply('❌ *GAGAL!* Terjadi kesalahan saat memproses permintaan Anda. Silahkan coba lagi nanti.', { parse_mode: 'Markdown' }); }
-  await startSelectServer(ctx, 'trial', 'shadowsocks');
-});
 
 bot.action('service_trial', async (ctx) => {
   await ctx.answerCbQuery().catch(() => {});
@@ -7740,26 +7130,6 @@ bot.action('create_vmess', async (ctx) => {
   await startSelectServer(ctx, 'create', 'vmess');
 });
 
-bot.action('create_vless', async (ctx) => {
-  if (!ctx || !ctx.match) {
-    return ctx.reply('❌ *GAGAL!* Terjadi kesalahan saat memproses permintaan Anda. Silahkan coba lagi nanti.', { parse_mode: 'Markdown' });
-  }
-  await startSelectServer(ctx, 'create', 'vless');
-});
-
-bot.action('create_trojan', async (ctx) => {
-  if (!ctx || !ctx.match) {
-    return ctx.reply('❌ *GAGAL!* Terjadi kesalahan saat memproses permintaan Anda. Silahkan coba lagi nanti.', { parse_mode: 'Markdown' });
-  }
-  await startSelectServer(ctx, 'create', 'trojan');
-});
-
-bot.action('create_shadowsocks', async (ctx) => {
-  if (!ctx || !ctx.match) {
-    return ctx.reply('❌ *GAGAL!* Terjadi kesalahan saat memproses permintaan Anda. Silahkan coba lagi nanti.', { parse_mode: 'Markdown' });
-  }
-  await startSelectServer(ctx, 'create', 'shadowsocks');
-});
 
 bot.action('create_ssh', async (ctx) => {
   if (!ctx || !ctx.match) {
@@ -8430,7 +7800,7 @@ bot.action(/navigate_(\w+)_(\w+)_(\d+)/, async (ctx) => {
   await startSelectServer(ctx, action, type, parseInt(page, 10));
 });
 
-bot.action(/^(create|renew|trial)_username_(vmess|vless|trojan|shadowsocks|ssh)_(.+)$/, async (ctx) => {
+bot.action(/^(create|renew|trial)_username_(vmess|ssh)_(.+)$/, async (ctx) => {
   await ctx.telegram.answerCbQuery(ctx.callbackQuery.id);
 
   const match = ctx.match || [];
@@ -8547,18 +7917,6 @@ async function handleTrial(ctx, type, serverId) {
     switch (type) {
       case 'vmess':
         result = await trialvmess(username, exp, quota, iplimit, serverId);
-        break;
-
-      case 'vless':
-        result = await trialvless(username, exp, quota, iplimit, serverId);
-        break;
-
-      case 'trojan':
-        result = await trialtrojan(username, exp, quota, iplimit, serverId);
-        break;
-
-      case 'shadowsocks':
-        result = await trialshadowsocks(username, exp, quota, iplimit, serverId);
         break;
 
       case 'ssh':
@@ -9248,17 +8606,6 @@ try {
                 result = await createvmess(state.username, exp, server.quota, server.iplimit, state.serverId);
                 break;
 
-            case 'vless':
-                result = await createvless(state.username, exp, server.quota, server.iplimit, state.serverId);
-                break;
-
-            case 'trojan':
-                result = await createtrojan(state.username, exp, server.quota, server.iplimit, state.serverId);
-                break;
-
-            case 'shadowsocks':
-                result = await createshadowsocks(state.username, exp, server.quota, server.iplimit, state.serverId);
-                break;
 
             case 'ssh':
                 result = await createssh(state.username, state.password, exp, server.iplimit, state.serverId);
@@ -9297,18 +8644,6 @@ if (state.action === "create" && result?.config) {
 
             case 'vmess':
                 msg = await renewvmess(state.username, exp, server.quota, server.iplimit, state.serverId);
-                break;
-
-            case 'vless':
-                msg = await renewvless(state.username, exp, server.quota, server.iplimit, state.serverId);
-                break;
-
-            case 'trojan':
-                msg = await renewtrojan(state.username, exp, server.quota, server.iplimit, state.serverId);
-                break;
-
-            case 'shadowsocks':
-                msg = await renewshadowsocks(state.username, exp, server.quota, server.iplimit, state.serverId);
                 break;
 
             case 'ssh':
@@ -9372,9 +8707,6 @@ if (msg && !String(msg).includes('❌')) {
         const path   = msg.match(/Path\s*: `([^`]+)`/i)?.[1];
 
         const vmess  = msg.match(/vmess:\/\/[^\s`]+/)?.[0];
-        const vless  = msg.match(/vless:\/\/[^\s`]+/)?.[0];
-        const trojan = msg.match(/trojan:\/\/[^\s`]+/)?.[0];
-        const ss     = msg.match(/ss:\/\/[^\s`]+/)?.[0];
 
         configData = {
             username,
@@ -9385,9 +8717,6 @@ if (msg && !String(msg).includes('❌')) {
             host,
             path,
             vmess,
-            vless,
-            trojan,
-            shadowsocks: ss
         };
 
         if (username) {
