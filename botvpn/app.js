@@ -3709,7 +3709,7 @@ async function sendMainMenu(ctx) {
 <a href="https://t.me/${adminUsername}">╰📨 @${adminUsername}</a>
 
 📦━━━━━━━━━━━━━━━━━━━━━📦
-     <code>🌐 UPLOAD ARYA BLITAR </code>
+     <code>  🌐 UPLOAD ARYA BLITAR </code>
 📦━━━━━━━━━━━━━━━━━━━━━📦
 `;
 
