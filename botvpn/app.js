@@ -3709,7 +3709,7 @@ async function sendMainMenu(ctx) {
 <a href="https://t.me/${adminUsername}">╰📨 @${adminUsername}</a>
 
 📦━━━━━━━━━━━━━━━━━━━━━📦
-     <code>🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ ${NAMA_STORE} ɴᴇᴛᴡᴏʀᴋ</code>
+     <code>  🌐 UPLOAD ARYA BLITAR </code>
 📦━━━━━━━━━━━━━━━━━━━━━📦
 `;
 
@@ -3721,16 +3721,6 @@ if (bolehLihatTrial) {
       text: '🌐 Menu VPN',
       callback_data: 'menu_vpn',
       style: 'success'
-    }
-  ]);
-}
-
-if (tombolSewaScriptAktif) {
-  finalKeyboard.push([
-    {
-      text: '🛒 Sewa Script',
-      callback_data: 'service_sewascript',
-      style: 'primary'
     }
   ]);
 }
@@ -4448,9 +4438,6 @@ bot.action('menu_trial', async (ctx) => {
 ⚡ <b>Daftar Trial:</b>
 • SSH
 • VMESS
-• VLESS
-• TROJAN
-• SHADOWSOCKS
 `;
 
 const keyboard = [
@@ -4463,25 +4450,6 @@ const keyboard = [
     {
       text: '⚡ VMESS Trial',
       callback_data: 'trial_vmess',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🛡️ VLESS Trial',
-      callback_data: 'trial_vless',
-      style: 'primary'
-    },
-    {
-      text: '🔥 TROJAN Trial',
-      callback_data: 'trial_trojan',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🌙 SHADOWSOCKS Trial',
-      callback_data: 'trial_shadowsocks',
       style: 'primary'
     }
   ],
@@ -4528,9 +4496,6 @@ bot.action('menu_create', async (ctx) => {
 🚀 <b>Tersedia:</b>
 • SSH
 • VMESS
-• VLESS
-• TROJAN
-• SHADOWSOCKS
 `;
 
 const keyboard = [
@@ -4543,25 +4508,6 @@ const keyboard = [
     {
       text: '⚡ VMESS',
       callback_data: 'create_vmess',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🛡️ VLESS',
-      callback_data: 'create_vless',
-      style: 'primary'
-    },
-    {
-      text: '🔥 TROJAN',
-      callback_data: 'create_trojan',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🌙 SHADOWSOCKS',
-      callback_data: 'create_shadowsocks',
       style: 'primary'
     }
   ],
@@ -4608,9 +4554,6 @@ bot.action('menu_renew', async (ctx) => {
 🔄 <b>Tersedia:</b>
 • SSH
 • VMESS
-• VLESS
-• TROJAN
-• SHADOWSOCKS
 `;
 
 const keyboard = [
@@ -4623,25 +4566,6 @@ const keyboard = [
     {
       text: '⚡ VMESS',
       callback_data: 'renew_vmess',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🛡️ VLESS',
-      callback_data: 'renew_vless',
-      style: 'primary'
-    },
-    {
-      text: '🔥 TROJAN',
-      callback_data: 'renew_trojan',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🌙 SHADOWSOCKS',
-      callback_data: 'renew_shadowsocks',
       style: 'primary'
     }
   ],
