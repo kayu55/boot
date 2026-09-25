@@ -3709,7 +3709,7 @@ async function sendMainMenu(ctx) {
 <a href="https://t.me/${adminUsername}">╰📨 @${adminUsername}</a>
 
 📦━━━━━━━━━━━━━━━━━━━━━📦
-     <code>🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ ${NAMA_STORE} ɴᴇᴛᴡᴏʀᴋ</code>
+     <code>🌐 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ</code>
 📦━━━━━━━━━━━━━━━━━━━━━📦
 `;
 
@@ -3717,43 +3717,23 @@ async function sendMainMenu(ctx) {
 
 if (bolehLihatTrial) {
   finalKeyboard.push([
-    {
-      text: '🌐 Menu VPN',
-      callback_data: 'menu_vpn',
-      style: 'success'
-    }
+    { text: '🌐 Menu VPN', callback_data: 'menu_vpn' }
   ]);
 }
 
 if (tombolSewaScriptAktif) {
   finalKeyboard.push([
-    {
-      text: '🛒 Sewa Script',
-      callback_data: 'service_sewascript',
-      style: 'primary'
-    }
+    { text: '🛒 Sewa Script', callback_data: 'service_sewascript' }
   ]);
 }
 
 finalKeyboard.push([
-  {
-    text: '📜 Riwayat Transaksi',
-    callback_data: 'menu_riwayat_transaksi',
-    style: 'primary'
-  },
-  {
-    text: '📊 Cek Statistik',
-    callback_data: 'menu_statistik',
-    style: 'primary'
-  }
+  { text: '📜 Riwayat Transaksi', callback_data: 'menu_riwayat_transaksi' },
+  { text: '📊 Cek Statistik', callback_data: 'menu_statistik' }
 ]);
 
 finalKeyboard.push([
-  {
-    text: '💰 TopUp Saldo',
-    callback_data: 'menu_topup',
-    style: 'success'
-  }
+  { text: '💰 TopUp Saldo', callback_data: 'menu_topup' }
 ]);
 
     let sentMessage = null;
@@ -3815,622 +3795,105 @@ bot.action('menu_vpn', async (ctx) => {
 <code>Silakan pilih salah satu menu di bawah ini untuk lanjut.</code>
 `;
 
-if (ctx.callbackQuery?.message?.message_id) {
-  const msg = ctx.callbackQuery.message;
+    if (ctx.callbackQuery?.message?.message_id) {
+      const msg = ctx.callbackQuery.message;
 
-  const keyboard = {
-    inline_keyboard: [
-      [
-        {
-          text: '💠 Trial Akun',
-          callback_data: 'menu_trial',
-          style: 'success'
-        }
-      ],
-      [
-        {
-          text: '✏️ Buat Akun',
-          callback_data: 'menu_create',
-          style: 'primary'
-        },
-        {
-          text: '♻️ Renew Akun',
-          callback_data: 'menu_renew',
-          style: 'primary'
-        }
-      ],
-      [
-        {
-          text: '📡 Akun Saya',
-          callback_data: 'menu_akun_saya',
-          style: 'success'
-        }
-      ],
-      [
-        {
-          text: '🔙 Kembali ke Menu Utama',
-          callback_data: 'send_main_menu',
-          style: 'danger'
-        }
-      ]
-    ]
-  };
+      if (msg.photo) {
+        return await ctx.editMessageCaption(text, {
+          parse_mode: 'HTML',
+          reply_markup: {
+            inline_keyboard: [
+              [{ text: '💠 Trial Akun', callback_data: 'menu_trial' }],
+              [{ text: '✏️ Buat Akun', callback_data: 'menu_create' },
+              { text: '♻️ Renew Akun', callback_data: 'menu_renew' }],
+              [{ text: '📡 Akun Saya', callback_data: 'menu_akun_saya' }],
+              [{ text: '🔙 Kembali ke Menu Utama', callback_data: 'send_main_menu' }]
+            ]
+          }
+        });
+      }
 
-  if (msg.photo) {
-    return await ctx.editMessageCaption(text, {
+      return await ctx.editMessageText(text, {
+        parse_mode: 'HTML',
+        reply_markup: {
+          inline_keyboard: [
+              [{ text: '💠 Trial Akun', callback_data: 'menu_trial' }],
+              [{ text: '✏️ Buat Akun', callback_data: 'menu_create' },
+              { text: '♻️ Renew Akun', callback_data: 'menu_renew' }],
+              [{ text: '📡 Akun Saya', callback_data: 'menu_akun_saya' }],
+              [{ text: '🔙 Kembali ke Menu Utama', callback_data: 'send_main_menu' }]
+          ]
+        }
+      });
+    }
+
+    await ctx.reply(text, {
       parse_mode: 'HTML',
-      reply_markup: keyboard
+      reply_markup: {
+        inline_keyboard: [
+              [{ text: '💠 Trial Akun', callback_data: 'menu_trial' }],
+              [{ text: '✏️ Buat Akun', callback_data: 'menu_create' },
+              { text: '♻️ Renew Akun', callback_data: 'menu_renew' }],
+              [{ text: '📡 Akun Saya', callback_data: 'menu_akun_saya' }],
+              [{ text: '🔙 Kembali ke Menu Utama', callback_data: 'send_main_menu' }]
+        ]
+      }
     });
+  } catch (err) {
+    logger.error(`❌ Gagal tampilkan menu_vpn: ${err.message}`);
+    await ctx.reply('❌ Gagal membuka Menu VPN.');
   }
-
-  return await ctx.editMessageText(text, {
-    parse_mode: 'HTML',
-    reply_markup: keyboard
-  });
-}
-
-await ctx.reply(text, {
-  parse_mode: 'HTML',
-  reply_markup: {
-    inline_keyboard: [
-      [
-        {
-          text: '💠 Trial Akun',
-          callback_data: 'menu_trial',
-          style: 'primary'
-        }
-      ],
-      [
-        {
-          text: '✏️ Buat Akun',
-          callback_data: 'menu_create',
-          style: 'primary'
-        },
-        {
-          text: '♻️ Renew Akun',
-          callback_data: 'menu_renew',
-          style: 'success'
-        }
-      ],
-      [
-        {
-          text: '📡 Akun Saya',
-          callback_data: 'menu_akun_saya',
-          style: 'success'
-        }
-      ],
-      [
-        {
-          text: '🔙 Kembali ke Menu Utama',
-          callback_data: 'send_main_menu',
-          style: 'danger'
-        }
-      ]
-    ]
-  }
-});
-} catch (err) {
-  logger.error(`❌ Gagal membuka Menu VPN: ${err.message}`);
-  await ctx.reply('❌ Gagal membuka Menu VPN.');
-}
 });
 //menu akun saya
-bot.action("menu_akun_saya", async (ctx) => {
-    await ctx.answerCbQuery().catch(() => {});
-    tampilkanAkun(ctx, 1);
-});
-bot.action(/^akun_page_(\d+)$/, async (ctx) => {
-    await ctx.answerCbQuery().catch(() => {});
-    tampilkanAkun(ctx, Number(ctx.match[1]));
-});
-async function tampilkanAkun(ctx, page = 1) {
-    const userId = ctx.from.id;
-    const perPage = 10;
-
-    db.all(`
-        SELECT id, username, server_name, account_type
-        FROM user_accounts
-        WHERE user_id = ?
-        ORDER BY datetime(expired_at) ASC
-    `, [userId], async (err, rows) => {
-
-        if (err) return ctx.reply("❌ Gagal mengambil akun.");
-
-        if (!rows.length) {
-            return ctx.reply("📡 Belum ada akun.");
-        }
-
-        const icons = {
-            ssh: "🔐",
-            vmess: "⚡",
-            vless: "🛡",
-            trojan: "🐎",
-            shadowsocks: "🌑"
-        };
-
-        const totalPage = Math.ceil(rows.length / perPage);
-
-        if (page < 1) page = 1;
-        if (page > totalPage) page = totalPage;
-
-        const start = (page - 1) * perPage;
-        const data = rows.slice(start, start + perPage);
-
-        // ======================
-        // GROUP BERDASARKAN TYPE
-        // ======================
-        const grouped = {};
-
-        data.forEach(acc => {
-            const type = acc.account_type.toLowerCase();
-
-            if (!grouped[type]) grouped[type] = [];
-
-            grouped[type].push(acc);
-        });
-
-        // ======================
-        // TEXT
-        // ======================
-        let text = "";
-        text += `📡 <b>DAFTAR AKUN SAYA</b>\n`;
-        text += `━━━━━━━━━━━━━━━━━━\n`;
-        text += `📄 Halaman : <b>${page}/${totalPage}</b>\n`;
-        text += `📦 Total Akun : <b>${rows.length}</b>\n\n`;
-
-        Object.keys(grouped).forEach(type => {
-
-            const list = grouped[type];
-            const icon = icons[type] || "📦";
-
-            text += `${icon} <b>${type.toUpperCase()}</b> <i>(${list.length})</i>\n`;
-
-            list.forEach((acc, index) => {
-
-                const line = index === list.length - 1 ? "└" : "├";
-
-                text += `${line} 👤 <code>${acc.username}</code>\n`;
-                text += `  🌐 <code>${acc.server_name}</code>\n`;
-
-            });
-
-            text += `\n`;
-        });
-
-        // ======================
-        // KEYBOARD
-        // ======================
-        const keyboard = [];
-
-        Object.keys(grouped).forEach(type => {
-
-            grouped[type].forEach(acc => {
-
-                keyboard.push([
-                    {
-                        text: `${icons[type] || "📦"} ${acc.username}`,
-                        callback_data: `akun_detail_${acc.id}`,
-                        style: "primary"
-                    }
-                ]);
-
-            });
-
-        });
-
-        // ======================
-        // NAVIGATION
-        // ======================
-        const nav = [];
-
-        if (page > 1) {
-            nav.push({
-                text: "⬅️ Sebelumnya",
-                callback_data: `akun_page_${page - 1}`,
-                style: "primary"
-            });
-        }
-
-        nav.push({
-            text: `📄 ${page}/${totalPage}`,
-            callback_data: "noop",
-            style: "primary"
-        });
-
-        if (page < totalPage) {
-            nav.push({
-                text: "➡️ Berikutnya",
-                callback_data: `akun_page_${page + 1}`,
-                style: "primary"
-            });
-        }
-
-        keyboard.push(nav);
-
-        // ======================
-        // BACK
-        // ======================
-        keyboard.push([
-            {
-                text: "🔙 Kembali",
-                callback_data: "send_main_menu",
-                style: "danger"
-            }
-        ]);
-
-        try {
-            await ctx.editMessageText(text, {
-                parse_mode: "HTML",
-                reply_markup: {
-                    inline_keyboard: keyboard
-                }
-            });
-        } catch {
-            await ctx.reply(text, {
-                parse_mode: "HTML",
-                reply_markup: {
-                    inline_keyboard: keyboard
-                }
-            });
-        }
-
-    });
-}
-bot.action(/^akun_detail_(\d+)$/, async (ctx) => {
+bot.action('menu_akun_saya', async (ctx) => {
   await ctx.answerCbQuery().catch(() => {});
 
-  const accountId = Number(ctx.match[1]);
   const userId = ctx.from.id;
 
-  db.get(`
-    SELECT *
+  db.all(`
+    SELECT username, server_name, account_type, expired_at, status
     FROM user_accounts
-    WHERE id = ? AND user_id = ?
-  `, [accountId, userId], async (err, account) => {
-
+    WHERE user_id = ?
+    ORDER BY datetime(expired_at) ASC
+  `, [userId], async (err, rows) => {
     if (err) {
-      logger.error(err.message);
-      return ctx.reply("❌ Gagal mengambil detail akun.");
+      logger.error('❌ Gagal ambil akun user: ' + err.message);
+      return ctx.reply('❌ Gagal mengambil daftar akun.', { parse_mode: 'HTML' });
     }
 
-    if (!account) {
-      return ctx.reply("❌ Akun tidak ditemukan.");
+    if (!rows || rows.length === 0) {
+      return ctx.reply(
+        '📡 <b>Akun Saya</b>\n\nBelum ada akun yang tersimpan.',
+        {
+          parse_mode: 'HTML',
+          reply_markup: {
+            inline_keyboard: [
+              [{ text: '🔙 Kembali ke Menu Utama', callback_data: 'send_main_menu' }]
+            ]
+          }
+        }
+      );
     }
 
-    let data = {};
+    const text = rows.map((acc, i) =>
+      `${i + 1}.\n` +
+      `👤 Username: <code>${acc.username}</code>\n` +
+      `🌐 Server: <code>${acc.server_name}</code>\n` +
+      `🔐 Tipe: <code>${String(acc.account_type).toUpperCase()}</code>\n` +
+      `📅 Expired: <code>${formatTanggalIndonesia(acc.expired_at)}</code>\n` +
+      `📌 Status: <code>${acc.status}</code>`
+    ).join('\n\n━━━━━━━━━━━━━━━━━━━━\n\n');
 
-    try {
-      data = JSON.parse(account.config_json || "{}");
-    } catch (e) {
-      logger.error("Config JSON rusak: " + e.message);
-      return ctx.reply("❌ Data akun rusak.");
-    }
-     // AMBIL DATA SERVER
-    db.get(
-      "SELECT * FROM Server WHERE id = ?",
-      [account.server_id],
-      (err, server) => {
-
-        if (err || !server) {
-          return ctx.reply("❌ Server tidak ditemukan.");
-        }
-        
-
-    switch (String(account.account_type).toLowerCase()) {
-
-case "ssh": {
-
-    const sshData = data;
-    const cloudfront = server.cloudfront || "-";
-
-    const msg = `
-╭━━━━━━━━━━━━━━━━━━━━━━╮
-      🚀 *ꜱꜱʜ ᴀᴄᴄᴏᴜɴᴛ*
-╰━━━━━━━━━━━━━━━━━━━━━━╯
-
-┌〔 📄 *ᴀᴄᴄᴏᴜɴᴛ ɪɴꜰᴏ* 〕
-├ 👤 ᴜꜱᴇʀɴᴀᴍᴇ : \`${sshData.username}\`
-├ 🔑 ᴘᴀꜱꜱᴡᴏʀᴅ : \`${sshData.password}\`
-├ 📅 ᴇxᴘɪʀᴇᴅ  : \`${sshData.expired || account.expired_at}\`
-├ 🌐 ɪᴘ ʟɪᴍɪᴛ : \`${sshData.ip_limit}\`
-└ 🟢 ꜱᴛᴀᴛᴜꜱ   : \`${account.status.toUpperCase()}\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-┌〔 🌍 *ꜱᴇʀᴠᴇʀ* 〕
-├ 🌐 ᴅᴏᴍᴀɪɴ      : \`${sshData.domain}\`
-├ ☁️ ᴄʟᴏᴜᴅꜰʀᴏɴᴛ  : \`${server.cloudfront || "-"}\`
-├ 🌍 ɴᴀᴍᴇꜱᴇʀᴠᴇʀ  : \`${sshData.ns_domain}\`
-└ 🔑 ᴘᴜʙ ᴋᴇʏ     : \`${sshData.pubkey}\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-┌〔 🔌 *ᴘᴏʀᴛ* 〕
-├ 🔐 ᴛʟꜱ        : \`443,8443\`
-├ 🌐 ʜᴛᴛᴘ       : \`80,8080,2086,8880\`
-├ ⚡ ᴏᴘᴇɴꜱꜱʜ    : \`22\`
-├ 🚀 ᴜᴅᴘꜱꜱʜ      : \`1-65535\`
-├ 🌍 ᴅɴꜱ        : \`53,2222\`
-├ 📡 ᴅʀᴏᴘʙᴇᴀʀ   : \`109,110\`
-└ 🎮 ʙᴀᴅᴠᴘɴ      : \`7300\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-📡 *ʜᴛᴛᴘ ᴄᴜꜱᴛᴏᴍ*
-
-\`${sshData.domain}:80@${sshData.username}:${sshData.password}\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-📄 *ᴘᴀʏʟᴏᴀᴅ*
-
-\`GET /cdn-cgi/trace HTTP/1.1[crlf]Host: Bug_Kalian[crlf][crlf]GET-RAY / HTTP/1.1[crlf]Host: [host][crlf]Connection: Upgrade[crlf]User-Agent: [ua][crlf]Upgrade: websocket[crlf][crlf]\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
-
-https://${sshData.domain}:81/ssh-${sshData.username}.txt
-`;
-
-    return ctx.reply(msg, {
-        parse_mode: "Markdown",
-        reply_markup: {
-            inline_keyboard: [
-                [
-                    {
-                        text: "🔙 Kembali",
-                        callback_data: "menu_akun_saya"
-                    }
-                ]
-            ]
-        }
+    await ctx.reply(`📡 <b>DAFTAR AKUN SAYA</b>\n\n${text}`, {
+      parse_mode: 'HTML',
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: '🔙 Kembali ke Menu Utama', callback_data: 'send_main_menu' }]
+        ]
+      }
     });
-}
-
-case "vmess": {
-
-    const vmessData = data;
-    const cloudfront = server.cloudfront || "-";
-
-    const msg = `
-╭━━━━━━━━━━━━━━━━━━━━━━╮
-     🚀 *ᴠᴍᴇꜱꜱ ᴀᴄᴄᴏᴜɴᴛ*
-╰━━━━━━━━━━━━━━━━━━━━━━╯
-
-┌〔 📄 *ᴀᴄᴄᴏᴜɴᴛ ɪɴꜰᴏ* 〕
-├ 👤 ᴜꜱᴇʀɴᴀᴍᴇ : \`${vmessData.username}\`
-├ 🆔 ᴜᴜɪᴅ      : \`${vmessData.uuid}\`
-├ 📅 ᴇxᴘɪʀᴇᴅ   : \`${vmessData.expired || account.expired_at}\`
-├ 📦 Qᴜᴏᴛᴀ     : \`${vmessData.quota === '0 GB' ? 'Unlimited' : vmessData.quota}\`
-├ 🌐 ɪᴘ ʟɪᴍɪᴛ  : \`${vmessData.ip_limit === '0' ? 'Unlimited' : vmessData.ip_limit} IP\`
-└ 🟢 ꜱᴛᴀᴛᴜꜱ    : \`${account.status.toUpperCase()}\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-┌〔 🌍 *ꜱᴇʀᴠᴇʀ* 〕
-├ 🌐 ᴅᴏᴍᴀɪɴ      : \`${vmessData.domain}\`
-├ ☁️ ᴄʟᴏᴜᴅꜰʀᴏɴᴛ  : \`${server.cloudfront || "-"}\`
-├ 🔐 ᴛʟꜱ ᴘᴏʀᴛ    : \`443,8443\`
-├ 🌍 ʜᴛᴛᴘ ᴘᴏʀᴛ   : \`80,8080,2086,8880\`
-├ 🔒 ꜱᴇᴄᴜʀɪᴛʏ    : \`Auto\`
-├ 📂 ᴘᴀᴛʜ        : \`/vmess\`
-└ 🚀 ɢʀᴘᴄ ᴘᴀᴛʜ   : \`vmess-grpc\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-🔗 *ᴜʀʟ ᴛʟꜱ*
-
-\`\`\`
-${vmessData.vmess_tls_link}
-\`\`\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-🔗 *ᴜʀʟ ʜᴛᴛᴘ*
-
-\`\`\`
-${vmessData.vmess_nontls_link}
-\`\`\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-🔗 *ᴜʀʟ ɢʀᴘᴄ*
-
-\`\`\`
-${vmessData.vmess_grpc_link}
-\`\`\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
-
-https://${vmessData.domain}:81/vmess-${vmessData.username}.txt
-`;
-
-    return ctx.reply(msg, {
-        parse_mode: "Markdown",
-        reply_markup: {
-            inline_keyboard: [
-                [
-                    {
-                        text: "🔙 Kembali",
-                        callback_data: "menu_akun_saya"
-                    }
-                ]
-            ]
-        }
-    });
-
-}
-
-
-
-case "vless": {
-
-    const vlessData = data;
-    const cloudfront = server.cloudfront || "-";
-
-    const msg = `
-╭━━━━━━━━━━━━━━━━━━━━━━╮
-      🛡 *ᴠʟᴇꜱꜱ ᴀᴄᴄᴏᴜɴᴛ*
-╰━━━━━━━━━━━━━━━━━━━━━━╯
-
-┌〔 📄 *ᴀᴄᴄᴏᴜɴᴛ ɪɴꜰᴏ* 〕
-├ 👤 ᴜꜱᴇʀɴᴀᴍᴇ : \`${vlessData.username}\`
-├ 🆔 ᴜᴜɪᴅ      : \`${vlessData.uuid}\`
-├ 📅 ᴇxᴘɪʀᴇᴅ   : \`${vlessData.expired || account.expired_at}\`
-├ 📦 Qᴜᴏᴛᴀ     : \`${vlessData.quota === '0 GB' ? 'Unlimited' : vlessData.quota}\`
-├ 🌐 ɪᴘ ʟɪᴍɪᴛ  : \`${vlessData.ip_limit === '0' ? 'Unlimited' : vlessData.ip_limit} IP\`
-└ 🟢 ꜱᴛᴀᴛᴜꜱ    : \`${account.status.toUpperCase()}\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-┌〔 🌍 *ꜱᴇʀᴠᴇʀ* 〕
-├ 🌐 ᴅᴏᴍᴀɪɴ      : \`${vlessData.domain}\`
-├ ☁️ ᴄʟᴏᴜᴅꜰʀᴏɴᴛ  : \`${server.cloudfront || "-"}\`
-├ 🔐 ᴛʟꜱ ᴘᴏʀᴛ    : \`443,8443\`
-├ 🌍 ʜᴛᴛᴘ ᴘᴏʀᴛ   : \`80,8080,2086,8880\`
-├ 📂 ᴘᴀᴛʜ        : \`/vless\`
-└ 🚀 ɢʀᴘᴄ ᴘᴀᴛʜ   : \`vless-grpc\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-🔗 *ᴜʀʟ ᴛʟꜱ*
-
-\`\`\`
-${vlessData.vless_tls_link}
-\`\`\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-🔗 *ᴜʀʟ ʜᴛᴛᴘ*
-
-\`\`\`
-${vlessData.vless_nontls_link}
-\`\`\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-🔗 *ᴜʀʟ ɢʀᴘᴄ*
-
-\`\`\`
-${vlessData.vless_grpc_link}
-\`\`\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
-
-https://${vlessData.domain}:81/vless-${vlessData.username}.txt
-`;
-
-    return ctx.reply(msg, {
-        parse_mode: "Markdown",
-        reply_markup: {
-            inline_keyboard: [
-                [
-                    {
-                        text: "🔙 Kembali",
-                        callback_data: "menu_akun_saya"
-                    }
-                ]
-            ]
-        }
-    });
-
-}
-
-
-case "trojan": {
-
-    const trojanData = data;
-    const cloudfront = server.cloudfront || "-";
-
-    const msg = `
-╭━━━━━━━━━━━━━━━━━━━━━━╮
-     🐎 *ᴛʀᴏᴊᴀɴ ᴀᴄᴄᴏᴜɴᴛ*
-╰━━━━━━━━━━━━━━━━━━━━━━╯
-
-┌〔 📄 *ᴀᴄᴄᴏᴜɴᴛ ɪɴꜰᴏ* 〕
-├ 👤 ᴜꜱᴇʀɴᴀᴍᴇ : \`${trojanData.username}\`
-├ 🆔 ᴜᴜɪᴅ      : \`${trojanData.uuid}\`
-├ 📅 ᴇxᴘɪʀᴇᴅ   : \`${trojanData.expired || account.expired_at}\`
-├ 📦 Qᴜᴏᴛᴀ     : \`${trojanData.quota === '0 GB' ? 'Unlimited' : trojanData.quota}\`
-├ 🌐 ɪᴘ ʟɪᴍɪᴛ  : \`${trojanData.ip_limit === '0' ? 'Unlimited' : trojanData.ip_limit} IP\`
-└ 🟢 ꜱᴛᴀᴛᴜꜱ    : \`${account.status.toUpperCase()}\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-┌〔 🌍 *ꜱᴇʀᴠᴇʀ* 〕
-├ 🌐 ᴅᴏᴍᴀɪɴ      : \`${trojanData.domain}\`
-├ ☁️ ᴄʟᴏᴜᴅꜰʀᴏɴᴛ  : \`${server.cloudfront || "-"}\`
-├ 🔐 ᴛʟꜱ ᴘᴏʀᴛ    : \`443,8443\`
-├ 🌍 ʜᴛᴛᴘ ᴘᴏʀᴛ   : \`80,8080,2086,8880\`
-├ 📂 ᴘᴀᴛʜ        : \`/trojan-ws\`
-└ 🚀 ɢʀᴘᴄ ᴘᴀᴛʜ   : \`trojan-grpc\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-🔗 *ᴜʀʟ ᴛʟꜱ*
-
-\`\`\`
-${trojanData.trojan_tls_link}
-\`\`\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-🔗 *ᴜʀʟ ɢʀᴘᴄ*
-
-\`\`\`
-${trojanData.trojan_grpc_link}
-\`\`\`
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
-
-https://${trojanData.domain}:81/trojan-${trojanData.username}.txt
-`;
-
-    return ctx.reply(msg, {
-        parse_mode: "Markdown",
-        reply_markup: {
-            inline_keyboard: [
-                [
-                    {
-                        text: "🔙 Kembali",
-                        callback_data: "menu_akun_saya"
-                    }
-                ]
-            ]
-        }
-    });
-
-}
-
-
-
-case "shadowsocks": {
-
-    const shadowsocksData = data;
-
-    // Tempel template SHADOWSOCKS di sini
-    return ctx.reply("🚧 Menu Shadowsocks belum dibuat.");
-
-}
-
-default:
-    return ctx.reply("❌ Tipe akun tidak dikenali.");
-        } // tutup switch
-
-      } // tutup callback (err, server) => {
-
-    ); // tutup db.get Server
-
-  }); // tutup db.get user_accounts
-
-}); // tutup bot.action
+  });
+});
 /// menu trial
 bot.action('menu_trial', async (ctx) => {
   try {
@@ -4448,49 +3911,15 @@ bot.action('menu_trial', async (ctx) => {
 ⚡ <b>Daftar Trial:</b>
 • SSH
 • VMESS
-• VLESS
-• TROJAN
-• SHADOWSOCKS
 `;
 
-const keyboard = [
+    const keyboard = [
   [
-    {
-      text: '🔐 SSH Trial',
-      callback_data: 'trial_ssh',
-      style: 'primary'
-    },
-    {
-      text: '⚡ VMESS Trial',
-      callback_data: 'trial_vmess',
-      style: 'primary'
-    }
+    { text: '🔐 SSH Trial', callback_data: 'trial_ssh' },
+    { text: '⚡ VMESS Trial', callback_data: 'trial_vmess' }
   ],
   [
-    {
-      text: '🛡️ VLESS Trial',
-      callback_data: 'trial_vless',
-      style: 'primary'
-    },
-    {
-      text: '🔥 TROJAN Trial',
-      callback_data: 'trial_trojan',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🌙 SHADOWSOCKS Trial',
-      callback_data: 'trial_shadowsocks',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🔙 Kembali ke Menu VPN',
-      callback_data: 'menu_vpn',
-      style: 'danger'
-    }
+    { text: '🔙 Kembali ke Menu VPN', callback_data: 'menu_vpn' }
   ]
 ];
 
@@ -4528,49 +3957,15 @@ bot.action('menu_create', async (ctx) => {
 🚀 <b>Tersedia:</b>
 • SSH
 • VMESS
-• VLESS
-• TROJAN
-• SHADOWSOCKS
 `;
 
-const keyboard = [
+    const keyboard = [
   [
-    {
-      text: '🔐 SSH',
-      callback_data: 'create_ssh',
-      style: 'primary'
-    },
-    {
-      text: '⚡ VMESS',
-      callback_data: 'create_vmess',
-      style: 'primary'
-    }
+    { text: '🔐 SSH', callback_data: 'create_ssh' },
+    { text: '⚡ VMESS', callback_data: 'create_vmess' }
   ],
   [
-    {
-      text: '🛡️ VLESS',
-      callback_data: 'create_vless',
-      style: 'primary'
-    },
-    {
-      text: '🔥 TROJAN',
-      callback_data: 'create_trojan',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🌙 SHADOWSOCKS',
-      callback_data: 'create_shadowsocks',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🔙 Kembali ke Menu VPN',
-      callback_data: 'menu_vpn',
-      style: 'danger'
-    }
+    { text: '🔙 Kembali ke Menu VPN', callback_data: 'menu_vpn' }
   ]
 ];
 
@@ -4608,49 +4003,15 @@ bot.action('menu_renew', async (ctx) => {
 🔄 <b>Tersedia:</b>
 • SSH
 • VMESS
-• VLESS
-• TROJAN
-• SHADOWSOCKS
 `;
 
-const keyboard = [
+    const keyboard = [
   [
-    {
-      text: '🔐 SSH',
-      callback_data: 'renew_ssh',
-      style: 'primary'
-    },
-    {
-      text: '⚡ VMESS',
-      callback_data: 'renew_vmess',
-      style: 'primary'
-    }
+    { text: '🔐 SSH', callback_data: 'renew_ssh' },
+    { text: '⚡ VMESS', callback_data: 'renew_vmess' }
   ],
   [
-    {
-      text: '🛡️ VLESS',
-      callback_data: 'renew_vless',
-      style: 'primary'
-    },
-    {
-      text: '🔥 TROJAN',
-      callback_data: 'renew_trojan',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🌙 SHADOWSOCKS',
-      callback_data: 'renew_shadowsocks',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🔙 Kembali ke Menu VPN',
-      callback_data: 'menu_vpn',
-      style: 'danger'
-    }
+    { text: '🔙 Kembali ke Menu VPN', callback_data: 'menu_vpn' }
   ]
 ];
 
