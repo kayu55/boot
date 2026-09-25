@@ -4444,25 +4444,13 @@ bot.action('menu_trial', async (ctx) => {
 • VMESS
 `;
 
-const keyboard = [
+    const keyboard = [
   [
-    {
-      text: '🔐 SSH Trial',
-      callback_data: 'trial_ssh',
-      style: 'primary'
-    },
-    {
-      text: '⚡ VMESS Trial',
-      callback_data: 'trial_vmess',
-      style: 'primary'
-    }
+    { text: '🔐 SSH Trial', callback_data: 'trial_ssh' },
+    { text: '⚡ VMESS Trial', callback_data: 'trial_vmess' }
   ],
   [
-    {
-      text: '🔙 Kembali ke Menu VPN',
-      callback_data: 'menu_vpn',
-      style: 'danger'
-    }
+    { text: '🔙 Kembali ke Menu VPN', callback_data: 'menu_vpn' }
   ]
 ];
 
