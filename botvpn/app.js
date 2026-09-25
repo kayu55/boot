@@ -14,6 +14,7 @@ const FormData = require("form-data");
 const FOLDER_TEMPATDB = "/root/BotVPN2/sellvpn.db";
 const restoreState = {};
 
+
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.combine(
@@ -96,7 +97,7 @@ const SAWERIA_EMAIL = vars.SAWERIA_EMAIL;
 const BOT_TOKEN = vars.BOT_TOKEN;
 const port = vars.PORT || 50123;
 const ADMIN = vars.USER_ID;
-const NAMA_STORE = vars.NAMA_STORE || 'ARYAVPN';
+const NAMA_STORE = vars.NAMA_STORE || 'ARYABLITAR';
 const DATA_QRIS = vars.DATA_QRIS;
 const DATA_QRIS_GOPAY = vars.DATA_QRIS_GOPAY;
 const MERCHANT_ID = vars.MERCHANT_ID;
@@ -328,17 +329,20 @@ const db = new sqlite3.Database('./sellvpn.db', (err) => {
         db.serialize(() => {
 
             // Inisialisasi tabel bonus_config
-            db.run(`
-                CREATE TABLE IF NOT EXISTS bonus_config (
-                    id INTEGER PRIMARY KEY CHECK (id = 1),
-                    enabled INTEGER DEFAULT 0,
-                    min_topup INTEGER DEFAULT 0,
-                    bonus_percent INTEGER DEFAULT 0
-                )
-            `, (err) => {
-                if (err) logger.error('❌ Gagal membuat tabel bonus_config:', err.message);
-                else logger.info('✅ Tabel bonus_config siap');
-            });
+          
+db.run(`
+CREATE TABLE IF NOT EXISTS bonus_config (
+    id INTEGER PRIMARY KEY CHECK (id = 1),
+    enabled INTEGER DEFAULT 0,
+    min_topup INTEGER DEFAULT 0,
+    bonus_percent INTEGER DEFAULT 0,
+    start_at INTEGER DEFAULT 0,
+    end_at INTEGER DEFAULT 0
+)
+`, (err) => {
+    if (err) logger.error('❌ Gagal membuat tabel bonus_config:', err.message);
+    else logger.info('✅ Tabel bonus_config siap');
+});
 
             db.run(`
                 INSERT OR IGNORE INTO bonus_config (id, enabled, min_topup, bonus_percent)
@@ -362,6 +366,24 @@ const db = new sqlite3.Database('./sellvpn.db', (err) => {
                 if (err) logger.error('❌ Gagal membuat tabel bonus_log:', err.message);
                 else logger.info('✅ Tabel bonus_log siap');
             });
+            db.all("PRAGMA table_info(bonus_config)", (err, columns) => {
+    if (err) return logger.error(err.message);
+
+    const hasStart = columns.some(c => c.name === "start_at");
+    const hasEnd = columns.some(c => c.name === "end_at");
+
+    if (!hasStart) {
+        db.run(
+            "ALTER TABLE bonus_config ADD COLUMN start_at INTEGER DEFAULT 0"
+        );
+    }
+
+    if (!hasEnd) {
+        db.run(
+            "ALTER TABLE bonus_config ADD COLUMN end_at INTEGER DEFAULT 0"
+        );
+    }
+});
 
             // Inisialisasi tabel pending_deposits
             db.run(`
@@ -516,23 +538,50 @@ const db = new sqlite3.Database('./sellvpn.db', (err) => {
             });
 
             // Inisialisasi tabel Server
-            db.run(`CREATE TABLE IF NOT EXISTS Server (
-              id INTEGER PRIMARY KEY AUTOINCREMENT,
-              domain TEXT,
-              auth TEXT,
-              harga INTEGER,
-              nama_server TEXT,
-              quota INTEGER,
-              iplimit INTEGER,
-              batas_create_akun INTEGER,
-              total_create_akun INTEGER
-            )`, (err) => {
-              if (err) {
-                logger.error('Kesalahan membuat tabel Server:', err.message);
-              } else {
-                logger.info('Server table created or already exists');
-              }
-            });
+            // Inisialisasi tabel Server
+db.run(`CREATE TABLE IF NOT EXISTS Server (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  domain TEXT,
+  auth TEXT,
+  harga INTEGER,
+  nama_server TEXT,
+  quota INTEGER,
+  iplimit INTEGER,
+  batas_create_akun INTEGER,
+  total_create_akun INTEGER,
+  cloudfront TEXT DEFAULT ''
+)`, (err) => {
+  if (err) {
+    logger.error('Kesalahan membuat tabel Server:', err.message);
+  } else {
+    logger.info('Server table created or already exists');
+
+    // Auto tambah kolom cloudfront jika database lama
+    db.all("PRAGMA table_info(Server)", (err, columns) => {
+      if (err) {
+        logger.error('Gagal cek struktur tabel Server: ' + err.message);
+        return;
+      }
+
+      const hasCloudfront = columns.some(col => col.name === 'cloudfront');
+
+      if (!hasCloudfront) {
+        db.run(
+          "ALTER TABLE Server ADD COLUMN cloudfront TEXT DEFAULT ''",
+          (err) => {
+            if (err) {
+              logger.error("❌ Gagal menambah kolom cloudfront: " + err.message);
+            } else {
+              logger.info("✅ Kolom cloudfront berhasil ditambahkan.");
+            }
+          }
+        );
+      } else {
+        logger.info("ℹ️ Kolom cloudfront sudah tersedia.");
+      }
+    });
+  }
+});
 
             // Inisialisasi tabel users (dengan perbaikan PRAGMA)
             db.run(`CREATE TABLE IF NOT EXISTS users (
@@ -987,7 +1036,7 @@ async function sendMainMenu(ctx) {
 <a href="https://t.me/${adminUsername}">╰📨 @${adminUsername}</a>
 
 📦━━━━━━━━━━━━━━━━━━━━━📦
-     <code>   🌐 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ </code>
+     <code>  🌐 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ 🌐 <code>
 📦━━━━━━━━━━━━━━━━━━━━━📦
 `;
 
@@ -1243,7 +1292,6 @@ bot.action('menu_create', async (ctx) => {
     { text: '⚡ VMESS', callback_data: 'create_vmess' }
   ],
   [
-
     { text: '🔙 Kembali ke Menu VPN', callback_data: 'menu_vpn' }
   ]
 ];
@@ -2060,7 +2108,9 @@ bot.action('topup_pakasir', async (ctx) => {
 // TOPUP PAKASIR YOOOOO
 
 async function generateQrisTemplate(payment) {
-  const qrBuffer = await QRCode.toBuffer(payment.payment_number, {
+  const qrData = payment.payment_number || payment.qrString;
+
+  const qrBuffer = await QRCode.toBuffer(qrData, {
     width: 550,
     margin: 2,
     errorCorrectionLevel: 'H'
@@ -2136,6 +2186,91 @@ async function generateQrisTemplate(payment) {
         top: 250,
         left: 300
       },
+      {
+        input: textOverlay,
+        top: 0,
+        left: 0
+      }
+    ])
+    .png()
+    .toFile(outputPath);
+
+  return outputPath;
+}
+
+async function generateTopupSuccessTemplate(data) {
+  const waktu = new Date().toLocaleString("id-ID", {
+    timeZone: "Asia/Jakarta",
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+
+  const textOverlay = Buffer.from(`
+<svg width="1024" height="1280">
+<style>
+.value{
+fill:#18F6FF;
+font-size:28px;
+font-family:Arial;
+font-weight:bold;
+}
+
+.time{
+fill:white;
+font-size:24px;
+font-family:Arial;
+}
+</style>
+
+<!-- Username -->
+<text x="500" y="470" class="value">
+@${data.username}
+</text>
+
+<!-- User ID -->
+<text x="500" y="563" class="value">
+${data.userId}
+</text>
+
+<!-- Nominal -->
+<text x="500" y="650" class="value">
+Rp ${Number(data.amount).toLocaleString("id-ID")}
+</text>
+
+<!-- Bonus -->
+<text x="500" y="740" class="value">
+Rp ${Number(data.bonus || 0).toLocaleString("id-ID")}
+</text>
+
+<!-- Saldo -->
+<text x="500" y="825" class="value">
+Rp ${Number(data.balance).toLocaleString("id-ID")}
+</text>
+
+<!-- ID Transaksi -->
+<text x="500" y="908" class="value">
+${data.transactionId}
+</text>
+
+<!-- Waktu -->
+<text x="500" y="1000" class="time">
+${waktu}
+</text>
+
+</svg>
+`);
+
+  const outputPath = path.join(
+    tempDir,
+    `topup_${data.userId}_${Date.now()}.png`
+  );
+
+  await sharp("./assets/topup_success.png")
+    .composite([
       {
         input: textOverlay,
         top: 0,
@@ -2332,9 +2467,9 @@ bot.action('menu_topup', async (ctx) => {
 ☎️ <b>ʜᴜʙᴜɴɢɪ ᴀᴅᴍɪɴ:</b>
 ╰<a href="https://t.me/${adminUsername}">@${adminUsername}</a>
 
-📦━━━━━━━━━━━━━━━━━━━━━📦
-     <code>   🌐 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ </code>
-📦━━━━━━━━━━━━━━━━━━━━━📦
+📦━━━━━━━━━━━━━━━━━━━━📦
+     <code>   🌐 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ</code>
+📦━━━━━━━━━━━━━━━━━━━━📦
 `;
 
     let sentMessage;
@@ -3005,11 +3140,10 @@ const showSewaScript = await new Promise((resolve) => {
     text: `💸 Topup Pakasir ${config.topup_pakasir ? '✅' : '❌'}`,
     callback_data: 'toggle_topup_pakasir'
 }],
-        [{ text: '👥 List Reseller', callback_data: 'listreseller' }],
+        [{ text: '👥 List Reseller', callback_data: 'listreseller' },{ text: "☁️ Edit CloudFront", callback_data: "edit_cloudfront" }],
         [
     { text: "📦 Backup Database", callback_data: "backup_database" },
-    { text: "♻️ Restore Database", callback_data: "restore_database" }
-],
+    { text: "♻️ Restore Database", callback_data: "restore_database" }],
         [{ text: '🔙 Kembali', callback_data: 'send_main_menu' }]
     ];
 
@@ -3082,6 +3216,58 @@ bot.action('toggle_topup_gopay', async (ctx) => {
   );
 
   return sendAdminMenu(ctx);
+});
+bot.action("edit_cloudfront", async (ctx) => {
+  await ctx.answerCbQuery();
+
+  db.all(
+    "SELECT id, nama_server FROM Server ORDER BY id ASC",
+    async (err, rows) => {
+      if (err || !rows.length) {
+        return ctx.reply("❌ Server tidak ditemukan.");
+      }
+
+      const keyboard = rows.map(server => [
+        {
+          text: server.nama_server,
+          callback_data: `edit_cloudfront_${server.id}`
+        }
+      ]);
+
+      keyboard.push([
+        {
+          text: "🔙 Kembali",
+          callback_data: "admin_server"
+        }
+      ]);
+
+      await ctx.reply(
+        "☁️ Pilih server yang ingin diubah CloudFront-nya:",
+        {
+          reply_markup: {
+            inline_keyboard: keyboard
+          }
+        }
+      );
+    }
+  );
+});
+bot.action(/^edit_cloudfront_(\d+)$/, async (ctx) => {
+  await ctx.answerCbQuery();
+
+  const serverId = Number(ctx.match[1]);
+
+  userState[ctx.from.id] = {
+    action: "edit_cloudfront",
+    serverId
+  };
+
+  await ctx.reply(
+    "🌐 Kirim domain CloudFront baru.\n\nContoh:\n`d3abc123.cloudfront.net`",
+    {
+      parse_mode: "Markdown"
+    }
+  );
 });
 bot.action('sewascript_daftar', async (ctx) => {
     try {
@@ -3543,21 +3729,42 @@ ${serverList}
           const msg = ctx.callbackQuery?.message;
 
           if (msg?.photo) {
-            await ctx.editMessageCaption(messageText, {
-              reply_markup: { inline_keyboard: keyboard },
-              parse_mode: 'HTML'
-            });
-          } else if (msg?.text) {
-            await ctx.editMessageText(messageText, {
-              reply_markup: { inline_keyboard: keyboard },
-              parse_mode: 'HTML'
-            });
-          } else {
-            await ctx.reply(messageText, {
-              reply_markup: { inline_keyboard: keyboard },
-              parse_mode: 'HTML'
-            });
-          }
+  try {
+    if (messageText.length > 1000) {
+      await ctx.deleteMessage().catch(() => {});
+
+      return await ctx.reply(messageText, {
+        reply_markup: { inline_keyboard: keyboard },
+        parse_mode: 'HTML'
+      });
+    }
+
+    await ctx.editMessageCaption(messageText, {
+      reply_markup: { inline_keyboard: keyboard },
+      parse_mode: 'HTML'
+    });
+  } catch (err) {
+    logger.error(`❌ Edit caption gagal: ${err.message}`);
+
+    return await ctx.reply(messageText, {
+      reply_markup: { inline_keyboard: keyboard },
+      parse_mode: 'HTML'
+    });
+  }
+
+} else if (msg?.text) {
+  await ctx.editMessageText(messageText, {
+    reply_markup: { inline_keyboard: keyboard },
+    parse_mode: 'HTML'
+  });
+
+} else {
+  await ctx.reply(messageText, {
+    reply_markup: { inline_keyboard: keyboard },
+    parse_mode: 'HTML'
+  });
+}
+
         } catch (editError) {
           logger.error(`❌ Gagal edit list server ${action}-${type}: ${editError.message}`);
 
@@ -4232,6 +4439,35 @@ if (global.depositState && (
         }
         return;
     }
+      // ================================
+// SIMPAN CLOUDFRONT
+// ================================
+if (
+  userState[ctx.from.id] &&
+  userState[ctx.from.id].action === "edit_cloudfront"
+) {
+  const cloudfront = ctx.message.text.trim();
+  const serverId = userState[ctx.from.id].serverId;
+
+  db.run(
+    "UPDATE Server SET cloudfront = ? WHERE id = ?",
+    [cloudfront, serverId],
+    async (err) => {
+      if (err) {
+        logger.error("Gagal update CloudFront: " + err.message);
+        await ctx.reply("❌ Gagal menyimpan CloudFront.");
+      } else {
+        await ctx.reply(
+          `✅ CloudFront berhasil diperbarui.\n\n☁️ ${cloudfront}`
+        );
+      }
+
+      delete userState[ctx.from.id];
+    }
+  );
+
+  return;
+}
 
     if (state && state.step === 'sewascript_create_input') {
         const username = ctx.message.text.trim();
@@ -4433,33 +4669,92 @@ Pesan Error: ${errUpdateSaldo.message}
         return;
     }
 
-    if (state && state.step === 'atur_bonus_input') {
-        const [status, minStr, persenStr] = ctx.message.text.trim().split(/\s+/);
-        const min = parseInt(minStr, 10);
-        const persen = parseInt(persenStr, 10);
+if (state && state.step === 'atur_bonus_input') {
+    const [status, minStr, persenStr, durasiStr] = ctx.message.text.trim().split(/\s+/);
 
-        if (!status || isNaN(min) || isNaN(persen)) {
-            return ctx.reply('⚠️ Format salah. Gunakan: `on|off <minimal_topup> <persen_bonus>`\nContoh: `on 10000 25`', { parse_mode: 'Markdown' });
+    const min = parseInt(minStr, 10);
+    const persen = parseInt(persenStr, 10);
+
+    if (!status || isNaN(min) || isNaN(persen) || !durasiStr) {
+        return ctx.reply(
+            '⚠️ Format salah.\n\nGunakan:\n`on|off <minimal_topup> <persen_bonus> <durasi>`\n\nContoh:\n`on 10000 25 7d`\n`on 5000 10 12h`\n`off 0 0 0`',
+            { parse_mode: 'Markdown' }
+        );
+    }
+
+    const enabled = status.toLowerCase() === 'on' ? 1 : 0;
+
+    let duration = 0;
+
+    if (enabled) {
+        const match = durasiStr.match(/^(\d+)([mhd])$/i);
+
+        if (!match) {
+            return ctx.reply(
+                '❌ Format durasi salah.\n\nContoh:\n30m\n12h\n7d'
+            );
         }
 
-        const enabled = status.toLowerCase() === 'on' ? 1 : 0;
-        db.run('UPDATE bonus_config SET enabled = ?, min_topup = ?, bonus_percent = ? WHERE id = 1',
-            [enabled, min, persen],
-            (err) => {
-                if (err) {
-                    logger.error('❌ Gagal update bonus config:', err.message);
-                    return ctx.reply('❌ Gagal menyimpan pengaturan bonus.');
-                }
-                ctx.reply(`✅ Bonus Top Up *${enabled ? 'Aktif' : 'Nonaktif'}*
-📌 Minimal Top Up: Rp${min}
-🎁 Bonus: ${persen}%`, {
-                    parse_mode: 'Markdown'
-                });
-                delete userState[userId];
-            }
-        );
-        return;
+        const value = parseInt(match[1]);
+        const unit = match[2].toLowerCase();
+
+        switch (unit) {
+            case 'm':
+                duration = value * 60 * 1000;
+                break;
+            case 'h':
+                duration = value * 60 * 60 * 1000;
+                break;
+            case 'd':
+                duration = value * 24 * 60 * 60 * 1000;
+                break;
+        }
     }
+
+    const startAt = enabled ? Date.now() : 0;
+    const endAt = enabled ? startAt + duration : 0;
+
+    db.run(
+        `UPDATE bonus_config
+         SET enabled = ?,
+             min_topup = ?,
+             bonus_percent = ?,
+             start_at = ?,
+             end_at = ?
+         WHERE id = 1`,
+        [
+            enabled,
+            min,
+            persen,
+            startAt,
+            endAt
+        ],
+        (err) => {
+            if (err) {
+                logger.error('❌ Gagal update bonus config:', err.message);
+                return ctx.reply('❌ Gagal menyimpan pengaturan bonus.');
+            }
+
+            const selesai = enabled
+                ? new Date(endAt).toLocaleString('id-ID')
+                : '-';
+
+            ctx.reply(
+                `✅ Bonus Top Up *${enabled ? 'Aktif' : 'Nonaktif'}*\n\n` +
+                `📌 Minimal Top Up: Rp${min.toLocaleString('id-ID')}\n` +
+                `🎁 Bonus: ${persen}%\n` +
+                `⏰ Berakhir: ${selesai}`,
+                {
+                    parse_mode: 'Markdown'
+                }
+            );
+
+            delete userState[userId];
+        }
+    );
+
+    return;
+}
 
     if (state && state.step.startsWith('username_')) {
         state.username = ctx.message.text.trim();
@@ -5848,29 +6143,37 @@ bot.action(/^saweria_nominal_(\d+)$/, async (ctx) => {
 
 bot.action('bonus_topup_setting', async (ctx) => {
     await ctx.answerCbQuery();
+
     db.get('SELECT * FROM bonus_config WHERE id = 1', (err, row) => {
         if (err || !row) {
             return ctx.reply('❌ Gagal mengambil pengaturan bonus.');
         }
 
-        ctx.reply(`⚙️ *Pengaturan Bonus Top Up*
+        const mulai = row.start_at
+            ? new Date(row.start_at).toLocaleString('id-ID')
+            : '-';
 
-` +
-            `Status: *${row.enabled ? 'Aktif ✅' : 'Nonaktif ❌'}*
-` +
-            `Minimal TopUp: *Rp${row.min_topup}*
-` +
-            `Bonus: *${row.bonus_percent}%*
+        const selesai = row.end_at
+            ? new Date(row.end_at).toLocaleString('id-ID')
+            : '-';
 
-` +
-            `Klik tombol di bawah ini untuk mengatur:`, {
-            parse_mode: 'Markdown',
-            reply_markup: {
-                inline_keyboard: [
-                    [{ text: '🔧 Atur Bonus TopUp', callback_data: 'atur_bonus_topup' }]
-                ]
+        ctx.reply(
+            `⚙️ *Pengaturan Bonus Top Up*\n\n` +
+            `Status: *${row.enabled ? 'Aktif ✅' : 'Nonaktif ❌'}*\n` +
+            `Minimal TopUp: *Rp${row.min_topup}*\n` +
+            `Bonus: *${row.bonus_percent}%*\n` +
+            `Mulai: *${mulai}*\n` +
+            `Berakhir: *${selesai}*\n\n` +
+            `Klik tombol di bawah ini untuk mengatur:`,
+            {
+                parse_mode: 'Markdown',
+                reply_markup: {
+                    inline_keyboard: [
+                        [{ text: '🔧 Atur Bonus TopUp', callback_data: 'atur_bonus_topup' }]
+                    ]
+                }
             }
-        });
+        );
     });
 });
 
@@ -5878,10 +6181,28 @@ bot.action('bonus_topup_setting', async (ctx) => {
 bot.action('atur_bonus_topup', async (ctx) => {
     await ctx.answerCbQuery();
 
-    userState[ctx.chat.id] = { step: 'atur_bonus_input' };
-    await ctx.reply('✍️ Kirim format:\n`on|off <minimal_topup> <persen_bonus>`\n\nContoh:\n`on 10000 25`', {
-        parse_mode: 'Markdown'
-    });
+    userState[ctx.chat.id] = {
+        step: 'atur_bonus_input'
+    };
+
+    await ctx.reply(
+`✍️ Kirim format berikut:
+
+on|off minimal bonus durasi
+
+Contoh:
+on 10000 25 7d
+on 5000 10 12h
+off 0 0 0
+
+Keterangan:
+m = menit
+h = jam
+d = hari`,
+        {
+            parse_mode: 'Markdown'
+        }
+    );
 });
 
 bot.action('log_bonus_topup', async (ctx) => {
@@ -6189,6 +6510,8 @@ bot.on('callback_query', async (ctx) => {
     await sendPaginatedResellerList(ctx, page, ctx.callbackQuery.message.message_id);
     return;
   }
+  
+
 
   // ===============================
   // 🧪 LIST UNLIMITED TRIAL
@@ -6639,7 +6962,7 @@ async function processDepositGopay(ctx, amount) {
       `🔗 [Buka QRIS](${safeQrUrl})`,
       ``,
       `┏━━━━━━━━━━━━━━━━━━━━━┓`,
-      `    🌐 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ*`,
+      `       🌐 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ*`,
       `┗━━━━━━━━━━━━━━━━━━━━━┛`
     ].join('\n');
 
@@ -6717,7 +7040,7 @@ async function processDeposit(ctx, amount) {
   }
   lastRequestTime = currentTime;
 
-  const uniqueCode = `user-${userId}-${currentTime}`;
+  const uniqueCode = `ORKUT-${userId}-✅`;
   const finalAmount = generateRandomAmount(parseInt(amount));
   global.pendingDeposits ??= {};
   global.depositState[userId] = true;
@@ -6761,84 +7084,109 @@ async function processDeposit(ctx, amount) {
       }
     }, 700);
 
-    // === Generate QRIS (pakai timeout & fallback) ===
-    let qrString, qrBuffer;
-    try {
-      qrString = qris.generateQrString(finalAmount);
-      qrBuffer = await withTimeout(qris.generateQRWithLogo(qrString), 10000, "Timeout generate QR");
-    } catch (err) {
-      console.warn("QRIS gagal, mencoba fallback generator lokal:", err);
-      try {
-        const QRCode = require('qrcode');
-        qrBuffer = await QRCode.toBuffer(qrString, { width: 300 });
-      } catch (fallbackErr) {
-        clearInterval(loading);
-        await ctx.reply("❌ Gagal membuat QRIS. Silakan coba lagi nanti.");
-        console.error("QR Fallback gagal:", fallbackErr);
-        await resetDepositState();
-        return;
-      }
+const inlineKeyboard = [
+  [
+    { text: "📢 Join Channel", url: `https://t.me/${GROUP_USERNAME}` }
+  ],
+  [
+    { text: "❌ Batal Topup", callback_data: `batal_topup_${uniqueCode}` }
+  ]
+];
+// === Generate QRIS ===
+let qrString;
+
+try {
+  qrString = qris.generateQrString(finalAmount);
+
+  // Tetap generate untuk memastikan QR valid
+  await withTimeout(
+    qris.generateQRWithLogo(qrString),
+    10000,
+    "Timeout generate QR"
+  );
+} catch (err) {
+  console.warn("QRIS gagal:", err);
+  clearInterval(loading);
+  await ctx.reply("❌ Gagal membuat QRIS. Silakan coba lagi nanti.");
+  await resetDepositState();
+  return;
+}
+
+clearInterval(loading);
+const nominal = parseInt(amount);
+const fee = finalAmount - nominal;
+
+const payment = {
+  payment_number: qrString,
+  qrString,
+  amount: nominal,
+  fee,
+  total_payment: finalAmount,
+  order_id: uniqueCode,
+  expired_at: new Date(Date.now() + 5 * 60 * 1000).toISOString()
+};
+
+const qrisImage = await generateQrisTemplate(payment);
+
+const expiredz = new Date(payment.expired_at).toLocaleString("id-ID", {
+  timeZone: "Asia/Jakarta",
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+  hour: "2-digit",
+  minute: "2-digit"
+});
+
+const qrMessage = await ctx.replyWithPhoto(
+  { source: qrisImage },
+  {
+    caption: `
+┏━━━━━━━━━━━━━━━━━━━━━┓
+      🏷️ *ᴅᴇᴛᴀɪʟ ᴘᴇᴍʙᴀʏᴀʀᴀɴ*
+┗━━━━━━━━━━━━━━━━━━━━━┛
+
+💰 ɴᴏᴍɪɴᴀʟ ᴛᴏᴘᴜᴘ : *Rp ${Number(payment.amount).toLocaleString("id-ID")}*
+💸 ꜰᴇᴇ QRIS       : *Rp ${Number(payment.fee).toLocaleString("id-ID")}*
+💵 ᴛᴏᴛᴀʟ ʙᴀʏᴀʀ    : *Rp ${Number(payment.total_payment).toLocaleString("id-ID")}*
+
+🆔 ʀᴇꜰꜰ : \`${payment.order_id}\`
+⏳ ᴇxᴘɪʀᴇᴅ : *${expiredz}*
+
+⚠️ ᴛʀᴀɴꜱꜰᴇʀ ʜᴀʀᴜꜱ ꜱᴇꜱᴜᴀɪ *TOTAL BAYAR*
+    `,
+    parse_mode: "Markdown",
+    reply_markup: {
+      inline_keyboard: inlineKeyboard
     }
-
-    clearInterval(loading);
-
-    // === Kirim QR ke user ===
-    const caption = [
-  `┏━━━━━━━━━━━━━━━━━━━━━┓`,
-  `          🏷️*ᴅᴇᴛᴀɪʟ ᴘᴇᴍʙᴀʏᴀʀᴀɴ*🏷️`,
-  `┗━━━━━━━━━━━━━━━━━━━━━┛`,
-  ``,
-  `💵 ɴᴏᴍɪɴᴀʟ: *Rp ${finalAmount}*`,
-  `⏳ ʙᴀᴛᴀꜱ ᴡᴀᴋᴛᴜ: *5 ᴍᴇɴɪᴛ*`,
-  `⚠️ ᴛʀᴀɴꜱꜰᴇʀ *ʜᴀʀᴜꜱ ꜱᴇꜱᴜᴀɪ ɴᴏᴍɪɴᴀʟ*`,
-  ``,
-  `✅ ᴘᴇᴍʙᴀʏᴀʀᴀɴ ᴏᴛᴏᴍᴀᴛɪꜱ`,
-  `📌 ᴊᴀɴɢᴀɴ ᴛᴜᴛᴜᴘ ʜᴀʟᴀᴍᴀɴ ɪɴɪ`,
-  ``,
-  `┏━━━━━━━━━━━━━━━━━━━━━┓`,
-  `    🌐 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ*`,
-  `┗━━━━━━━━━━━━━━━━━━━━━┛`
-].join('\n');
-
-
-    const inlineKeyboard = [
-      [
-        { text: "📢 Join Channel", url: `https://t.me/${GROUP_USERNAME}` }
-      ],
-      [
-        { text: "❌ Batal Topup", callback_data: `batal_topup_${uniqueCode}` }
-      ]
-    ];
-
-    const qrMessage = await ctx.replyWithPhoto(
-      { source: qrBuffer },
-      {
-        caption,
-        parse_mode: "Markdown",
-        reply_markup: { inline_keyboard: inlineKeyboard }
-      }
-    );
+  }
+);
 
     try { await ctx.deleteMessage(waitMsg.message_id); } catch {}
 
     // === Simpan data deposit ke memori & database ===
     global.pendingDeposits[uniqueCode] = {
-      amount: finalAmount,
-      originalAmount: amount,
-      userId,
-      username: ctx.from.username || `user_${userId}`,
-      timestamp: Date.now(),
-      status: 'pending',
-      method: 'QRIS Gopay',
-      qrMessageId: qrMessage.message_id
-    };
+  transaction_id: uniqueCode,
+
+  amount: nominal,              // Saldo yang masuk
+  originalAmount: nominal,
+  fee: fee,                     // Kode unik
+  total_payment: finalAmount,   // Yang dibayar user
+
+  userId,
+  username: ctx.from.username || `user_${userId}`,
+  timestamp: Date.now(),
+  status: "pending",
+  method: "QRIS Orkut",
+  qrMessageId: qrMessage.message_id
+};
 
     await insertPendingDeposit(
       uniqueCode,
       userId,
       ctx.from.username || `user_${userId}`,
-      finalAmount,
-      amount,
+      nominal,
+      nominal,
       qrMessage.message_id
     );
 
@@ -7187,43 +7535,45 @@ async function checkQRISStatus() {
     const pendingDeposits = Object.entries(global.pendingDeposits || {});
 
     for (const [uniqueCode, deposit] of pendingDeposits) {
-      if (!deposit || deposit.status !== 'pending') continue;
 
-      // QRIS GoPay diproses oleh checkQRISStatusGopay()
-      if (deposit.method === 'Qris Gopay') {
-        continue;
-      }
+      if (!deposit) continue;
+
+      // Jangan proses lagi kalau sedang diproses / sudah sukses
+      if (deposit.status !== "pending") continue;
+
+      // QRIS GoPay diproses checker lain
+      if (deposit.method === "Qris Gopay") continue;
 
       const depositAge = Date.now() - deposit.timestamp;
 
-      // Expired lokal (5 menit)
+      // Expired 5 menit
       if (depositAge > 5 * 60 * 1000) {
         try {
           if (deposit.qrMessageId) {
-            await bot.telegram.deleteMessage(deposit.userId, deposit.qrMessageId);
+            await bot.telegram.deleteMessage(
+              deposit.userId,
+              deposit.qrMessageId
+            );
           }
 
           await bot.telegram.sendMessage(
             deposit.userId,
-            '❌ *Pembayaran Kedaluwarsa*\n\n' +
-            'Waktu pembayaran telah habis. Silakan klik Top Up lagi untuk mendapatkan QR baru.',
+            "❌ *Pembayaran Kedaluwarsa*\n\nWaktu pembayaran telah habis. Silakan klik Top Up lagi untuk mendapatkan QR baru.",
             {
-              parse_mode: 'Markdown'
+              parse_mode: "Markdown"
             }
           );
-        } catch (error) {
-          logger.error('Error saat menghapus pesan pembayaran kedaluwarsa:', error.message);
+        } catch (err) {
+          logger.error(
+            "Error saat menghapus pembayaran expired:",
+            err.message
+          );
         } finally {
           delete global.pendingDeposits[uniqueCode];
 
           db.run(
-            'DELETE FROM pending_deposits WHERE unique_code = ?',
-            [uniqueCode],
-            (err) => {
-              if (err) {
-                logger.error('Gagal menghapus pending_deposits:', err.message);
-              }
-            }
+            "DELETE FROM pending_deposits WHERE unique_code = ?",
+            [uniqueCode]
           );
         }
 
@@ -7232,61 +7582,94 @@ async function checkQRISStatus() {
 
       try {
         const checkPaymentUrl =
-  `https://mutasi-orkut.autsc.my.id/mutasi?username=${MERCHANT_ID}&token=${API_KEY}`;
+          `https://mutasi-orkut.autsc.my.id/mutasi?username=${MERCHANT_ID}&token=${API_KEY}`;
 
-const result = await axios.get(checkPaymentUrl);
+        const { data } = await axios.get(checkPaymentUrl);
 
         if (
-          result.data.status === 'success' &&
-          Array.isArray(result.data.data) &&
-          result.data.data.length > 0
+          data.status !== "success" ||
+          !Array.isArray(data.data)
         ) {
-          for (const transaction of result.data.data) {
-            if (parseInt(transaction.amount) !== deposit.amount) continue;
+          continue;
+        }
 
-            const transactionKey = `${transaction.issuer_reff}_${transaction.amount}`;
+        for (const transaction of data.data) {
 
-            if (global.processedTransactions.has(transactionKey)) {
-              logger.info(`⚠️ Transaksi ${transactionKey} sudah diproses`);
-              continue;
-            }
+          const paidAmount = Number(transaction.amount);
+          const expectedAmount = Number(
+            deposit.total_payment || deposit.amount
+          );
 
-            const success = await processMatchingPayment(
-              deposit,
-              transaction,
-              uniqueCode
+          logger.info(
+            `[QRIS MATCH] ${uniqueCode} | API=${paidAmount} | EXPECT=${expectedAmount}`
+          );
+
+          if (paidAmount !== expectedAmount) {
+            continue;
+          }
+
+          const transactionKey = `${
+            transaction.transaction_id ||
+            transaction.issuer_reff ||
+            transaction.reference_id ||
+            transaction.id
+          }_${paidAmount}`;
+
+          if (global.processedTransactions.has(transactionKey)) {
+            logger.info(
+              `⚠️ Transaksi ${transactionKey} sudah diproses`
+            );
+            continue;
+          }
+
+          logger.info(
+            `[QRIS MATCH] Match ditemukan ${uniqueCode}`
+          );
+
+          // LOCK AGAR INTERVAL BERIKUTNYA TIDAK MEMPROSES LAGI
+          deposit.status = "processing";
+
+          const success = await processMatchingPayment(
+            deposit,
+            transaction,
+            uniqueCode
+          );
+
+          if (success) {
+            logger.info(
+              `✅ Pembayaran berhasil diproses | ${uniqueCode}`
             );
 
-            if (success) {
-              logger.info(`✅ Pembayaran berhasil diproses | ${uniqueCode}`);
+            deposit.status = "success";
 
-              delete global.pendingDeposits[uniqueCode];
+            delete global.pendingDeposits[uniqueCode];
 
-              db.run(
-                'DELETE FROM pending_deposits WHERE unique_code = ?',
-                [uniqueCode],
-                (err) => {
-                  if (err) {
-                    logger.error('Gagal menghapus pending_deposits:', err.message);
-                  }
-                }
-              );
+            db.run(
+              "DELETE FROM pending_deposits WHERE unique_code = ?",
+              [uniqueCode]
+            );
 
-              break;
-            }
+            break;
+          } else {
+            // Gagal, boleh dicoba lagi interval berikutnya
+            deposit.status = "pending";
           }
         }
-      } catch (error) {
+
+      } catch (err) {
+        deposit.status = "pending";
+
         logger.error(
-          `Error saat memeriksa status pembayaran untuk ${uniqueCode}:`,
-          error.response?.data || error.message
+          `Error cek pembayaran ${uniqueCode}:`,
+          err.response?.data || err.message
         );
       }
     }
-  } catch (error) {
+
+  } catch (err) {
     logger.error(
-      'Error di checkQRISStatus:',
-      error.response?.data || error.message
+      "Error di checkQRISStatus:",
+      err.response?.data || err.message
     );
   }
 }
@@ -7686,27 +8069,57 @@ ${bonusLine}💳 Saldo Sekarang  : Rp${balanceAmount.toLocaleString('id-ID')}
 ✨ Terima kasih sudah melakukan Top Up ✨
 ━━━━━━━━━━━━━━`;
 
-    await bot.telegram.sendMessage(
-      userId,
-      messageText,
-      {
-        parse_mode: 'MarkdownV2',
-        reply_markup: {
-          inline_keyboard: [
-            [
-              {
-                text: '💸 Top Up',
-                callback_data: 'menu_topup'
-              },
-              {
-                text: '📝 Menu Utama',
-                callback_data: 'send_main_menu'
-              }
-            ]
+console.log("[NOTIF] generate image mulai");
+
+let image;
+
+try {
+  image = await generateTopupSuccessTemplate({
+    username,
+    userId,
+    amount: topupAmount,
+    bonus: bonusAmount,
+    balance: balanceAmount,
+    transactionId: deposit?.transaction_id ?? "-"
+  });
+} catch (err) {
+  logger.error("❌ Generate template gagal:", err);
+  throw err;
+}
+
+try {
+  await bot.telegram.sendPhoto(
+    userId,
+    {
+      source: image
+    },
+    {
+      caption: messageText,
+      parse_mode: "Markdown",
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: "💸 Top Up",
+              callback_data: "menu_topup"
+            },
+            {
+              text: "📝 Menu Utama",
+              callback_data: "send_main_menu"
+            }
           ]
-        }
+        ]
       }
-    );
+    }
+  );
+
+  console.log("[NOTIF] kirim foto user selesai");
+
+} catch (err) {
+  console.error("[NOTIF] SEND PHOTO ERROR");
+  console.error(err.response?.data || err);
+  throw err;
+}
 
     if (deposit.qrMessageId) {
       try {
@@ -7724,9 +8137,9 @@ ${bonusLine}💳 Saldo Sekarang  : Rp${balanceAmount.toLocaleString('id-ID')}
     const group = getBotGroupData();
 
     if (group) {
-      const { keyGroup, chatId } = group;
+  const { keyGroup, chatId } = group;
 
-      const messageToGroup =
+  const messageToGroup =
 `╭──────────────╮
    📦 TOP UP BERHASIL 📦
 ╰──────────────╯
@@ -7741,25 +8154,39 @@ ${bonusLine}💳 Saldo Sekarang  : Rp${balanceAmount.toLocaleString('id-ID')}
 ✨ Terima kasih sudah melakukan Top Up ✨
 ━━━━━━━━━━━━━━`;
 
-      try {
-        await axios.post(
-          `https://api.telegram.org/bot${keyGroup}/sendMessage`,
-          {
-            chat_id: chatId,
-            text: messageToGroup,
-            parse_mode: 'MarkdownV2'
-          }
-        );
-      } catch (err) {
-        logger.warn(
-          `❗ Gagal kirim ke grup: ${
-            err.response?.data?.description ||
-            err.message
-          }`
-        );
-      }
-    }
+  try {
+    const image = await generateTopupSuccessTemplate({
+      username,
+      userId,
+      amount: topupAmount,
+      bonus: bonusAmount,
+      balance: balanceAmount,
+      transactionId: deposit?.transaction_id ?? "-"
+    });
 
+    const form = new FormData();
+    form.append("chat_id", chatId);
+    form.append("photo", fs.createReadStream(image));
+    form.append("caption", messageToGroup);
+    form.append("parse_mode", "Markdown");
+
+    await axios.post(
+      `https://api.telegram.org/bot${keyGroup}/sendPhoto`,
+      form,
+      {
+        headers: form.getHeaders()
+      }
+    );
+
+  } catch (err) {
+    logger.warn(
+      `❗ Gagal kirim ke grup: ${
+        err.response?.data?.description ||
+        err.message
+      }`
+    );
+  }
+}
     return true;
 
   } catch (error) {
@@ -7770,7 +8197,6 @@ ${bonusLine}💳 Saldo Sekarang  : Rp${balanceAmount.toLocaleString('id-ID')}
     return false;
   }
 }
-
 // Anda mungkin perlu menyesuaikan fungsi ini sesuai dengan data yang Anda butuhkan
 async function processMatchingPayment(deposit, matchingTransaction, uniqueCode) {
   const transactionId =
@@ -7780,14 +8206,16 @@ async function processMatchingPayment(deposit, matchingTransaction, uniqueCode) 
     matchingTransaction.trx_id ||
     matchingTransaction.id;
 
+  const paidAmount = Number(
+    matchingTransaction.amount || 0
+  );
+
   const amount = Number(
-    matchingTransaction.amount ||
     deposit.originalAmount ||
     deposit.amount ||
     0
   );
 
-  // Sinkronkan nominal untuk semua gateway
   deposit.originalAmount = amount;
 
   const paymentMethod =
@@ -7806,10 +8234,16 @@ async function processMatchingPayment(deposit, matchingTransaction, uniqueCode) 
 
   const transactionKey = `${transactionId}_${amount}`;
 
+  global.processedTransactions ??= new Set();
+
   if (global.processedTransactions.has(transactionKey)) {
     logger.info(`Transaction ${transactionKey} already processed, skipping...`);
     return false;
   }
+
+  // LOCK AGAR TIDAK DIPROSES DUA KALI
+  global.processedTransactions.add(transactionKey);
+  deposit.status = "processing";
 
   try {
     logger.info(
@@ -7827,6 +8261,33 @@ async function processMatchingPayment(deposit, matchingTransaction, uniqueCode) 
         }
       );
     });
+
+    const now = Date.now();
+
+    if (config) {
+      if (
+        config.enabled &&
+        config.end_at > 0 &&
+        now > config.end_at
+      ) {
+        await new Promise((resolve) => {
+          db.run(
+            'UPDATE bonus_config SET enabled = 0 WHERE id = 1',
+            resolve
+          );
+        });
+
+        config.enabled = 0;
+      }
+
+      if (
+        config.enabled &&
+        config.start_at > 0 &&
+        now < config.start_at
+      ) {
+        config.enabled = 0;
+      }
+    }
 
     let bonus = 0;
     let bonusPercent = 0;
@@ -7876,36 +8337,62 @@ async function processMatchingPayment(deposit, matchingTransaction, uniqueCode) 
     if (!userBalance) {
       throw new Error('User balance not found after update');
     }
-logger.info(
-  '[PAKASIR NOTIF DATA] ' +
-  JSON.stringify({
-    amount,
-    bonus: deposit.bonus,
-    bonus_percent: deposit.bonus_percent,
-    saldo: userBalance.saldo
-  })
-);
+
+    logger.info(
+      '[PAKASIR NOTIF DATA] ' +
+      JSON.stringify({
+        amount,
+        bonus: deposit.bonus,
+        bonus_percent: deposit.bonus_percent,
+        saldo: userBalance.saldo
+      })
+    );
+
+    logger.info("[MATCH] masuk processMatchingPayment");
+
+    logger.info(
+      "[MATCH] sebelum send notif " +
+      JSON.stringify({
+        transaction_id: deposit.transaction_id,
+        amount,
+        userId: deposit.userId,
+        username: deposit.username
+      })
+    );
+
     const notificationSent =
       await sendPaymentSuccessNotificationByUserId(
         deposit.userId,
         {
+          transaction_id: deposit.transaction_id,
           amount,
           originalAmount: amount,
           bonus: deposit.bonus || 0,
           bonus_percent: deposit.bonus_percent || 0,
-          qrMessageId: deposit.qrMessageId
+          qrMessageId: deposit.qrMessageId,
+          method: deposit.method,
+          username: deposit.username
         },
         userBalance.saldo,
         deposit.username
       );
 
+    logger.info("[MATCH] notificationSent = " + notificationSent);
+
     if (notificationSent) {
-      global.processedTransactions.add(transactionKey);
+      deposit.status = "success";
       return true;
     }
 
+    deposit.status = "pending";
+    global.processedTransactions.delete(transactionKey);
+
     return false;
+
   } catch (error) {
+    deposit.status = "pending";
+    global.processedTransactions.delete(transactionKey);
+
     logger.error('❌ Error processing payment:', error);
     return false;
   }
