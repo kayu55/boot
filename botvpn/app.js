@@ -1,119 +1,42 @@
-// ============================================================
-// 📦 IMPORT MODULE / DEPENDENCIES
-// ============================================================
-
 const os = require('os');
-const fs = require('fs');
-const path = require('path');
-const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const QRCode = require('qrcode');
 const sharp = require('sharp');
-const axios = require('axios');
-const fetch = require('node-fetch');
-const FormData = require('form-data');
-const winston = require('winston');
-const { exec } = require('child_process');
-
-
-
-// ============================================================
-// 🤖 TELEGRAM / BOT MODULE
-// ============================================================
-
-const { Telegraf, session, Markup } = require('telegraf');
-
-
-// ============================================================
-// 💳 QRIS MODULE
-// ============================================================
-
-const { QRISGenerator } = require('autoft-qris');
-
-
-// ============================================================
-// 🌐 EXPRESS APP
-// ============================================================
-
+const path = require('path');
+const express = require('express');
+const { Telegraf, session } = require('telegraf');
 const app = express();
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-
-// ============================================================
-// 📂 DATABASE & FOLDER CONFIGURATION
-// ============================================================
-
+const axios = require('axios');
+const { QRISGenerator } = require('autoft-qris');
+const winston = require('winston');
+const fetch = require("node-fetch");
+const FormData = require("form-data");
 const FOLDER_TEMPATDB = "/root/BotVPN2/sellvpn.db";
-
-const tempDir = path.join(__dirname, 'temp');
-
-
-// ============================================================
-// 📁 CREATE TEMP DIRECTORY
-// ============================================================
-
-if (!fs.existsSync(tempDir)) {
-  fs.mkdirSync(tempDir, { recursive: true });
-}
-
-
-// ============================================================
-// 🌍 GLOBAL CONFIGURATION
-// ============================================================
-
-global.userConfigs = global.userConfigs || {};
-
 const restoreState = {};
 
 
-// ============================================================
-// 📝 LOGGER / LOGGING SYSTEM
-// ============================================================
-
 const logger = winston.createLogger({
   level: 'info',
-
   format: winston.format.combine(
     winston.format.timestamp(),
-
     winston.format.printf(({ timestamp, level, message }) => {
       return `${timestamp} [${level.toUpperCase()}]: ${message}`;
     })
   ),
-
   transports: [
-    new winston.transports.File({
-      filename: 'bot-error.log',
-      level: 'error'
-    }),
-
-    new winston.transports.File({
-      filename: 'bot-combined.log'
-    }),
+    new winston.transports.File({ filename: 'bot-error.log', level: 'error' }),
+    new winston.transports.File({ filename: 'bot-combined.log' }),
   ],
 });
-
-
-// ============================================================
-// 🖥️ CONSOLE LOGGER (DEVELOPMENT MODE)
-// ============================================================
-
 if (process.env.NODE_ENV !== 'production') {
-  logger.add(
-    new winston.transports.Console({
-      format: winston.format.simple(),
-    })
-  );
+  logger.add(new winston.transports.Console({
+    format: winston.format.simple(),
+  }));
 }
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// ============================================================
-// 🔐 CREATE ACCOUNT / TRIAL MODULE
-// ============================================================
-
-// ---------- Trial Account ----------
 const {
   trialssh,
   trialvmess,
@@ -166,44 +89,23 @@ if (!fs.existsSync(tempDir)) {
 }
 
 
-const vars = JSON.parse(
-  fs.readFileSync('./.vars.json', 'utf8')
-);
+const vars = JSON.parse(fs.readFileSync('./.vars.json', 'utf8'));
 
-// ============================================================
-// ⚙️ APPLICATION CONFIGURATION
-// ============================================================
-
-// ---------- Saweria ----------
 const SAWERIA_USERNAME = vars.SAWERIA_USERNAME;
 const SAWERIA_EMAIL = vars.SAWERIA_EMAIL;
 
-
-// ---------- Telegram Bot ----------
 const BOT_TOKEN = vars.BOT_TOKEN;
 const port = vars.PORT || 50123;
 const ADMIN = vars.USER_ID;
-const groupId = vars.GROUP_CHAT_ID;
-
-
-// ---------- Store ----------
 const NAMA_STORE = vars.NAMA_STORE || 'XWANSTORE';
-
-
-// ---------- Admin ----------
-const ADMIN_WA = vars.ADMIN_WA;
-const AUTHX = vars.AUTHX;
-
-
-// ---------- Orkut ----------
-
 const DATA_QRIS = vars.DATA_QRIS;
 const DATA_QRIS_GOPAY = vars.DATA_QRIS_GOPAY;
 const MERCHANT_ID = vars.MERCHANT_ID;
 const API_KEY = vars.API_KEY;
-
-
-// ---------- Menu Image ----------
+const groupId = vars.GROUP_CHAT_ID;
+const ADMIN_WA = vars.ADMIN_WA;
+const AUTHX = vars.AUTHX; 
+// gambar menu
 const GAMBAR_MENU = vars.GAMBAR_MENU;
 const GAMBAR_TOPUP = vars.GAMBAR_TOPUP;
 // Ambil dari env / vars
@@ -1134,7 +1036,7 @@ async function sendMainMenu(ctx) {
 <a href="https://t.me/${adminUsername}">╰📨 @${adminUsername}</a>
 
 📦━━━━━━━━━━━━━━━━━━━━━📦
-     <code>   🌐 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ </code>
+     <code>🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ ${NAMA_STORE} ɴᴇᴛᴡᴏʀᴋ</code>
 📦━━━━━━━━━━━━━━━━━━━━━📦
 `;
 
@@ -1334,14 +1236,24 @@ bot.action('menu_trial', async (ctx) => {
 ┗━━━━━━━━━━━━━━━━━━━━━┛
 
 ⚡ <b>Daftar Trial:</b>
-• SSH WSOKET
-• VRAY VMESS
+• SSH
+• VMESS
+• VLESS
+• TROJAN
+• SHADOWSOCKS
 `;
 
     const keyboard = [
   [
     { text: '🔐 SSH Trial', callback_data: 'trial_ssh' },
     { text: '⚡ VMESS Trial', callback_data: 'trial_vmess' }
+  ],
+  [
+    { text: '🛡️ VLESS Trial', callback_data: 'trial_vless' },
+    { text: '🔥 TROJAN Trial', callback_data: 'trial_trojan' }
+  ],
+  [
+    { text: '🌙 SHADOWSOCKS Trial', callback_data: 'trial_shadowsocks' }
   ],
   [
     { text: '🔙 Kembali ke Menu VPN', callback_data: 'menu_vpn' }
@@ -1382,12 +1294,22 @@ bot.action('menu_create', async (ctx) => {
 🚀 <b>Tersedia:</b>
 • SSH
 • VMESS
+• VLESS
+• TROJAN
+• SHADOWSOCKS
 `;
 
     const keyboard = [
   [
     { text: '🔐 SSH', callback_data: 'create_ssh' },
     { text: '⚡ VMESS', callback_data: 'create_vmess' }
+  ],
+  [
+    { text: '🛡️ VLESS', callback_data: 'create_vless' },
+    { text: '🔥 TROJAN', callback_data: 'create_trojan' }
+  ],
+  [
+    { text: '🌙 SHADOWSOCKS', callback_data: 'create_shadowsocks' }
   ],
   [
     { text: '🔙 Kembali ke Menu VPN', callback_data: 'menu_vpn' }
@@ -1428,12 +1350,22 @@ bot.action('menu_renew', async (ctx) => {
 🔄 <b>Tersedia:</b>
 • SSH
 • VMESS
+• VLESS
+• TROJAN
+• SHADOWSOCKS
 `;
 
     const keyboard = [
   [
     { text: '🔐 SSH', callback_data: 'renew_ssh' },
     { text: '⚡ VMESS', callback_data: 'renew_vmess' }
+  ],
+  [
+    { text: '🛡️ VLESS', callback_data: 'renew_vless' },
+    { text: '🔥 TROJAN', callback_data: 'renew_trojan' }
+  ],
+  [
+    { text: '🌙 SHADOWSOCKS', callback_data: 'renew_shadowsocks' }
   ],
   [
     { text: '🔙 Kembali ke Menu VPN', callback_data: 'menu_vpn' }
@@ -1786,7 +1718,6 @@ bot.command('helpadmin', async (ctx) => {
 26. /setdiskonreseller - Mengatur persentase diskon untuk reseller.
 27. /resetdiskonreseller - Mereset persentase diskon reseller ke 0%.
 28. /helpadmin - Menampilkan daftar perintah admin.
-29. /paymet - Mengubah metode pembayaran (GOPAY, ORKUT, atau SHOPEEPAY).
 
 📝 *Catatan:* Gunakan perintah ini dengan format yang benar untuk menghindari kesalahan.
 `;
@@ -2566,9 +2497,9 @@ bot.action('menu_topup', async (ctx) => {
 ☎️ <b>ʜᴜʙᴜɴɢɪ ᴀᴅᴍɪɴ:</b>
 ╰<a href="https://t.me/${adminUsername}">@${adminUsername}</a>
 
-📦━━━━━━━━━━━━━━━━━━━━━📦
-     <code>   🌐 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ </code>
-📦━━━━━━━━━━━━━━━━━━━━━📦
+📦━━━━━━━━━━━━━━━━━━━━📦
+     <code>🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ ${namaStore} ɴᴇᴛᴡᴏʀᴋ</code>
+📦━━━━━━━━━━━━━━━━━━━━📦
 `;
 
     let sentMessage;
@@ -7061,7 +6992,7 @@ async function processDepositGopay(ctx, amount) {
       `🔗 [Buka QRIS](${safeQrUrl})`,
       ``,
       `┏━━━━━━━━━━━━━━━━━━━━━┓`,
-      `    🌐 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ *`,
+      `    🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ *ᴀɴꜱᴇɴᴅᴀɴᴛ ɴᴇᴛᴡᴏʀᴋ*`,
       `┗━━━━━━━━━━━━━━━━━━━━━┛`
     ].join('\n');
 
