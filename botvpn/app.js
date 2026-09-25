@@ -1,119 +1,42 @@
-// ============================================================
-// 📦 IMPORT MODULE / DEPENDENCIES
-// ============================================================
-
 const os = require('os');
-const fs = require('fs');
-const path = require('path');
-const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const QRCode = require('qrcode');
 const sharp = require('sharp');
-const axios = require('axios');
-const fetch = require('node-fetch');
-const FormData = require('form-data');
-const winston = require('winston');
-const { exec } = require('child_process');
-
-
-
-// ============================================================
-// 🤖 TELEGRAM / BOT MODULE
-// ============================================================
-
-const { Telegraf, session, Markup } = require('telegraf');
-
-
-// ============================================================
-// 💳 QRIS MODULE
-// ============================================================
-
-const { QRISGenerator } = require('autoft-qris');
-
-
-// ============================================================
-// 🌐 EXPRESS APP
-// ============================================================
-
+const path = require('path');
+const express = require('express');
+const { Telegraf, session } = require('telegraf');
 const app = express();
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-
-// ============================================================
-// 📂 DATABASE & FOLDER CONFIGURATION
-// ============================================================
-
+const axios = require('axios');
+const { QRISGenerator } = require('autoft-qris');
+const winston = require('winston');
+const fetch = require("node-fetch");
+const FormData = require("form-data");
 const FOLDER_TEMPATDB = "/root/BotVPN2/sellvpn.db";
-
-const tempDir = path.join(__dirname, 'temp');
-
-
-// ============================================================
-// 📁 CREATE TEMP DIRECTORY
-// ============================================================
-
-if (!fs.existsSync(tempDir)) {
-  fs.mkdirSync(tempDir, { recursive: true });
-}
-
-
-// ============================================================
-// 🌍 GLOBAL CONFIGURATION
-// ============================================================
-
-global.userConfigs = global.userConfigs || {};
-
 const restoreState = {};
 
 
-// ============================================================
-// 📝 LOGGER / LOGGING SYSTEM
-// ============================================================
-
 const logger = winston.createLogger({
   level: 'info',
-
   format: winston.format.combine(
     winston.format.timestamp(),
-
     winston.format.printf(({ timestamp, level, message }) => {
       return `${timestamp} [${level.toUpperCase()}]: ${message}`;
     })
   ),
-
   transports: [
-    new winston.transports.File({
-      filename: 'bot-error.log',
-      level: 'error'
-    }),
-
-    new winston.transports.File({
-      filename: 'bot-combined.log'
-    }),
+    new winston.transports.File({ filename: 'bot-error.log', level: 'error' }),
+    new winston.transports.File({ filename: 'bot-combined.log' }),
   ],
 });
-
-
-// ============================================================
-// 🖥️ CONSOLE LOGGER (DEVELOPMENT MODE)
-// ============================================================
-
 if (process.env.NODE_ENV !== 'production') {
-  logger.add(
-    new winston.transports.Console({
-      format: winston.format.simple(),
-    })
-  );
+  logger.add(new winston.transports.Console({
+    format: winston.format.simple(),
+  }));
 }
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// ============================================================
-// 🔐 CREATE ACCOUNT / TRIAL MODULE
-// ============================================================
-
-// ---------- Trial Account ----------
 const {
   trialssh,
   trialvmess,
@@ -122,8 +45,6 @@ const {
   trialshadowsocks
 } = require("./modules/create");
 
-
-// ---------- Permanent Account ----------
 const {
   createssh,
   createvmess,
@@ -132,11 +53,6 @@ const {
   createshadowsocks
 } = require('./modules/create');
 
-
-// ============================================================
-// ♻️ RENEW ACCOUNT MODULE
-// ============================================================
-
 const {
   renewssh,
   renewvmess,
@@ -144,12 +60,6 @@ const {
   renewtrojan,
   renewshadowsocks
 } = require('./modules/renew');
-
-
-// ============================================================
-// 📅 FORMAT TANGGAL INDONESIA
-// ============================================================
-
 function formatTanggalIndonesia(isoString) {
   const date = new Date(isoString);
 
@@ -171,1565 +81,102 @@ function formatTanggalIndonesia(isoString) {
 
   return `${hari}, ${tanggal} • ${jam}`;
 }
+const fs = require('fs');
+const tempDir = path.join(__dirname, 'temp');
+
+if (!fs.existsSync(tempDir)) {
+  fs.mkdirSync(tempDir, { recursive: true });
+}
 
 
-// ============================================================
-// ⚙️ LOAD ENV / VARIABLES CONFIGURATION
-// ============================================================
+const vars = JSON.parse(fs.readFileSync('./.vars.json', 'utf8'));
 
-const vars = JSON.parse(
-  fs.readFileSync('./.vars.json', 'utf8')
-);
-
-// ============================================================
-// ⚙️ APPLICATION CONFIGURATION
-// ============================================================
-
-// ---------- Saweria ----------
 const SAWERIA_USERNAME = vars.SAWERIA_USERNAME;
 const SAWERIA_EMAIL = vars.SAWERIA_EMAIL;
 
-
-// ---------- Telegram Bot ----------
 const BOT_TOKEN = vars.BOT_TOKEN;
 const port = vars.PORT || 50123;
 const ADMIN = vars.USER_ID;
-const groupId = vars.GROUP_CHAT_ID;
-
-
-// ---------- Store ----------
 const NAMA_STORE = vars.NAMA_STORE || 'XWANSTORE';
-
-
-// ---------- Admin ----------
-const ADMIN_WA = vars.ADMIN_WA;
-const AUTHX = vars.AUTHX;
-
-
-// ---------- Orkut ----------
-
 const DATA_QRIS = vars.DATA_QRIS;
 const DATA_QRIS_GOPAY = vars.DATA_QRIS_GOPAY;
 const MERCHANT_ID = vars.MERCHANT_ID;
 const API_KEY = vars.API_KEY;
-
-
-// ---------- Menu Image ----------
+const groupId = vars.GROUP_CHAT_ID;
+const ADMIN_WA = vars.ADMIN_WA;
+const AUTHX = vars.AUTHX; 
+// gambar menu
 const GAMBAR_MENU = vars.GAMBAR_MENU;
 const GAMBAR_TOPUP = vars.GAMBAR_TOPUP;
+// Ambil dari env / vars
+const GROUP_USERNAME = String(vars.GROUP_USERNAME || '').replace('@', '');
+const CHANNEL_USERNAME = String(vars.CHANNEL_USERNAME || '').replace('@', '');
 
-
-// ---------- Group Channel Configuration ----------
-
-const GROUP_USERNAME = String(
-    vars.GROUP_USERNAME || ''
-).replace('@', '');
-
-const CHANNEL_USERNAME = String(
-    vars.CHANNEL_USERNAME || ''
-).replace('@', '');
-
-
-// ---------- Gopay ----------
-
-const GOPAY_GENERATE_API =
-    "https://v1-gateway.autogopay.site/qris/generate";
-
-const GOPAY_STATUS_API =
-    "https://v1-gateway.autogopay.site/qris/status";
-
+// GOPAY CONFIG
+const GOPAY_GENERATE_API = "https://v1-gateway.autogopay.site/qris/generate";
+const GOPAY_STATUS_API = "https://v1-gateway.autogopay.site/qris/status";
 const GOPAY_KEY = vars.GOPAY_KEY;
 const GOPAY_ID = vars.GOPAY_ID;
-
-
-// ---------- Pakasir ----------
-
+// PAKASIR KONFIG
 const PAKASIR_API_KEY = vars.PAKASIR_API_KEY;
 const PAKASIR_PROJECT = vars.PAKASIR_PROJECT;
-
 const PAY_BASE = "https://app.pakasir.com";
 
-
-// ============================================================
-// 🤖 INITIALIZE TELEGRAM BOT
-// ============================================================
-
 const bot = new Telegraf(BOT_TOKEN);
-
-
-// ============================================================
-// 🔐 BASH ENCRYPT / DECRYPT MANAGER
-// ============================================================
-
-class BashEncryptManager {
-
-    // ========================================================
-    // 📁 CONSTRUCTOR
-    // ========================================================
-
-    constructor() {
-        this.tempDir = "./temp-bash";
-        this.ensureTempDir();
-    }
-
-
-    // ========================================================
-    // 📂 ENSURE TEMP DIRECTORY
-    // ========================================================
-
-    ensureTempDir() {
-        if (!fs.existsSync(this.tempDir)) {
-            fs.mkdirSync(this.tempDir, {
-                recursive: true
-            });
-        }
-    }
-
-
-    // ========================================================
-    // 🧹 CLEANUP TEMP FILES
-    // ========================================================
-
-    cleanupTempFiles() {
-        try {
-
-            if (!fs.existsSync(this.tempDir)) {
-                return;
-            }
-
-            const files = fs.readdirSync(this.tempDir);
-
-            files.forEach(file => {
-
-                if (
-                    file.startsWith("input_") ||
-                    file.startsWith("temp_")
-                ) {
-                    fs.unlinkSync(
-                        path.join(this.tempDir, file)
-                    );
-                }
-
-            });
-
-        } catch (e) {
-            logger.error(e.message);
-        }
-    }
-
-
-    // ========================================================
-    // 🧹 CLEANUP ENCRYPTED / DECRYPTED FILES
-    // ========================================================
-
-    cleanupResultFiles() {
-        try {
-
-            if (!fs.existsSync(this.tempDir)) {
-                return;
-            }
-
-            const files = fs.readdirSync(this.tempDir);
-
-            files.forEach(file => {
-
-                if (
-                    file.startsWith("encrypted_") ||
-                    file.startsWith("decrypted_")
-                ) {
-                    fs.unlinkSync(
-                        path.join(this.tempDir, file)
-                    );
-                }
-
-            });
-
-        } catch (e) {
-            logger.error(e.message);
-        }
-    }
-
-
-    // ========================================================
-    // 🔒 ENCRYPT BASH SCRIPT
-    // ========================================================
-
-    async encryptScript(inputPath, outputName) {
-
-        return new Promise((resolve, reject) => {
-
-            const outputPath = path.join(
-                this.tempDir,
-                outputName
-            );
-
-            exec(
-                `bash-obfuscate ${inputPath} -o ${outputPath}`,
-
-                (err, stdout, stderr) => {
-
-                    // ---------- Error ----------
-                    if (err) {
-                        return reject(err);
-                    }
-
-
-                    // ---------- Stderr ----------
-                    if (
-                        stderr &&
-                        !stderr.includes("Warning")
-                    ) {
-                        return reject(
-                            new Error(stderr)
-                        );
-                    }
-
-
-                    // ---------- Success ----------
-                    resolve({
-                        success: true,
-                        outputPath,
-                        fileName: outputName
-                    });
-
-                }
-            );
-
-        });
-
-    }
-
-
-    // ========================================================
-    // 🔓 DECRYPT BASH SCRIPT
-    // ========================================================
-
-    async decryptScript(inputPath, outputName) {
-
-        return new Promise((resolve, reject) => {
-
-            try {
-
-                // ---------- Read Encrypted File ----------
-                const encrypted =
-                    fs.readFileSync(
-                        inputPath,
-                        "utf8"
-                    );
-
-
-                // ---------- Replace Eval ----------
-                const output =
-                    encrypted.replace(
-                        /eval/g,
-                        "echo"
-                    );
-
-
-                // ---------- Temporary Script ----------
-                const tempScript =
-                    path.join(
-                        this.tempDir,
-                        "temp_decrypt.sh"
-                    );
-
-
-                // ---------- Output File ----------
-                const outputPath =
-                    path.join(
-                        this.tempDir,
-                        outputName
-                    );
-
-
-                // ---------- Write Temporary Script ----------
-                fs.writeFileSync(
-                    tempScript,
-                    output
-                );
-
-
-                // ---------- Execute Decryption ----------
-                exec(
-                    `bash ${tempScript} > ${outputPath} 2>&1`,
-
-                    err => {
-
-                        // ---------- Remove Temporary File ----------
-                        try {
-                            fs.unlinkSync(tempScript);
-                        } catch {}
-
-
-                        // ---------- Fallback ----------
-                        if (
-                            err &&
-                            !fs.existsSync(outputPath)
-                        ) {
-
-                            fs.writeFileSync(
-                                outputPath,
-                                output
-                            );
-
-                        }
-
-
-                        // ---------- Success ----------
-                        resolve({
-                            success: true,
-                            outputPath,
-                            fileName: outputName
-                        });
-
-                    }
-                );
-
-            } catch (e) {
-
-                reject(e);
-
-            }
-
-        });
-
-    }
-
-
-    // ========================================================
-    // 🔍 CHECK BASH-OBFUSCATE
-    // ========================================================
-
-    async checkBashObfuscate() {
-
-        return new Promise(resolve => {
-
-            exec(
-                "which bash-obfuscate",
-
-                err => resolve(!err)
-
-            );
-
-        });
-
-    }
-
-
-    // ========================================================
-    // 📦 INSTALL BASH-OBFUSCATE
-    // ========================================================
-
-    async installBashObfuscate() {
-
-        return new Promise((resolve, reject) => {
-
-            exec(
-                "npm install -g bash-obfuscate",
-
-                err => {
-
-                    // ---------- Error ----------
-                    if (err) {
-                        return reject(err);
-                    }
-
-
-                    // ---------- Success ----------
-                    resolve(true);
-
-                }
-            );
-
-        });
-
-    }
-
-}
-
-// ============================================================
-// 🔐 INITIALIZE BASH ENCRYPT MANAGER
-// ============================================================
-
-const bashEncrypt = new BashEncryptManager();
-
-
-// ============================================================
-// 💾 DATABASE BACKUP CONFIGURATION
-// ============================================================
-
+///backup kode sellvpndb
 const https = require("https");
-
-const BACKUP_DIR = path.join(
-    __dirname,
-    "backup"
-);
-
-
-// ============================================================
-// 📁 CREATE BACKUP DIRECTORY
-// ============================================================
+const BACKUP_DIR = path.join(__dirname, "backup");
 
 if (!fs.existsSync(BACKUP_DIR)) {
-    fs.mkdirSync(
-        BACKUP_DIR,
-        {
-            recursive: true
-        }
-    );
+    fs.mkdirSync(BACKUP_DIR, { recursive: true });
 }
-
-
-// ============================================================
-// 📄 GENERATE V2RAY YAML CONFIGURATION
-// ============================================================
-
-function generateV2RayYaml(
-    v2rayConfig,
-    configName = ""
-) {
-
-    console.log(
-        '🛠️ Generating V2Ray YAML from:',
-        v2rayConfig
-    );
-
-
-    // ========================================================
-    // 🔍 VALIDATE V2RAY CONFIGURATION
-    // ========================================================
-
-    if (
-        !v2rayConfig.id ||
-        !v2rayConfig.add
-    ) {
-        throw new Error(
-            'Konfigurasi tidak valid: missing ID atau address'
-        );
-    }
-
-
-    // ========================================================
-    // ⚙️ EXTRACT V2RAY PARAMETERS
-    // ========================================================
-
-    const proxyName =
-        v2rayConfig.ps ||
-        v2rayConfig.name ||
-        "v2ray-proxy";
-
-
-    const server =
-        v2rayConfig.add ||
-        v2rayConfig.address ||
-        v2rayConfig.server ||
-        "server.example.com";
-
-
-    const port =
-        v2rayConfig.port ||
-        443;
-
-
-    const uuid =
-        v2rayConfig.id ||
-        v2rayConfig.uuid ||
-        "66ce30e3-4c14-42f6-b708-2f4dd60a161f";
-
-
-    const alterId =
-        v2rayConfig.aid ||
-        v2rayConfig.alterId ||
-        0;
-
-
-    const cipher =
-        v2rayConfig.cipher ||
-        "auto";
-
-
-    const tls =
-        v2rayConfig.tls === "tls" ||
-        v2rayConfig.tls === true ||
-        v2rayConfig.security === "tls";
-
-
-    const skipVerify =
-        v2rayConfig.skipCertVerify !== undefined
-            ? v2rayConfig.skipCertVerify
-            : true;
-
-
-    const servername =
-        v2rayConfig.sni ||
-        v2rayConfig.servername ||
-        v2rayConfig.host ||
-        server;
-
-
-    const network =
-        v2rayConfig.net ||
-        v2rayConfig.network ||
-        "tcp";
-
-
-    const wsPath =
-        v2rayConfig.path ||
-        "/";
-
-
-    const wsHost =
-        v2rayConfig.host ||
-        v2rayConfig.sni ||
-        servername;
-
-
-    const udp =
-        v2rayConfig.udp !== undefined
-            ? v2rayConfig.udp
-            : true;
-
-
-    // ========================================================
-    // 🔀 DETERMINE PROXY TYPE
-    // ========================================================
-
-    const proxyType =
-        v2rayConfig.type === 'vless'
-            ? 'vless'
-            : 'vmess';
-
-
-    console.log(
-        `🔧 YAML parameters: ${proxyType}://${uuid}@${server}:${port}`
-    );
-
-    console.log(
-        `🔧 Network: ${network}, TLS: ${tls}, SNI: ${servername}, Path: ${wsPath}, Host: ${wsHost}`
-    );
-
-
-    // ========================================================
-    // 📝 INITIALIZE YAML HEADER / NOTES
-    // ========================================================
-
-    let yaml =
-        addYamlNotes(
-            proxyType,
-            configName
-        );
-
-
-    // ========================================================
-    // 🌐 BASIC PROXY CONFIGURATION
-    // ========================================================
-
-    yaml += "proxies:\n";
-
-    yaml +=
-        `  - name: ${proxyName}\n`;
-
-    yaml +=
-        `    server: ${server}\n`;
-
-    yaml +=
-        `    port: ${port}\n`;
-
-    yaml +=
-        `    type: ${proxyType}\n`;
-
-    yaml +=
-        `    uuid: ${uuid}\n`;
-
-
-    // ========================================================
-    // ⚡ VMESS-SPECIFIC CONFIGURATION
-    // ========================================================
-
-    if (proxyType === 'vmess') {
-
-        yaml +=
-            `    alterId: ${alterId}\n`;
-
-        yaml +=
-            `    cipher: ${cipher}\n`;
-    }
-
-
-    // ========================================================
-    // 🔒 TLS CONFIGURATION
-    // ========================================================
-
-    yaml +=
-        `    tls: ${tls}\n`;
-
-    yaml +=
-        `    skip-cert-verify: ${skipVerify}\n`;
-
-
-    // ========================================================
-    // 🌍 SERVERNAME / SNI
-    // ========================================================
-
-    if (servername) {
-
-        yaml +=
-            `    servername: ${servername}\n`;
-    }
-
-
-    // ========================================================
-    // 🌐 NETWORK CONFIGURATION
-    // ========================================================
-
-    yaml +=
-        `    network: ${network}\n`;
-
-
-    // ========================================================
-    // 🔌 NETWORK-SPECIFIC OPTIONS
-    // ========================================================
-
-    // ---------- WebSocket ----------
-    if (network === "ws") {
-
-        yaml +=
-            `    ws-opts:\n`;
-
-        yaml +=
-            `      path: "${wsPath}"\n`;
-
-
-        // ---------- WebSocket Host ----------
-        if (wsHost) {
-
-            yaml +=
-                `      headers:\n`;
-
-            yaml +=
-                `        Host: ${wsHost}\n`;
-        }
-    }
-
-
-    // ---------- gRPC ----------
-    else if (network === "grpc") {
-
-        yaml +=
-            `    grpc-opts:\n`;
-
-        yaml +=
-            `      grpc-service-name: "${wsPath}"\n`;
-    }
-
-
-    // ---------- HTTP/2 ----------
-    else if (network === "h2") {
-
-        yaml +=
-            `    h2-opts:\n`;
-
-        yaml +=
-            `      path: "${wsPath}"\n`;
-
-
-        // ---------- HTTP/2 Host ----------
-        if (wsHost) {
-
-            yaml +=
-                `      host: ["${wsHost}"]\n`;
-        }
-    }
-
-
-    // ---------- TCP ----------
-    else if (network === "tcp") {
-
-        // Custom TCP HTTP Header
-        if (wsHost) {
-
-            yaml +=
-                `    http-opts:\n`;
-
-            yaml +=
-                `      headers:\n`;
-
-            yaml +=
-                `        Host: ${wsHost}\n`;
-        }
-    }
-
-
-    // ========================================================
-    // 🛡️ VLESS FLOW CONFIGURATION
-    // ========================================================
-
-    if (
-        proxyType === 'vless' &&
-        v2rayConfig.flow
-    ) {
-
-        yaml +=
-            `    flow: ${v2rayConfig.flow}\n`;
-    }
-
-
-    // ========================================================
-    // 📡 UDP CONFIGURATION
-    // ========================================================
-
-    yaml +=
-        `    udp: ${udp}\n`;
-
-
-    // ========================================================
-    // ✅ YAML GENERATION COMPLETE
-    // ========================================================
-
-    console.log(
-        '✅ YAML generated successfully'
-    );
-
-    console.log(
-        '📄 Generated YAML:\n',
-        yaml
-    );
-
-
-    return yaml;
-}
-
-// ============================================================
-// 📝 ADD YAML HEADER / NOTES
-// ============================================================
-
-function addYamlNotes(
-    proxyType,
-    configName = ""
-) {
-
-    const now = new Date();
-
-    const timestamp =
-        now.toLocaleString('id-ID');
-
-
-    // ========================================================
-    // 📋 YAML HEADER
-    // ========================================================
-
-    let notes =
-        `# ========================================\n`;
-
-    notes +=
-        `# KONFIGURASI ${proxyType.toUpperCase()} - ANSENDANTVPN\n`;
-
-    notes +=
-        `# ========================================\n`;
-
-
-    // ========================================================
-    // ℹ️ YAML INFORMATION
-    // ========================================================
-
-    notes +=
-        `# - Pastikan server dalam keadaan aktif\n`;
-
-    notes +=
-        `# - Untuk masalah koneksi, cek status server\n`;
-
-
-    // ========================================================
-    // 🏷️ CONFIG NAME
-    // ========================================================
-
-    if (configName) {
-
-        notes +=
-            `# - Nama: ${configName}\n`;
-    }
-
-
-    // ========================================================
-    // 🕒 GENERATE TIMESTAMP
-    // ========================================================
-
-    notes +=
-        `# - Generated on: ${timestamp}\n\n`;
-
-
-    return notes;
-}
-
-
-// ============================================================
-// 🔗 PARSE VMESS LINK
-// ============================================================
-
-function parseVMessLink(link) {
-
-    try {
-
-        console.log(
-            '🔗 Parsing VMess link'
-        );
-
-
-        // ========================================================
-        // 📦 EXTRACT BASE64 DATA
-        // ========================================================
-
-        const base64Data =
-            link.split('://')[1];
-
-
-        // ========================================================
-        // 🔓 DECODE BASE64
-        // ========================================================
-
-        const decoded =
-            Buffer
-                .from(base64Data, 'base64')
-                .toString();
-
-
-        console.log(
-            '📋 Decoded VMess:',
-            decoded
-        );
-
-
-        // ========================================================
-        // 📄 PARSE JSON
-        // ========================================================
-
-        const config =
-            JSON.parse(decoded);
-
-
-        console.log(
-            '📋 VMess config parsed:',
-            config
-        );
-
-
-        // ========================================================
-        // 🔄 NORMALIZE VMESS CONFIGURATION
-        // ========================================================
-
-        const normalizedConfig = {
-
-            id:
-                config.id ||
-                config.uuid ||
-                config.userID ||
-                "66ce30e3-4c14-42f6-b708-2f4dd60a161f",
-
-
-            add:
-                config.add ||
-                config.address ||
-                config.host ||
-                config.server ||
-                "server.example.com",
-
-
-            port:
-                parseInt(config.port) ||
-                443,
-
-
-            ps:
-                config.ps ||
-                config.remarks ||
-                config.name ||
-                "vmess-proxy",
-
-
-            type:
-                'vmess',
-
-
-            aid:
-                parseInt(config.aid) ||
-                parseInt(config.alterId) ||
-                0,
-
-
-            cipher:
-                config.cipher ||
-                config.security ||
-                "auto",
-
-
-            tls:
-                config.tls === "tls" ||
-                config.security === "tls" ||
-                false,
-
-
-            sni:
-                config.sni ||
-                config.host ||
-                (
-                    config.add ||
-                    "server.example.com"
-                ),
-
-
-            host:
-                config.host ||
-                config.add,
-
-
-            net:
-                config.net ||
-                config.type ||
-                "tcp",
-
-
-            path:
-                config.path ||
-                "/",
-
-
-            skipCertVerify:
-                config.skipCertVerify !== undefined
-                    ? config.skipCertVerify
-                    : true,
-
-
-            udp:
-                config.udp !== undefined
-                    ? config.udp
-                    : true
-
-        };
-
-
-        // ========================================================
-        // ✅ VMESS PARSING SUCCESS
-        // ========================================================
-
-        console.log(
-            '✅ VMess config normalized:',
-            normalizedConfig
-        );
-
-
-        return normalizedConfig;
-
-
-    } catch (error) {
-
-        // ========================================================
-        // ❌ VMESS PARSING ERROR
-        // ========================================================
-
-        console.error(
-            '❌ VMess parsing error:',
-            error
-        );
-
-
-        throw new Error(
-            'Format link VMess tidak valid: ' +
-            error.message
-        );
-
-    }
-}
-
-
-// ============================================================
-// 🔗 PARSE VLESS LINK
-// ============================================================
-
-function parseVLessLink(link) {
-
-    try {
-
-        console.log(
-            '🔗 Parsing VLESS link:',
-            link
-        );
-
-
-        // ========================================================
-        // 🌐 PARSE URL
-        // ========================================================
-
-        const url =
-            new URL(link);
-
-
-        const params =
-            new URLSearchParams(
-                url.search
-            );
-
-
-        // ========================================================
-        // 🔄 BUILD VLESS CONFIGURATION
-        // ========================================================
-
-        const config = {
-
-            id:
-                url.username ||
-                "66ce30e3-4c14-42f6-b708-2f4dd60a161f",
-
-
-            add:
-                url.hostname ||
-                "server.example.com",
-
-
-            port:
-                parseInt(url.port) ||
-                443,
-
-
-            type:
-                'vless',
-
-
-            ps:
-                url.hash
-                    ? decodeURIComponent(
-                        url.hash.substring(1)
-                    )
-                    : 'vless-proxy',
-
-
-            tls:
-                params.get('security') === 'tls' ||
-                params.get('encryption') === 'tls'
-                    ? 'tls'
-                    : 'none',
-
-
-            sni:
-                params.get('sni') ||
-                params.get('host') ||
-                url.hostname,
-
-
-            host:
-                params.get('host') ||
-                params.get('sni') ||
-                url.hostname,
-
-
-            net:
-                params.get('type') ||
-                params.get('network') ||
-                'tcp',
-
-
-            path:
-                params.get('path') ||
-                '/',
-
-
-            aid:
-                0,
-
-
-            cipher:
-                'auto',
-
-
-            udp:
-                true,
-
-
-            skipCertVerify:
-                true,
-
-
-            flow:
-                params.get('flow') ||
-                ''
-
-        };
-
-
-        // ========================================================
-        // ✅ VLESS PARSING SUCCESS
-        // ========================================================
-
-        console.log(
-            '✅ VLESS config parsed:',
-            config
-        );
-
-
-        return config;
-
-
-    } catch (error) {
-
-        // ========================================================
-        // ❌ VLESS PARSING ERROR
-        // ========================================================
-
-        console.error(
-            '❌ VLESS parsing error:',
-            error
-        );
-
-
-        throw new Error(
-            'Format link VLESS tidak valid: ' +
-            error.message
-        );
-
-    }
-}
-
-
-// ============================================================
-// 🔗 PARSE TROJAN LINK
-// ============================================================
-
-function parseTrojanLink(link) {
-
-    try {
-
-        console.log(
-            '🔗 Parsing Trojan link:',
-            link
-        );
-
-
-        // ========================================================
-        // 🌐 PARSE URL
-        // ========================================================
-
-        const url =
-            new URL(link);
-
-
-        const params =
-            new URLSearchParams(
-                url.search
-            );
-
-
-        // ========================================================
-        // 📍 DECODE PATH
-        // ========================================================
-
-        let path =
-            params.get('path') ||
-            '/';
-
-
-        try {
-
-            path =
-                decodeURIComponent(path);
-
-        } catch (e) {
-
-            // Jika decode gagal,
-            // gunakan path asli
-
-        }
-
-
-        // ========================================================
-        // 🔄 BUILD TROJAN CONFIGURATION
-        // ========================================================
-
-        const config = {
-
-            password:
-                url.username ||
-                "password",
-
-
-            server:
-                url.hostname ||
-                "server.example.com",
-
-
-            port:
-                parseInt(url.port) ||
-                443,
-
-
-            sni:
-                params.get('sni') ||
-                params.get('host') ||
-                url.hostname,
-
-
-            allowInsecure:
-                params.get('allowInsecure') === '1' ||
-                true,
-
-
-            name:
-                url.hash
-                    ? decodeURIComponent(
-                        url.hash.substring(1)
-                    )
-                    : 'trojan-proxy',
-
-
-            type:
-                'trojan',
-
-
-            network:
-                params.get('type') ||
-                params.get('network') ||
-                'tcp',
-
-
-            path:
-                path,
-
-
-            host:
-                params.get('host') ||
-                params.get('sni') ||
-                url.hostname,
-
-
-            udp:
-                true
-
-        };
-
-
-        // ========================================================
-        // ✅ TROJAN PARSING SUCCESS
-        // ========================================================
-
-        console.log(
-            '✅ Trojan config parsed:',
-            config
-        );
-
-
-        return config;
-
-
-    } catch (error) {
-
-        // ========================================================
-        // ❌ TROJAN PARSING ERROR
-        // ========================================================
-
-        console.error(
-            '❌ Trojan parsing error:',
-            error
-        );
-
-
-        throw new Error(
-            'Format link Trojan tidak valid: ' +
-            error.message
-        );
-
-    }
-}
-// ============================================================
-// 🔍 DETECT CONFIGURATION TYPE
-// ============================================================
-
-function detectConfigType(link) {
-
-    // ========================================================
-    // ❌ VALIDATE LINK
-    // ========================================================
-
-    if (!link) {
-        return null;
-    }
-
-
-    // ========================================================
-    // ⚡ DETECT VMESS
-    // ========================================================
-
-    if (link.startsWith("vmess://")) {
-
-        return {
-            type: "vmess",
-            config: parseVMessLink(link)
-        };
-    }
-
-
-    // ========================================================
-    // 🛡️ DETECT VLESS
-    // ========================================================
-
-    if (link.startsWith("vless://")) {
-
-        return {
-            type: "vless",
-            config: parseVLessLink(link)
-        };
-    }
-
-
-    // ========================================================
-    // 🐎 DETECT TROJAN
-    // ========================================================
-
-    if (link.startsWith("trojan://")) {
-
-        return {
-            type: "trojan",
-            config: parseTrojanLink(link)
-        };
-    }
-
-
-    // ========================================================
-    // ❌ UNSUPPORTED CONFIGURATION
-    // ========================================================
-
-    throw new Error(
-        "Format config tidak didukung."
-    );
-}
-
-
-// ============================================================
-// 📝 GENERATE YAML FROM CONFIG LINK
-// ============================================================
-
-function generateYamlFromLink(link) {
-
-    // ========================================================
-    // 🔍 DETECT CONFIG TYPE
-    // ========================================================
-
-    const result =
-        detectConfigType(link);
-
-
-    // ========================================================
-    // 🔀 GENERATE YAML BASED ON TYPE
-    // ========================================================
-
-    switch (result.type) {
-
-        // ---------- VMESS ----------
-        case "vmess":
-
-        // ---------- VLESS ----------
-        case "vless":
-
-            return generateV2RayYaml(
-                result.config
-            );
-
-
-        // ---------- TROJAN ----------
-        case "trojan":
-
-            return generateTrojanYaml(
-                result.config
-            );
-
-
-        // ====================================================
-        // ❌ UNKNOWN CONFIG TYPE
-        // ====================================================
-
-        default:
-
-            throw new Error(
-                "Tipe config tidak didukung."
-            );
-    }
-}
-
-
-// ============================================================
-// 🧪 TEMPORARY TEST CONFIGURATION
-// ============================================================
-
-const testLink =
-    "vmess://eyJhZGQiOiIxMDQuMTcuMy44MSIsImFpZCI6IjAiLCJzY3kiOiJhdXRvIiwiaG9zdCI6ImRvOC52aXB0dW5uZWwubmV0IiwiaWQiOiJiYTZlNTA0NS1mNzViLTQyYTYtYTk5ZS00YmE5Yjc3NmM0OGUiLCJuZXQiOiJ3cyIsInBhdGgiOiJcL3ZtZXNzIiwicG9ydCI6IjgwIiwicHMiOiJuZXdqdWx5IDAyIiwidGxzIjoibm9uZSIsInNuaSI6IiIsInR5cGUiOiJub25lIiwidiI6IjIifQ==";
-
-
-// ============================================================
-// 🧪 TEST DETECT CONFIG
-// ============================================================
-
-// console.log(
-//     detectConfigType(testLink)
-// );
-
-
-// ============================================================
-// 🧪 TEST GENERATE YAML
-// ============================================================
-
-const yaml =
-    generateYamlFromLink(testLink);
-
-console.log(yaml);
-
-
-// ============================================================
-// 💾 FORMAT BACKUP DATABASE NAME
-// ============================================================
 
 function formatBackupName() {
+    const d = new Date();
 
-    // ========================================================
-    // 🕒 GET CURRENT DATE & TIME
-    // ========================================================
-
-    const d =
-        new Date();
-
-
-    // ========================================================
-    // 📅 DATE COMPONENTS
-    // ========================================================
-
-    const y =
-        d.getFullYear();
-
-    const m =
-        String(
-            d.getMonth() + 1
-        ).padStart(2, "0");
-
-    const day =
-        String(
-            d.getDate()
-        ).padStart(2, "0");
-
-
-    // ========================================================
-    // ⏰ TIME COMPONENTS
-    // ========================================================
-
-    const h =
-        String(
-            d.getHours()
-        ).padStart(2, "0");
-
-    const min =
-        String(
-            d.getMinutes()
-        ).padStart(2, "0");
-
-    const s =
-        String(
-            d.getSeconds()
-        ).padStart(2, "0");
-
-
-    // ========================================================
-    // 🏷️ GENERATE BACKUP FILE NAME
-    // ========================================================
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    const h = String(d.getHours()).padStart(2, "0");
+    const min = String(d.getMinutes()).padStart(2, "0");
+    const s = String(d.getSeconds()).padStart(2, "0");
 
     return `sellvpn-${y}-${m}-${day}_${h}-${min}-${s}.db`;
 }
-
-// ============================================================
-// 💾 CREATE DATABASE BACKUP
-// ============================================================
 
 async function createDatabaseBackup() {
 
     return new Promise((resolve, reject) => {
 
-        // ========================================================
-        // 🏷️ GENERATE BACKUP NAME
-        // ========================================================
+        const backupName = formatBackupName();
 
-        const backupName =
-            formatBackupName();
+        const backupPath = path.join(BACKUP_DIR, backupName);
 
+        fs.copyFile(FOLDER_TEMPATDB, backupPath, err => {
 
-        // ========================================================
-        // 📂 BACKUP FILE PATH
-        // ========================================================
+            if (err) return reject(err);
 
-        const backupPath =
-            path.join(
-                BACKUP_DIR,
-                backupName
-            );
+            resolve({
+                name: backupName,
+                path: backupPath
+            });
 
-
-        // ========================================================
-        // 📋 COPY DATABASE FILE
-        // ========================================================
-
-        fs.copyFile(
-            FOLDER_TEMPATDB,
-            backupPath,
-
-            err => {
-
-                // ==================================================
-                // ❌ BACKUP ERROR
-                // ==================================================
-
-                if (err) {
-                    return reject(err);
-                }
-
-
-                // ==================================================
-                // ✅ BACKUP SUCCESS
-                // ==================================================
-
-                resolve({
-                    name: backupName,
-                    path: backupPath
-                });
-
-            }
-        );
+        });
 
     });
 
 }
 
-
-// ============================================================
-// 📤 SEND DATABASE BACKUP TO ADMIN
-// ============================================================
-
-async function sendBackupToAdmin(
-    filePath,
-    fileName
-) {
+async function sendBackupToAdmin(filePath, fileName) {
 
     try {
 
-        // ========================================================
-        // 📤 SEND FILE TO TELEGRAM
-        // ========================================================
-
         await bot.telegram.sendDocument(
             ADMIN,
-
             {
-                source:
-                    fs.createReadStream(
-                        filePath
-                    ),
-
-                filename:
-                    fileName
+                source: fs.createReadStream(filePath),
+                filename: fileName
             },
-
             {
                 caption:
 `📦 <b>Backup Database Otomatis</b>
@@ -1738,71 +185,30 @@ async function sendBackupToAdmin(
 <code>${fileName}</code>
 
 ✅ Backup berhasil dibuat.`,
-
                 parse_mode: "HTML"
             }
         );
 
-
-        // ========================================================
-        // 📝 LOG SUCCESS
-        // ========================================================
-
-        logger.info(
-            "Backup database berhasil dikirim ke Telegram."
-        );
-
+        logger.info("Backup database berhasil dikirim ke Telegram.");
 
     } catch (err) {
 
-        // ========================================================
-        // ❌ LOG ERROR
-        // ========================================================
-
-        logger.error(
-            "Gagal kirim backup : " +
-            err.message
-        );
+        logger.error("Gagal kirim backup : " + err.message);
 
     }
 
 }
+// =======================
+// GATE WAJIB JOIN (Channel & Group)
+// =======================
+const REQUIRED_CHANNEL = `@${CHANNEL_USERNAME}`;
+const REQUIRED_GROUP = `@${GROUP_USERNAME}`;
 
-
-// ============================================================
-// 🔐 REQUIRED JOIN GATE
-// 📢 CHANNEL + 👥 GROUP
-// ============================================================
-
-const REQUIRED_CHANNEL =
-    `@${CHANNEL_USERNAME}`;
-
-const REQUIRED_GROUP =
-    `@${GROUP_USERNAME}`;
-
-
-// ============================================================
-// 🔗 CHANNEL & GROUP LINK
-// ============================================================
-
-const channelLink =
-    `https://t.me/${CHANNEL_USERNAME}`;
-
-const groupLink =
-    `https://t.me/${GROUP_USERNAME}`;
-
-
-// ============================================================
-// 🚪 SEND JOIN GATE
-// ============================================================
+const channelLink = `https://t.me/${CHANNEL_USERNAME}`;
+const groupLink = `https://t.me/${GROUP_USERNAME}`;
 
 async function sendJoinGate(ctx) {
-
-    // ========================================================
-    // 📝 JOIN GATE MESSAGE
-    // ========================================================
-
-    const gateText =
+  const gateText = 
 `🔔 *Selamat Datang Di ${NAMA_STORE} 🤗*
 
 \`\`\`
@@ -1816,1565 +222,486 @@ dengan komunitas kami terlebih dahulu.
 Silakan gabung ke keduanya, lalu tekan tombol
 "✅ Saya Sudah Bergabung" di bawah ini untuk lanjut.`;
 
-
-try {
-
-    // ====================================================
-    // 📤 SEND JOIN GATE MESSAGE
-    // ====================================================
-
-    await ctx.reply(
-        gateText,
-        {
-            parse_mode: 'Markdown',
-            disable_web_page_preview: true,
-
-            reply_markup: {
-                inline_keyboard: [
-
-                    // ------------------------------------
-                    // 📢 JOIN CHANNEL
-                    // 🔵 BIRU
-                    // ------------------------------------
-
-                    [
-                        {
-                            text: '🔗 Gabung Channel kami',
-                            url: channelLink,
-                            style: 'primary'
-                        }
-                    ],
-
-                    // ------------------------------------
-                    // 👥 JOIN GROUP
-                    // 🔵 BIRU
-                    // ------------------------------------
-
-                    [
-                        {
-                            text: '💬 Gabung Group kami',
-                            url: groupLink,
-                            style: 'primary'
-                        }
-                    ],
-
-                    // ------------------------------------
-                    // ✅ CONTINUE
-                    // 🟢 HIJAU
-                    // ------------------------------------
-
-                    [
-                        {
-                            text: '✅ Saya Sudah Bergabung, Lanjutkan',
-                            callback_data: 'continue_after_join',
-                            style: 'success'
-                        }
-                    ]
-
-                ]
-            }
-        }
-    );
-
-} catch (e) {
-
-    // ====================================================
-    // ❌ JOIN GATE ERROR
-    // ====================================================
-
-    logger.error(
-        'Gagal mengirim Join Gate: ' +
-        e.message
-    );
-
+  try {
+    await ctx.reply(gateText, {
+      parse_mode: 'Markdown',
+      disable_web_page_preview: true,
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: '🔗 Gabung Channel kami', url: channelLink }],
+          [{ text: '💬 Gabung Group kami', url: groupLink }],
+          [{ text: '✅ Saya Sudah Bergabung, Lanjutkan', callback_data: 'continue_after_join' }]
+        ]
+      }
+    });
+  } catch (e) {
+    logger.error('Gagal mengirim Join Gate: ' + e.message);
+  }
 }
-}
-
-// ============================================================
-// 👥 CHECK CHANNEL & GROUP MEMBERSHIP
-// ============================================================
 
 async function checkMembership(ctx) {
+  const userId = ctx.from?.id;
+  if (!userId) return false;
 
-    // ========================================================
-    // 🆔 GET USER ID
-    // ========================================================
+  try {
+    const ch = await ctx.telegram.getChatMember(REQUIRED_CHANNEL, userId);
+    const gr = await ctx.telegram.getChatMember(REQUIRED_GROUP, userId);
 
-    const userId =
-        ctx.from?.id;
+    logger.info(`Status channel user ${userId}: ${ch?.status}`);
+    logger.info(`Status group user ${userId}: ${gr?.status}`);
 
-    if (!userId) {
-        return false;
-    }
-
-
-    try {
-
-        // ====================================================
-        // 📢 CHECK CHANNEL MEMBERSHIP
-        // ====================================================
-
-        const ch =
-            await ctx.telegram.getChatMember(
-                REQUIRED_CHANNEL,
-                userId
-            );
-
-
-        // ====================================================
-        // 👥 CHECK GROUP MEMBERSHIP
-        // ====================================================
-
-        const gr =
-            await ctx.telegram.getChatMember(
-                REQUIRED_GROUP,
-                userId
-            );
-
-
-        // ====================================================
-        // 📝 LOG MEMBERSHIP STATUS
-        // ====================================================
-
-        logger.info(
-            `Status channel user ${userId}: ${ch?.status}`
-        );
-
-        logger.info(
-            `Status group user ${userId}: ${gr?.status}`
-        );
-
-
-        // ====================================================
-        // ✅ VALID MEMBERSHIP STATUS
-        // ====================================================
-
-        const okStatus =
-            new Set([
-                'creator',
-                'administrator',
-                'member',
-                'restricted'
-            ]);
-
-
-        // ====================================================
-        // 🔍 CHECK BOTH MEMBERSHIPS
-        // ====================================================
-
-        return (
-            okStatus.has(ch?.status) &&
-            okStatus.has(gr?.status)
-        );
-
-
-    } catch (e) {
-
-        // ====================================================
-        // ⚠️ MEMBERSHIP CHECK ERROR
-        // ====================================================
-
-        logger.warn(
-            'checkMembership warn: ' +
-            e.message
-        );
-
-        return false;
-    }
+    const okStatus = new Set(['creator', 'administrator', 'member', 'restricted']);
+    return okStatus.has(ch?.status) && okStatus.has(gr?.status);
+  } catch (e) {
+    logger.warn('checkMembership warn: ' + e.message);
+    return false;
+  }
 }
+bot.action("restore_database", async (ctx) => {
 
+    if (!adminIds.includes(ctx.from.id))
+        return ctx.answerCbQuery("Ditolak!");
 
-// ============================================================
-// ♻️ RESTORE DATABASE BUTTON
-// ============================================================
+    restoreState[ctx.from.id] = true;
 
-bot.action(
-    "restore_database",
-    async (ctx) => {
+    await ctx.answerCbQuery();
 
-        // ====================================================
-        // 🔐 CHECK ADMIN ACCESS
-        // ====================================================
-
-        if (!adminIds.includes(ctx.from.id)) {
-            return ctx.answerCbQuery(
-                "Ditolak!"
-            );
-        }
-
-
-        // ====================================================
-        // 📝 ENABLE RESTORE STATE
-        // ====================================================
-
-        restoreState[ctx.from.id] = true;
-
-
-        // ====================================================
-        // ✅ ANSWER CALLBACK
-        // ====================================================
-
-        await ctx.answerCbQuery();
-
-
-        // ====================================================
-        // 📤 REQUEST DATABASE FILE
-        // ====================================================
-
-        await ctx.reply(
+    await ctx.reply(
 `📤 Kirim file database (*.db)
 
 Contoh:
 sellvpn.db
 
 Backup lama akan otomatis dibuat sebelum restore.`
-        );
+    );
+
+});
+bot.action("backup_database", async (ctx) => {
+
+    if (!adminIds.includes(ctx.from.id))
+        return ctx.answerCbQuery("Ditolak!");
+
+    await ctx.answerCbQuery("Membuat Backup...");
+
+    try {
+
+        const backup = await createDatabaseBackup();
+
+        await ctx.reply("📦 Backup berhasil dibuat.");
+
+        await ctx.replyWithDocument({
+            source: backup.path,
+            filename: backup.name
+        });
+
+    } catch (err) {
+
+        await ctx.reply("❌ Backup gagal.");
+
+        logger.error(err);
 
     }
-);
+
+});
 
 
-// ============================================================
-// 💾 BACKUP DATABASE BUTTON
-// ============================================================
+bot.action('continue_after_join', async (ctx) => {
+  try {
+    await ctx.answerCbQuery();
+  } catch (e) {}
 
-bot.action(
-    "backup_database",
-    async (ctx) => {
+  if (await checkMembership(ctx)) {
+    return sendMainMenu(ctx);
+  }
 
-        // ====================================================
-        // 🔐 CHECK ADMIN ACCESS
-        // ====================================================
+  return sendJoinGate(ctx);
+});
 
-        if (!adminIds.includes(ctx.from.id)) {
-            return ctx.answerCbQuery(
-                "Ditolak!"
-            );
-        }
+const adminIds = ADMIN;
+logger.info('Bot initialized');
 
+const db = new sqlite3.Database('./sellvpn.db', (err) => {
+    if (err) {
+        logger.error('Kesalahan koneksi SQLite3:', err.message);
+    } else {
+        logger.info('✅ Terhubung ke SQLite3');
 
-        // ====================================================
-        // ⏳ CALLBACK STATUS
-        // ====================================================
+        db.serialize(() => {
 
-        await ctx.answerCbQuery(
-            "Membuat Backup..."
-        );
+            // Inisialisasi tabel bonus_config
+          
+db.run(`
+CREATE TABLE IF NOT EXISTS bonus_config (
+    id INTEGER PRIMARY KEY CHECK (id = 1),
+    enabled INTEGER DEFAULT 0,
+    min_topup INTEGER DEFAULT 0,
+    bonus_percent INTEGER DEFAULT 0,
+    start_at INTEGER DEFAULT 0,
+    end_at INTEGER DEFAULT 0
+)
+`, (err) => {
+    if (err) logger.error('❌ Gagal membuat tabel bonus_config:', err.message);
+    else logger.info('✅ Tabel bonus_config siap');
+});
 
-
-        try {
-
-            // ==================================================
-            // 💾 CREATE DATABASE BACKUP
-            // ==================================================
-
-            const backup =
-                await createDatabaseBackup();
-
-
-            // ==================================================
-            // ✅ BACKUP CREATED
-            // ==================================================
-
-            await ctx.reply(
-                "📦 Backup berhasil dibuat."
-            );
-
-
-            // ==================================================
-            // 📤 SEND BACKUP FILE
-            // ==================================================
-
-            await ctx.replyWithDocument({
-
-                source:
-                    backup.path,
-
-                filename:
-                    backup.name
-
+            db.run(`
+                INSERT OR IGNORE INTO bonus_config (id, enabled, min_topup, bonus_percent)
+                VALUES (1, 0, 0, 0)
+            `, (err) => {
+                if (err) logger.error('❌ Gagal insert default bonus_config:', err.message);
+                else logger.info('✅ Default bonus_config dijamin ada');
             });
 
-
-        } catch (err) {
-
-            // ==================================================
-            // ❌ BACKUP ERROR
-            // ==================================================
-
-            await ctx.reply(
-                "❌ Backup gagal."
-            );
-
-
-            logger.error(err);
-
-        }
-
-    }
-);
-
-
-// ============================================================
-// ✅ CONTINUE AFTER JOIN
-// ============================================================
-
-bot.action(
-    'continue_after_join',
-    async (ctx) => {
-
-        // ====================================================
-        // ✅ ANSWER CALLBACK
-        // ====================================================
-
-        try {
-
-            await ctx.answerCbQuery();
-
-        } catch (e) {
-            // Ignore callback error
-        }
-
-
-        // ====================================================
-        // 👥 VERIFY MEMBERSHIP
-        // ====================================================
-
-        if (
-            await checkMembership(ctx)
-        ) {
-
-            return sendMainMenu(ctx);
-        }
-
-
-        // ====================================================
-        // 🚪 MEMBERSHIP NOT COMPLETE
-        // ====================================================
-
-        return sendJoinGate(ctx);
-
-    }
-);
-
-
-// ============================================================
-// 👑 ADMIN CONFIGURATION
-// ============================================================
-
-const adminIds =
-    ADMIN;
-
-
-// ============================================================
-// 🤖 BOT INITIALIZED
-// ============================================================
-
-logger.info(
-    'Bot initialized'
-);
-
-
-// ============================================================
-// 🗄️ SQLITE DATABASE CONNECTION
-// ============================================================
-
-const db =
-    new sqlite3.Database(
-        './sellvpn.db',
-
-        (err) => {
-
-            // ==================================================
-            // ❌ DATABASE CONNECTION ERROR
-            // ==================================================
-
-            if (err) {
-
-                logger.error(
-                    'Kesalahan koneksi SQLite3:',
-                    err.message
-                );
-
-                return;
-            }
-
-
-            // ==================================================
-            // ✅ DATABASE CONNECTED
-            // ==================================================
-
-            logger.info(
-                '✅ Terhubung ke SQLite3'
-            );
-
-
-            // ==================================================
-            // 🔄 SERIALIZE DATABASE OPERATIONS
-            // ==================================================
-
-            db.serialize(() => {
-
-
-                // ==================================================
-                // 🧩 ADD config_json COLUMN
-                // ==================================================
-
-                db.run(`
-                    ALTER TABLE user_accounts
-                    ADD COLUMN config_json TEXT
-                `, (err) => {
-
-                    // ==============================================
-                    // ❌ ALTER TABLE ERROR
-                    // ==============================================
-
-                    if (err) {
-
-                        if (
-                            !err.message.includes(
-                                "duplicate column name"
-                            )
-                        ) {
-
-                            console.error(
-                                "❌ Gagal menambah kolom config_json:",
-                                err.message
-                            );
-
-                        } else {
-
-                            console.log(
-                                "ℹ️ Kolom config_json sudah ada."
-                            );
-
-                        }
-
-                    }
-
-                    // ==============================================
-                    // ✅ COLUMN ADDED
-                    // ==============================================
-
-                    else {
-
-                        console.log(
-                            "✅ Kolom config_json berhasil ditambahkan."
-                        );
-
-                    }
-
-                });
-
-
-                // ==================================================
-                // 💰 BONUS CONFIGURATION
-                // ==================================================
-
-                // Inisialisasi tabel bonus_config
-          
-// ============================================================
-// 💰 BONUS CONFIGURATION TABLE
-// ============================================================
-
-db.run(`
-    CREATE TABLE IF NOT EXISTS bonus_config (
-        id INTEGER PRIMARY KEY CHECK (id = 1),
-        enabled INTEGER DEFAULT 0,
-        min_topup INTEGER DEFAULT 0,
-        bonus_percent INTEGER DEFAULT 0,
-        start_at INTEGER DEFAULT 0,
-        end_at INTEGER DEFAULT 0
-    )
-`, (err) => {
-
-    if (err) {
-
-        logger.error(
-            '❌ Gagal membuat tabel bonus_config:',
-            err.message
+            // Inisialisasi tabel bonus_log
+            db.run(`
+                CREATE TABLE IF NOT EXISTS bonus_log (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER,
+                    username TEXT,
+                    amount INTEGER,
+                    bonus INTEGER,
+                    timestamp TEXT
+                )
+            `, (err) => {
+                if (err) logger.error('❌ Gagal membuat tabel bonus_log:', err.message);
+                else logger.info('✅ Tabel bonus_log siap');
+            });
+            db.all("PRAGMA table_info(bonus_config)", (err, columns) => {
+    if (err) return logger.error(err.message);
+
+    const hasStart = columns.some(c => c.name === "start_at");
+    const hasEnd = columns.some(c => c.name === "end_at");
+
+    if (!hasStart) {
+        db.run(
+            "ALTER TABLE bonus_config ADD COLUMN start_at INTEGER DEFAULT 0"
         );
-
-    } else {
-
-        logger.info(
-            '✅ Tabel bonus_config siap'
-        );
-
     }
 
+    if (!hasEnd) {
+        db.run(
+            "ALTER TABLE bonus_config ADD COLUMN end_at INTEGER DEFAULT 0"
+        );
+    }
 });
 
-
-// ============================================================
-// 💰 INSERT DEFAULT BONUS CONFIG
-// ============================================================
-
-db.run(`
-    INSERT OR IGNORE INTO bonus_config (
-        id,
-        enabled,
-        min_topup,
-        bonus_percent
-    )
-    VALUES (
-        1,
-        0,
-        0,
-        0
-    )
-`, (err) => {
-
-    if (err) {
-
-        logger.error(
-            '❌ Gagal insert default bonus_config:',
-            err.message
-        );
-
-    } else {
-
-        logger.info(
-            '✅ Default bonus_config dijamin ada'
-        );
-
-    }
-
-});
-
-
-// ============================================================
-// 📝 BONUS LOG TABLE
-// ============================================================
-
-db.run(`
-    CREATE TABLE IF NOT EXISTS bonus_log (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
-        username TEXT,
-        amount INTEGER,
-        bonus INTEGER,
-        timestamp TEXT
-    )
-`, (err) => {
-
-    if (err) {
-
-        logger.error(
-            '❌ Gagal membuat tabel bonus_log:',
-            err.message
-        );
-
-    } else {
-
-        logger.info(
-            '✅ Tabel bonus_log siap'
-        );
-
-    }
-
-});
-
-
-// ============================================================
-// 🔍 CHECK BONUS CONFIG COLUMNS
-// ============================================================
-
-db.all(
-    "PRAGMA table_info(bonus_config)",
-    (err, columns) => {
-
-        if (err) {
-            return logger.error(
-                err.message
-            );
-        }
-
-
-        // ====================================================
-        // 🔎 CHECK start_at COLUMN
-        // ====================================================
-
-        const hasStart =
-            columns.some(
-                c => c.name === "start_at"
-            );
-
-
-        // ====================================================
-        // 🔎 CHECK end_at COLUMN
-        // ====================================================
-
-        const hasEnd =
-            columns.some(
-                c => c.name === "end_at"
-            );
-
-
-        // ====================================================
-        // ➕ ADD start_at IF MISSING
-        // ====================================================
-
-        if (!hasStart) {
-
-            db.run(
-                "ALTER TABLE bonus_config ADD COLUMN start_at INTEGER DEFAULT 0"
-            );
-
-        }
-
-
-        // ====================================================
-        // ➕ ADD end_at IF MISSING
-        // ====================================================
-
-        if (!hasEnd) {
-
-            db.run(
-                "ALTER TABLE bonus_config ADD COLUMN end_at INTEGER DEFAULT 0"
-            );
-
-        }
-
-    }
-);
-
-
-// ============================================================
-// 💳 PENDING DEPOSITS TABLE
-// ============================================================
-
-db.run(`
-    CREATE TABLE IF NOT EXISTS pending_deposits (
-        unique_code TEXT PRIMARY KEY,
-        user_id INTEGER,
-        username TEXT,
-        amount INTEGER,
-        original_amount INTEGER,
-        timestamp INTEGER,
-        status TEXT,
-        qr_message_id INTEGER
-    )
-`, (err) => {
-
-    if (err) {
-
-        logger.error(
-            '❌ Gagal membuat tabel pending_deposits:',
-            err.message
-        );
-
-    } else {
-
-        logger.info(
-            '✅ Tabel pending_deposits siap'
-        );
-
-    }
-
-});
-
-
-// ============================================================
-// 🧾 LOG PENJUALAN TABLE
-// ============================================================
-
-db.run(`
-    CREATE TABLE IF NOT EXISTS log_penjualan (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
-        username TEXT,
-        nama_server TEXT,
-        tipe_akun TEXT,
-        harga INTEGER,
-        masa_aktif_hari INTEGER,
-        waktu_transaksi TEXT,
-        action_type TEXT,
-        user_role TEXT DEFAULT 'member'
-    )
-`, (err) => {
-
-    if (err) {
-
-        logger.error(
-            '❌ Gagal membuat tabel log_penjualan:',
-            err.message
-        );
-
-        return;
-    }
-
-
-    // ========================================================
-    // ✅ LOG PENJUALAN TABLE READY
-    // ========================================================
-
-    logger.info(
-        '✅ Tabel log_penjualan siap'
-    );
-
-
-    // ========================================================
-    // 🔍 CHECK LOG PENJUALAN COLUMNS
-    // ========================================================
-
-    db.all(
-        "PRAGMA table_info(log_penjualan)",
-        (err, columns) => {
-
-            // ==================================================
-            // ❌ PRAGMA ERROR
-            // ==================================================
-
-            if (err) {
-
-                logger.error(
-                    'Error getting table info for log_penjualan:',
-                    err.message
-                );
-
-                return;
-            }
-
-
-            // ==================================================
-            // 🔎 VALIDATE COLUMN RESULT
-            // ==================================================
-
-            if (
-                columns &&
-                Array.isArray(columns)
-            ) {
-
-                // ==============================================
-                // 🔍 CHECK user_role COLUMN
-                // ==============================================
-
-                const hasUserRoleColumn =
-                    columns.some(
-                        col =>
-                            col.name === 'user_role'
-                    );
-
-
-                // ==============================================
-                // ➕ ADD user_role IF MISSING
-                // ==============================================
-
-                if (!hasUserRoleColumn) {
-
-                    db.run(
-                        "ALTER TABLE log_penjualan ADD COLUMN user_role TEXT DEFAULT 'member'",
-
-                        (err) => {
-
-                            if (err) {
-
-                                logger.error(
-                                    'Error adding user_role column to log_penjualan table:',
-                                    err.message
-                                );
-
-                            } else {
-
-                                logger.info(
-                                    '✅ Added user_role column to log_penjualan table'
-                                );
-
-                            }
-
-                        }
-                    );
-
+            // Inisialisasi tabel pending_deposits
+            db.run(`
+                CREATE TABLE IF NOT EXISTS pending_deposits (
+                    unique_code TEXT PRIMARY KEY,
+                    user_id INTEGER,
+                    username TEXT,
+                    amount INTEGER,
+                    original_amount INTEGER,
+                    timestamp INTEGER,
+                    status TEXT,
+                    qr_message_id INTEGER
+                )
+            `, (err) => {
+                if (err) {
+                    logger.error('❌ Gagal membuat tabel pending_deposits:', err.message);
+                } else {
+                    logger.info('✅ Tabel pending_deposits siap');
                 }
-
-            } else {
-
-                // ==============================================
-                // ⚠️ INVALID PRAGMA RESULT
-                // ==============================================
-
-                logger.warn(
-                    'PRAGMA table_info(log_penjualan) did not return an array for columns.'
-                );
-
-            }
-
-        }
-    );
-
-});
-
-// ============================================================
-// 🎁 UNLIMITED TRIAL USERS TABLE
-// ============================================================
-
-db.run(`
-    CREATE TABLE IF NOT EXISTS unlimited_trial_users (
-        user_id INTEGER PRIMARY KEY
-    )
-`, (err) => {
-
-    if (err) {
-
-        logger.error(
-            '❌ Gagal membuat tabel unlimited_trial_users:',
-            err.message
-        );
-
-    } else {
-
-        logger.info(
-            '✅ Tabel unlimited_trial_users siap'
-        );
-
-    }
-
-});
-
-
-// ============================================================
-// 🖥️ UI CONFIGURATION TABLE
-// ============================================================
-
-db.run(`
-    CREATE TABLE IF NOT EXISTS ui_config (
-        id INTEGER PRIMARY KEY CHECK (id = 1),
-        show_trial_button INTEGER DEFAULT 1,
-        show_sewa_script_button INTEGER DEFAULT 1
-    )
-`, (err) => {
-
-    if (err) {
-
-        logger.error(
-            '❌ Gagal membuat tabel ui_config:',
-            err.message
-        );
-
-    } else {
-
-        logger.info(
-            '✅ Tabel ui_config siap'
-        );
-
-    }
-
-});
-
-
-// ============================================================
-// 🖥️ INSERT DEFAULT UI CONFIG
-// ============================================================
-
-db.run(`
-    INSERT OR IGNORE INTO ui_config (
-        id,
-        show_trial_button,
-        show_sewa_script_button
-    )
-    VALUES (
-        1,
-        1,
-        1
-    )
-`, (err) => {
-
-    if (err) {
-
-        logger.error(
-            '❌ Gagal insert default ui_config:',
-            err.message
-        );
-
-    } else {
-
-        logger.info(
-            '✅ Default ui_config dijamin ada'
-        );
-
-    }
-
-});
-
-
-// ============================================================
-// 🔍 CHECK UI CONFIG COLUMNS
-// ============================================================
-
-db.all(
-    `PRAGMA table_info(ui_config)`,
-    (err, columns) => {
-
-        // ====================================================
-        // ❌ PRAGMA ERROR
-        // ====================================================
-
-        if (err) {
-
-            logger.error(
-                '❌ Gagal ambil info kolom ui_config:',
-                err.message
-            );
-
-            return;
-        }
-
-
-        // ====================================================
-        // 🔍 CHECK show_sewa_script_button
-        // ====================================================
-
-        const hasSewaScriptColumn =
-            columns.some(
-                col =>
-                    col.name ===
-                    'show_sewa_script_button'
-            );
-
-
-        // ====================================================
-        // ➕ ADD COLUMN IF MISSING
-        // ====================================================
-
-        if (!hasSewaScriptColumn) {
-
-            db.run(
-                `ALTER TABLE ui_config
-                 ADD COLUMN show_sewa_script_button INTEGER DEFAULT 1`,
-
-                (err) => {
-
-                    if (err) {
-
-                        logger.error(
-                            '❌ Gagal menambah kolom show_sewa_script_button:',
-                            err.message
-                        );
-
-                    } else {
-
-                        logger.info(
-                            '✅ Kolom show_sewa_script_button ditambahkan ke ui_config'
-                        );
-
-                    }
-
-                }
-            );
-
-        } else {
-
-            logger.info(
-                'ℹ️ Kolom show_sewa_script_button sudah tersedia di ui_config'
-            );
-
-        }
-
-    }
-);
-
-
-// ============================================================
-// 💼 RESELLER CONFIGURATION TABLE
-// ============================================================
-
-db.run(`
-    CREATE TABLE IF NOT EXISTS reseller_config (
-        id INTEGER PRIMARY KEY CHECK (id = 1),
-        discount_percent INTEGER DEFAULT 0
-    )
-`, (err) => {
-
-    if (err) {
-
-        logger.error(
-            '❌ Gagal membuat tabel reseller_config:',
-            err.message
-        );
-
-    } else {
-
-        logger.info(
-            '✅ Tabel reseller_config siap'
-        );
-
-    }
-
-});
-
-
-// ============================================================
-// 💼 INSERT DEFAULT RESELLER CONFIG
-// ============================================================
-
-db.run(`
-    INSERT OR IGNORE INTO reseller_config (
-        id,
-        discount_percent
-    )
-    VALUES (
-        1,
-        0
-    )
-`, (err) => {
-
-    if (err) {
-
-        logger.error(
-            '❌ Gagal insert default reseller_config:',
-            err.message
-        );
-
-    } else {
-
-        logger.info(
-            '✅ Default reseller_config dijamin ada'
-        );
-
-    }
-
-});
-
-
-// ============================================================
-// 💰 TOPUP LOG TABLE
-// ============================================================
-
-db.run(`
-    CREATE TABLE IF NOT EXISTS topup_log (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
-        username TEXT,
-        amount INTEGER,
-        method TEXT,
-        waktu TEXT
-    )
-`, (err) => {
-
-    if (err) {
-
-        logger.error(
-            '❌ Gagal membuat tabel topup_log:',
-            err.message
-        );
-
-    } else {
-
-        logger.info(
-            '✅ Tabel topup_log siap'
-        );
-
-    }
-
-});
-
-
-// ============================================================
-// 🖥️ SERVER TABLE
-// ============================================================
-
-db.run(`
-    CREATE TABLE IF NOT EXISTS Server (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        domain TEXT,
-        auth TEXT,
-        harga INTEGER,
-        nama_server TEXT,
-        quota INTEGER,
-        iplimit INTEGER,
-        batas_create_akun INTEGER,
-        total_create_akun INTEGER,
-        cloudfront TEXT DEFAULT ''
-    )
-`, (err) => {
-
-    // ========================================================
-    // ❌ SERVER TABLE ERROR
-    // ========================================================
-
-    if (err) {
-
-        logger.error(
-            'Kesalahan membuat tabel Server:',
-            err.message
-        );
-
-        return;
-    }
-
-
-    // ========================================================
-    // ✅ SERVER TABLE READY
-    // ========================================================
-
-    logger.info(
-        'Server table created or already exists'
-    );
-
-
-    // ========================================================
-    // 🔍 CHECK SERVER TABLE COLUMNS
-    // ========================================================
-
-    db.all(
-        "PRAGMA table_info(Server)",
-        (err, columns) => {
-
-            // ==================================================
-            // ❌ PRAGMA ERROR
-            // ==================================================
-
-            if (err) {
-
-                logger.error(
-                    'Gagal cek struktur tabel Server: ' +
-                    err.message
-                );
-
-                return;
-            }
-
-
-            // ==================================================
-            // 🔍 CHECK CLOUDFRONT COLUMN
-            // ==================================================
-
-            const hasCloudfront =
-                columns.some(
-                    col =>
-                        col.name === 'cloudfront'
-                );
-
-
-            // ==================================================
-            // ➕ ADD CLOUDFRONT IF MISSING
-            // ==================================================
-
-            if (!hasCloudfront) {
-
-                db.run(
-                    "ALTER TABLE Server ADD COLUMN cloudfront TEXT DEFAULT ''",
-
-                    (err) => {
-
+            });
+
+            // Inisialisasi tabel log_penjualan (dengan perbaikan)
+            db.run(`
+                CREATE TABLE IF NOT EXISTS log_penjualan (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER,
+                    username TEXT,
+                    nama_server TEXT,
+                    tipe_akun TEXT,
+                    harga INTEGER,
+                    masa_aktif_hari INTEGER,
+                    waktu_transaksi TEXT,
+                    action_type TEXT,
+                    user_role TEXT DEFAULT 'member'
+                )
+            `, (err) => {
+                if (err) {
+                    logger.error('❌ Gagal membuat tabel log_penjualan:', err.message);
+                } else {
+                    logger.info('✅ Tabel log_penjualan siap');
+                    db.all("PRAGMA table_info(log_penjualan)", (err, columns) => { // Menggunakan db.all
                         if (err) {
-
-                            logger.error(
-                                "❌ Gagal menambah kolom cloudfront: " +
-                                err.message
-                            );
-
-                        } else {
-
-                            logger.info(
-                                "✅ Kolom cloudfront berhasil ditambahkan."
-                            );
-
+                            logger.error('Error getting table info for log_penjualan:', err.message);
+                            return;
                         }
-
-                    }
-                );
-
-            } else {
-
-                logger.info(
-                    "ℹ️ Kolom cloudfront sudah tersedia."
-                );
-
-            }
-
-        }
-    );
-
-});
-
-
-// ============================================================
-// 👤 USERS TABLE
-// ============================================================
-
-db.run(`
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER UNIQUE,
-        saldo INTEGER DEFAULT 0,
-        role TEXT DEFAULT 'member',
-        CONSTRAINT unique_user_id UNIQUE (user_id)
-    )
-`, (err) => {
-
-    // ========================================================
-    // ❌ USERS TABLE ERROR
-    // ========================================================
-
-    if (err) {
-
-        logger.error(
-            'Kesalahan membuat tabel users:',
-            err.message
-        );
-
-        return;
-    }
-
-
-    // ========================================================
-    // ✅ USERS TABLE READY
-    // ========================================================
-
-    logger.info(
-        'Users table created or already exists'
-    );
-
-
-    // ========================================================
-    // 🔍 CHECK USERS TABLE COLUMNS
-    // ========================================================
-
-    db.all(
-        "PRAGMA table_info(users)",
-        (err, columns) => {
-
-            // ==================================================
-            // ❌ PRAGMA ERROR
-            // ==================================================
-
-            if (err) {
-
-                logger.error(
-                    'Error getting table info:',
-                    err.message
-                );
-
-                return;
-            }
-
-
-            // ==================================================
-            // 🔎 VALIDATE PRAGMA RESULT
-            // ==================================================
-
-            if (
-                columns &&
-                Array.isArray(columns)
-            ) {
-
-                // ==============================================
-                // 🔍 CHECK ROLE COLUMN
-                // ==============================================
-
-                const hasRoleColumn =
-                    columns.some(
-                        col =>
-                            col.name === 'role'
-                    );
-
-
-                // ==============================================
-                // ➕ ADD ROLE COLUMN IF MISSING
-                // ==============================================
-
-                if (!hasRoleColumn) {
-
-                    db.run(
-                        "ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'member'",
-
-                        (err) => {
-
-                            if (err) {
-
-                                logger.error(
-                                    'Error adding role column to users table:',
-                                    err.message
-                                );
-
-                            } else {
-
-                                logger.info(
-                                    '✅ Added role column to users table'
-                                );
-
+                        if (columns && Array.isArray(columns)) {
+                            const hasUserRoleColumn = columns.some(col => col.name === 'user_role');
+                            if (!hasUserRoleColumn) {
+                                db.run("ALTER TABLE log_penjualan ADD COLUMN user_role TEXT DEFAULT 'member'", (err) => {
+                                    if (err) logger.error('Error adding user_role column to log_penjualan table:', err.message);
+                                    else logger.info('✅ Added user_role column to log_penjualan table');
+                                });
                             }
-
+                        } else {
+                            logger.warn('PRAGMA table_info(log_penjualan) did not return an array for columns.');
                         }
-                    );
+                    });
+                }
+            });
 
+            // Inisialisasi tabel unlimited_trial_users
+            db.run(`
+                CREATE TABLE IF NOT EXISTS unlimited_trial_users (
+                    user_id INTEGER PRIMARY KEY
+                )
+            `, (err) => {
+                if (err) {
+                    logger.error('❌ Gagal membuat tabel unlimited_trial_users:', err.message);
+                } else {
+                    logger.info('✅ Tabel unlimited_trial_users siap');
+                }
+            });
+            
+            db.run(`
+                CREATE TABLE IF NOT EXISTS ui_config (
+                    id INTEGER PRIMARY KEY CHECK (id = 1),
+                    show_trial_button INTEGER DEFAULT 1,
+                    show_sewa_script_button INTEGER DEFAULT 1
+                )
+            `, (err) => {
+                if (err) {
+                    logger.error('❌ Gagal membuat tabel ui_config:', err.message);
+                } else {
+                    logger.info('✅ Tabel ui_config siap');
+                }
+            });
+
+            db.run(`
+                INSERT OR IGNORE INTO ui_config (id, show_trial_button, show_sewa_script_button)
+                VALUES (1, 1, 1)
+            `, (err) => {
+                if (err) {
+                    logger.error('❌ Gagal insert default ui_config:', err.message);
+                } else {
+                    logger.info('✅ Default ui_config dijamin ada');
+                }
+            });
+            
+            db.all(`PRAGMA table_info(ui_config)`, (err, columns) => {
+                if (err) {
+                    logger.error('❌ Gagal ambil info kolom ui_config:', err.message);
+                    return;
                 }
 
+                const hasSewaScriptColumn = columns.some(col => col.name === 'show_sewa_script_button');
+                if (!hasSewaScriptColumn) {
+                    db.run(`ALTER TABLE ui_config ADD COLUMN show_sewa_script_button INTEGER DEFAULT 1`, (err) => {
+                        if (err) {
+                            logger.error('❌ Gagal menambah kolom show_sewa_script_button:', err.message);
+                        } else {
+                            logger.info('✅ Kolom show_sewa_script_button ditambahkan ke ui_config');
+                        }
+                    });
+                } else {
+                    logger.info('ℹ️ Kolom show_sewa_script_button sudah tersedia di ui_config');
+                }
+            });
+             
+            // Inisialisasi tabel reseller_config
+            
+            db.run(`
+                CREATE TABLE IF NOT EXISTS reseller_config (
+                    id INTEGER PRIMARY KEY CHECK (id = 1),
+                    discount_percent INTEGER DEFAULT 0
+                )
+            `, (err) => {
+                if (err) logger.error('❌ Gagal membuat tabel reseller_config:', err.message);
+                else logger.info('✅ Tabel reseller_config siap');
+            });
+
+            db.run(`
+                INSERT OR IGNORE INTO reseller_config (id, discount_percent)
+                VALUES (1, 0)
+            `, (err) => {
+                if (err) logger.error('❌ Gagal insert default reseller_config:', err.message);
+                else logger.info('✅ Default reseller_config dijamin ada');
+            });
+
+            // Inisialisasi tabel topup_log
+            db.run(`
+              CREATE TABLE IF NOT EXISTS topup_log (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER,
+                username TEXT,
+                amount INTEGER,
+                method TEXT,
+                waktu TEXT
+              )
+            `, (err) => {
+              if (err) logger.error('❌ Gagal membuat tabel topup_log:', err.message);
+              else logger.info('✅ Tabel topup_log siap');
+            });
+
+            // Inisialisasi tabel Server
+            // Inisialisasi tabel Server
+db.run(`CREATE TABLE IF NOT EXISTS Server (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  domain TEXT,
+  auth TEXT,
+  harga INTEGER,
+  nama_server TEXT,
+  quota INTEGER,
+  iplimit INTEGER,
+  batas_create_akun INTEGER,
+  total_create_akun INTEGER,
+  cloudfront TEXT DEFAULT ''
+)`, (err) => {
+  if (err) {
+    logger.error('Kesalahan membuat tabel Server:', err.message);
+  } else {
+    logger.info('Server table created or already exists');
+
+    // Auto tambah kolom cloudfront jika database lama
+    db.all("PRAGMA table_info(Server)", (err, columns) => {
+      if (err) {
+        logger.error('Gagal cek struktur tabel Server: ' + err.message);
+        return;
+      }
+
+      const hasCloudfront = columns.some(col => col.name === 'cloudfront');
+
+      if (!hasCloudfront) {
+        db.run(
+          "ALTER TABLE Server ADD COLUMN cloudfront TEXT DEFAULT ''",
+          (err) => {
+            if (err) {
+              logger.error("❌ Gagal menambah kolom cloudfront: " + err.message);
             } else {
-
-                // ==============================================
-                // ⚠️ INVALID PRAGMA RESULT
-                // ==============================================
-
-                logger.warn(
-                    'PRAGMA table_info(users) did not return an array for columns.'
-                );
-
+              logger.info("✅ Kolom cloudfront berhasil ditambahkan.");
             }
-
-        }
-    );
-
+          }
+        );
+      } else {
+        logger.info("ℹ️ Kolom cloudfront sudah tersedia.");
+      }
+    });
+  }
 });
 
+            // Inisialisasi tabel users (dengan perbaikan PRAGMA)
+            db.run(`CREATE TABLE IF NOT EXISTS users (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              user_id INTEGER UNIQUE,
+              saldo INTEGER DEFAULT 0,
+              role TEXT DEFAULT 'member',
+              CONSTRAINT unique_user_id UNIQUE (user_id)
+            )`, (err) => {
+              if (err) {
+                logger.error('Kesalahan membuat tabel users:', err.message);
+              } else {
+                logger.info('Users table created or already exists');
+                db.all("PRAGMA table_info(users)", (err, columns) => { // Menggunakan db.all
+                  if (err) {
+                    logger.error('Error getting table info:', err.message);
+                    return;
+                  }
+                  if (columns && Array.isArray(columns)) {
+                      const hasRoleColumn = columns.some(col => col.name === 'role');
+                      if (!hasRoleColumn) {
+                          db.run("ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'member'", (err) => {
+                              if (err) logger.error('Error adding role column to users table:', err.message);
+                              else logger.info('✅ Added role column to users table');
+                          });
+                      }
+                  } else {
+                      logger.warn('PRAGMA table_info(users) did not return an array for columns.');
+                  }
+                });
+              }
+            });
 
-// ============================================================
-// 🧪 TRIAL LOG TABLE
-// ============================================================
+            // Inisialisasi tabel TrialLog
+            db.run(`
+              CREATE TABLE IF NOT EXISTS TrialLog (
+                user_id INTEGER,
+                date TEXT,
+                count INTEGER DEFAULT 0,
+                UNIQUE(user_id, date)
+            )
+            `);
 
-db.run(`
-    CREATE TABLE IF NOT EXISTS TrialLog (
-        user_id INTEGER,
-        date TEXT,
-        count INTEGER DEFAULT 0,
-        UNIQUE(user_id, date)
-    )
-`);
-
-
-// ============================================================
-// 🔚 END DATABASE SERIALIZE
-// ============================================================
-
-}); // End of db.serialize
-
-
-// ============================================================
-// 🔚 END SQLITE CONNECTION
-// ============================================================
-
-});
-
-
-// ============================================================
-// 👤 USER ACCOUNTS TABLE
-// ============================================================
-
-db.run(`
-    CREATE TABLE IF NOT EXISTS user_accounts (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
-        username TEXT,
-        server_id INTEGER,
-        server_name TEXT,
-        account_type TEXT,
-        exp_days INTEGER DEFAULT 0,
-        expired_at TEXT,
-        status TEXT DEFAULT 'active',
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-        updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
-        last_notified_h1 INTEGER DEFAULT 0,
-        last_notified_expired INTEGER DEFAULT 0,
-        UNIQUE(username, server_id, account_type)
-    )
-`, (err) => {
-
-    // ========================================================
-    // ❌ USER ACCOUNTS TABLE ERROR
-    // ========================================================
-
-    if (err) {
-
-        logger.error(
-            '❌ Gagal membuat tabel user_accounts: ' +
-            err.message
-        );
-
-    } else {
-
-        logger.info(
-            '✅ Tabel user_accounts siap'
-        );
-
+        }); // End of db.serialize
     }
-
 });
-
-
-// ============================================================
-// 🧠 USER STATE MANAGEMENT
-// ============================================================
+//bahan notifikasi 
+db.run(`
+  CREATE TABLE IF NOT EXISTS user_accounts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    username TEXT,
+    server_id INTEGER,
+    server_name TEXT,
+    account_type TEXT,
+    exp_days INTEGER DEFAULT 0,
+    expired_at TEXT,
+    status TEXT DEFAULT 'active',
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    last_notified_h1 INTEGER DEFAULT 0,
+    last_notified_expired INTEGER DEFAULT 0,
+    UNIQUE(username, server_id, account_type)
+  )
+`, (err) => {
+  if (err) logger.error('❌ Gagal membuat tabel user_accounts: ' + err.message);
+  else logger.info('✅ Tabel user_accounts siap');
+});
 
 const lastMenus = {};
 const userState = {};
-
-logger.info(
-    'User state initialized'
-);
-
-
-// ============================================================
-// 🤖 HANDLER /START & /MENU
-// 🔐 DENGAN GATE WAJIB JOIN
-// ============================================================
-
-bot.command(
-    ['start', 'menu'],
-    async (ctx) => {
-
-        // ====================================================
-        // 📥 COMMAND RECEIVED
-        // ====================================================
-
-        logger.info(
-            '📥 Perintah /start atau /menu diterima'
-        );
-
-
-        // ====================================================
-        // 🆔 GET USER & CHAT ID
-        // ====================================================
-
-        const userId =
-            ctx.from.id;
-
-        const chatId =
-            ctx.chat.id;
-
-
-        // ====================================================
-        // 🧹 DELETE USER COMMAND MESSAGE
-        // ====================================================
-
-        try {
-
-            await ctx.telegram.deleteMessage(
-                chatId,
-                ctx.message.message_id
-            );
-
-        } catch (e) {
-
-            // Ignore delete message error
-
-        }
-
-
-        // ====================================================
-        // 👥 CHECK CHANNEL & GROUP MEMBERSHIP
-        // ====================================================
-
-        const joined =
-            await checkMembership(ctx);
-
-
-        // ====================================================
-        // 🚪 USER BELUM JOIN
-        // ====================================================
-
-        if (!joined) {
-
-            return sendJoinGate(ctx);
-
-        }
-
-
-        // ====================================================
-        // 👤 REGISTER / CHECK USER DATABASE
-        // ====================================================
-
-        await new Promise(
-            (resolve) => {
-
-                db.get(
-                    'SELECT * FROM users WHERE user_id = ?',
-
-                    [userId],
-
-                    (err, row) => {
-
-                        // ==========================================
-                        // ❌ DATABASE ERROR
-                        // ==========================================
-
-                        if (err) {
-
-                            logger.error(
-                                '❌ Kesalahan saat memeriksa user_id:',
-                                err.message
-                            );
-
-                            resolve();
-
-                            return;
-                        }
-
-
-                        // ==========================================
-                        // 🆕 USER BELUM TERDAFTAR
-                        // ==========================================
-
-                        if (!row) {
-
-                            db.run(
-                                'INSERT INTO users (user_id, role) VALUES (?, ?)',
-
-                                [
-                                    userId,
-                                    'member'
-                                ],
-
-                                (err) => {
-
-                                    if (err) {
-
-                                        logger.error(
-                                            '❌ Gagal menyimpan user_id:',
-                                            err.message
-                                        );
-
-                                    } else {
-
-                                        logger.info(
-                                            `✅ User ID ${userId} berhasil disimpan`
-                                        );
-
-                                    }
-
-                                    resolve();
-
-                                }
-                            );
-
-                        }
-
-
-                        // ==========================================
-                        // 👤 USER SUDAH TERDAFTAR
-                        // ==========================================
-
-                        else {
-
-                            logger.info(
-                                `ℹ️ User ID ${userId} sudah ada`
-                            );
-
-                            resolve();
-
-                        }
-
-                    }
-                );
-
-            }
-        );
-
-
-        // ====================================================
-        // 🏠 SEND MAIN MENU
-        // ====================================================
-
-        await sendMainMenu(ctx);
-
-    }
-);
-
-
-// ============================================================
-// 🔚 END /START & /MENU HANDLER
-// ============================================================
+logger.info('User state initialized');
+
+// =======================
+// Handler /start atau /menu
+// =======================
+// =======================
+// Handler /start atau /menu (dengan gate wajib join)
+// =======================
+bot.command(['start', 'menu'], async (ctx) => {
+  logger.info('📥 Perintah /start atau /menu diterima');
+
+  const userId = ctx.from.id;
+  const chatId = ctx.chat.id;
+
+  // Hapus pesan command user (biar bersih)
+  try { await ctx.telegram.deleteMessage(chatId, ctx.message.message_id); } catch (e) {}
+
+  // Cek membership dulu
+  const joined = await checkMembership(ctx);
+  if (!joined) {
+    // Tampilkan UI ajakan gabung
+    return sendJoinGate(ctx);
+  }
+
+  // --- Jika sudah join, lanjut proses registrasi user di DB (tetap mempertahankan logika lama) ---
+  await new Promise((resolve) => {
+    db.get('SELECT * FROM users WHERE user_id = ?', [userId], (err, row) => {
+      if (err) {
+        logger.error('❌ Kesalahan saat memeriksa user_id:', err.message);
+        resolve();
+        return;
+      }
+      if (!row) {
+        db.run('INSERT INTO users (user_id, role) VALUES (?, ?)', [userId, 'member'], (err) => {
+          if (err) logger.error('❌ Gagal menyimpan user_id:', err.message);
+          else logger.info(`✅ User ID ${userId} berhasil disimpan`);
+          resolve();
+        });
+      } else {
+        logger.info(`ℹ️ User ID ${userId} sudah ada`);
+        resolve();
+      }
+    });
+  });
+
+  // Kirim menu utama
+  await sendMainMenu(ctx);
+});
+// --- AKHIR COMMAND /start atau /menu ---
 
 
 // =======================
@@ -3709,7 +1036,7 @@ async function sendMainMenu(ctx) {
 <a href="https://t.me/${adminUsername}">╰📨 @${adminUsername}</a>
 
 📦━━━━━━━━━━━━━━━━━━━━━📦
-     <code>🌐 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ</code>
+     <code>🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ ${NAMA_STORE} ɴᴇᴛᴡᴏʀᴋ</code>
 📦━━━━━━━━━━━━━━━━━━━━━📦
 `;
 
@@ -3911,12 +1238,22 @@ bot.action('menu_trial', async (ctx) => {
 ⚡ <b>Daftar Trial:</b>
 • SSH
 • VMESS
+• VLESS
+• TROJAN
+• SHADOWSOCKS
 `;
 
     const keyboard = [
   [
     { text: '🔐 SSH Trial', callback_data: 'trial_ssh' },
     { text: '⚡ VMESS Trial', callback_data: 'trial_vmess' }
+  ],
+  [
+    { text: '🛡️ VLESS Trial', callback_data: 'trial_vless' },
+    { text: '🔥 TROJAN Trial', callback_data: 'trial_trojan' }
+  ],
+  [
+    { text: '🌙 SHADOWSOCKS Trial', callback_data: 'trial_shadowsocks' }
   ],
   [
     { text: '🔙 Kembali ke Menu VPN', callback_data: 'menu_vpn' }
@@ -3957,12 +1294,22 @@ bot.action('menu_create', async (ctx) => {
 🚀 <b>Tersedia:</b>
 • SSH
 • VMESS
+• VLESS
+• TROJAN
+• SHADOWSOCKS
 `;
 
     const keyboard = [
   [
     { text: '🔐 SSH', callback_data: 'create_ssh' },
     { text: '⚡ VMESS', callback_data: 'create_vmess' }
+  ],
+  [
+    { text: '🛡️ VLESS', callback_data: 'create_vless' },
+    { text: '🔥 TROJAN', callback_data: 'create_trojan' }
+  ],
+  [
+    { text: '🌙 SHADOWSOCKS', callback_data: 'create_shadowsocks' }
   ],
   [
     { text: '🔙 Kembali ke Menu VPN', callback_data: 'menu_vpn' }
@@ -4003,12 +1350,22 @@ bot.action('menu_renew', async (ctx) => {
 🔄 <b>Tersedia:</b>
 • SSH
 • VMESS
+• VLESS
+• TROJAN
+• SHADOWSOCKS
 `;
 
     const keyboard = [
   [
     { text: '🔐 SSH', callback_data: 'renew_ssh' },
     { text: '⚡ VMESS', callback_data: 'renew_vmess' }
+  ],
+  [
+    { text: '🛡️ VLESS', callback_data: 'renew_vless' },
+    { text: '🔥 TROJAN', callback_data: 'renew_trojan' }
+  ],
+  [
+    { text: '🌙 SHADOWSOCKS', callback_data: 'renew_shadowsocks' }
   ],
   [
     { text: '🔙 Kembali ke Menu VPN', callback_data: 'menu_vpn' }
@@ -4106,25 +1463,19 @@ bot.action('menu_riwayat_transaksi', async (ctx) => {
 
     const hasil = gabung.slice(0, 15);
 
-if (hasil.length === 0) {
-  return ctx.reply(
-    '📜 <b>Riwayat Transaksi</b>\n\nBelum ada riwayat transaksi.',
-    {
-      parse_mode: 'HTML',
-      reply_markup: {
-        inline_keyboard: [
-          [
-            {
-              text: '🔙 Kembali ke Menu Utama',
-              callback_data: 'send_main_menu',
-              style: 'danger'
-            }
-          ]
-        ]
-      }
+    if (hasil.length === 0) {
+      return ctx.reply(
+        '📜 <b>Riwayat Transaksi</b>\n\nBelum ada riwayat transaksi.',
+        {
+          parse_mode: 'HTML',
+          reply_markup: {
+            inline_keyboard: [
+              [{ text: '🔙 Kembali ke Menu Utama', callback_data: 'send_main_menu' }]
+            ]
+          }
+        }
+      );
     }
-  );
-}
 
     const text = `
 📜 <b>RIWAYAT TRANSAKSI ANDA</b>
@@ -4132,28 +1483,19 @@ if (hasil.length === 0) {
 ${hasil.map((item, i) => `${i + 1}.\n${item.text}`).join('\n\n━━━━━━━━━━━━━━━━━━━━\n\n')}
 `;
 
-await ctx.reply(text, {
-  parse_mode: 'HTML',
-  reply_markup: {
-    inline_keyboard: [
-      [
-        {
-          text: '🔙 Kembali ke Menu Utama',
-          callback_data: 'send_main_menu',
-          style: 'danger'
-        }
-      ]
-    ]
+    await ctx.reply(text, {
+      parse_mode: 'HTML',
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: '🔙 Kembali ke Menu Utama', callback_data: 'send_main_menu' }]
+        ]
+      }
+    });
+
+  } catch (error) {
+    logger.error(`❌ Gagal menampilkan riwayat transaksi user ${userId}: ${error.message}`);
+    await ctx.reply('❌ Gagal mengambil riwayat transaksi.');
   }
-});
-
-} catch (error) {
-  logger.error(
-    `❌ Gagal menampilkan riwayat transaksi user ${userId}: ${error.message}`
-  );
-
-  await ctx.reply('❌ Gagal mengambil riwayat transaksi.');
-}
 });
 // =======================
 // Helper kirim menu statistik
@@ -4262,29 +1604,21 @@ bot.action('menu_statistik', async (ctx) => {
 ┗━━━━━━━━━━━━━━━━━━━━━┛
 `;
 
-await ctx.reply(text, {
-  parse_mode: 'HTML',
-  reply_markup: {
-    inline_keyboard: [
-      [
-        {
-          text: '🔙 Kembali ke Menu Utama',
-          callback_data: 'send_main_menu',
-          style: 'danger'
-        }
-      ]
-    ]
+    await ctx.reply(text, {
+      parse_mode: 'HTML',
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: '🔙 Kembali ke Menu Utama', callback_data: 'send_main_menu' }]
+        ]
+      }
+    });
+
+  } catch (error) {
+    logger.error(`❌ Gagal menampilkan statistik user ${userId}: ${error.message}`);
+    await ctx.reply('❌ Gagal mengambil statistik.');
   }
 });
 
-} catch (error) {
-  logger.error(
-    `❌ Gagal menampilkan statistik user ${userId}: ${error.message}`
-  );
-
-  await ctx.reply('❌ Gagal mengambil statistik.');
-}
-});
 // helper notifikasi 
 function addDaysToNow(days) {
   const d = new Date();
@@ -4298,39 +1632,18 @@ async function saveOrUpdateUserAccount({
   serverId,
   serverName,
   accountType,
-  expDays,
-  configJson = null
+  expDays
 }) {
   return new Promise((resolve, reject) => {
     const expiredAt = addDaysToNow(expDays);
 
-    console.log("📥 Menyimpan akun:", {
-      userId,
-      username,
-      serverId,
-      serverName,
-      accountType,
-      expDays,
-      expiredAt
-    });
-
     db.run(`
       INSERT INTO user_accounts (
-        user_id,
-        username,
-        server_id,
-        server_name,
-        account_type,
-        exp_days,
-        expired_at,
-        status,
-        updated_at,
-        config_json,
-        last_notified_h1,
-        last_notified_expired
+        user_id, username, server_id, server_name, account_type,
+        exp_days, expired_at, status, updated_at,
+        last_notified_h1, last_notified_expired
       )
-      VALUES (?, ?, ?, ?, ?, ?, ?, 'active', CURRENT_TIMESTAMP, ?, 0, 0)
-
+      VALUES (?, ?, ?, ?, ?, ?, ?, 'active', CURRENT_TIMESTAMP, 0, 0)
       ON CONFLICT(username, server_id, account_type)
       DO UPDATE SET
         user_id = excluded.user_id,
@@ -4339,7 +1652,6 @@ async function saveOrUpdateUserAccount({
         expired_at = excluded.expired_at,
         status = 'active',
         updated_at = CURRENT_TIMESTAMP,
-        config_json = excluded.config_json,
         last_notified_h1 = 0,
         last_notified_expired = 0
     `, [
@@ -4349,19 +1661,10 @@ async function saveOrUpdateUserAccount({
       serverName,
       accountType,
       expDays,
-      expiredAt,
-      configJson
+      expiredAt
     ], function (err) {
-      if (err) {
-        console.error("❌ Gagal menyimpan user_accounts:", err.message);
-        return reject(err);
-      }
-
-      console.log(
-        `✅ user_accounts tersimpan. lastID=${this.lastID}, changes=${this.changes}`
-      );
-
-      resolve(true);
+      if (err) reject(err);
+      else resolve(true);
     });
   });
 }
@@ -4421,156 +1724,30 @@ bot.command('helpadmin', async (ctx) => {
   ctx.reply(helpMessage, { parse_mode: 'Markdown' });
 });
 
-// ============================================================
-// 📣 BROADCAST TEMPLATE SYSTEM
-// ============================================================
+bot.command('broadcast', async (ctx) => {
+  const userId = ctx.message.from.id;
 
-const broadcastState = {};
-
-function getBroadcastTemplateKeyboard() {
-  return {
-    inline_keyboard: [
-      [
-        {
-          text: '📢 Template Pengumuman',
-          callback_data: 'broadcast_template_pengumuman',
-          style: 'primary'
-        }
-      ],
-      [
-        {
-          text: 'ℹ️ Template Information',
-          callback_data: 'broadcast_template_information',
-          style: 'primary'
-        }
-      ],
-      [
-        {
-          text: '🎉 Template Promo',
-          callback_data: 'broadcast_template_promo',
-          style: 'success'
-        }
-      ],
-      [
-        {
-          text: '❌ Batal',
-          callback_data: 'broadcast_cancel',
-          style: 'danger'
-        }
-      ]
-    ]
-  };
-}
-
-async function sendBroadcastTemplateMenu(ctx) {
-  return ctx.reply(
-`📣 <b>MENU BROADCAST</b>
-
-Silakan pilih template broadcast yang ingin digunakan:
-
-📢 <b>Pengumuman</b>
-Untuk informasi penting atau pemberitahuan umum.
-
-ℹ️ <b>Information</b>
-Untuk informasi dan bantuan dari admin.
-
-🎉 <b>Promo</b>
-Untuk promosi dengan tombol langsung menuju menu Top Up.`,
-    {
-      parse_mode: 'HTML',
-      reply_markup: getBroadcastTemplateKeyboard()
-    }
-  );
-}
-
-function getBroadcastTemplate(type, inputText) {
-  const text = String(inputText || '').trim();
-
-  if (type === 'pengumuman') {
-    return `📢 <b>PENGUMUMAN</b>
-
-${text}
-
-━━━━━━━━━━━━━━━━━━━━
-📌 ${NAMA_STORE}`;
+  if (!adminIds.includes(userId)) {
+    return ctx.reply('⚠️ Anda tidak memiliki izin untuk menggunakan perintah ini.', { parse_mode: 'Markdown' });
   }
 
-  if (type === 'information') {
-    return `ℹ️ <b>INFORMATION</b>
+  const reply = ctx.message.reply_to_message;
+  const inputText = ctx.message.text.split(' ').slice(1).join(' ');
 
-${text}
-
-━━━━━━━━━━━━━━━━━━━━
-☎️ Silakan hubungi Admin jika membutuhkan bantuan.`;
+  if (!reply && !inputText) {
+    return ctx.reply(
+      '📌 *Cara menggunakan perintah broadcast:*\n\n' +
+      '1. Balas pesan (teks/gambar/video/dokumen) lalu ketik /broadcast untuk menyiarkan media tersebut\n' +
+      '2. Atau langsung kirim `/broadcast Pesanmu` untuk broadcast teks biasa\n\n' +
+      'Contoh:\n`/broadcast Hallo semua!`',
+      { parse_mode: 'Markdown' }
+    );
   }
-
-  if (type === 'promo') {
-    return `🎉 <b>PROMO ${NAMA_STORE}</b>
-
-${text}
-
-━━━━━━━━━━━━━━━━━━━━
-💳 Jangan lewatkan promonya!`;
-  }
-
-  return text;
-}
-
-function getBroadcastButtons(type) {
-
-  // =========================
-  // 🎉 BUTTON PROMO
-  // =========================
-  if (type === 'promo') {
-    return [
-      [
-        {
-          text: '💳 TOP UP SEKARANG',
-          callback_data: 'topup_saldo',
-          style: 'success'
-        }
-      ]
-    ];
-  }
-
-  // =========================
-  // ℹ️ BUTTON INFORMATION
-  // =========================
-  if (type === 'information') {
-    const adminWa = String(ADMIN_WA || '').trim();
-
-    if (adminWa) {
-      return [
-        [
-          {
-            text: '👨‍💼 HUBUNGI ADMIN',
-            url: `https://wa.me/${adminWa.replace(/\D/g, '')}`,
-            style: 'primary'
-          }
-        ]
-      ];
-    }
-
-    return [];
-  }
-
-  // Pengumuman tidak menggunakan button
-  return [];
-}
-
-async function executeBroadcast(ctx, type, inputText, replyMessage = null) {
-  const reply = replyMessage || ctx.message?.reply_to_message;
 
   db.all("SELECT user_id FROM users", [], async (err, rows) => {
     if (err) {
-      logger.error(
-        '❌ DB Error saat ambil user untuk broadcast:',
-        err
-      );
-
-      return ctx.reply(
-        '⚠️ Gagal mengambil daftar pengguna.'
-      );
+      logger.error('❌ DB Error saat ambil user untuk broadcast:', err);
+      return ctx.reply('⚠️ Gagal mengambil daftar pengguna.');
     }
 
     let success = 0;
@@ -4580,431 +1757,61 @@ async function executeBroadcast(ctx, type, inputText, replyMessage = null) {
       try {
         let sent;
 
-        // ====================================================
-        // 📎 BROADCAST MEDIA / REPLY MESSAGE
-        // ====================================================
         if (reply && reply.message_id) {
-
-          sent = await bot.telegram.copyMessage(
-            row.user_id,
-            ctx.chat.id,
-            reply.message_id
-          );
-
-          // Tambahkan button jika template mempunyai button
-          const buttons = getBroadcastButtons(type);
-
-          if (buttons.length && sent?.message_id) {
-            try {
-              await bot.telegram.editMessageReplyMarkup(
-                row.user_id,
-                sent.message_id,
-                undefined,
-                {
-                  inline_keyboard: buttons
-                }
-              );
-            } catch (e) {
-              logger.debug(
-                `Tidak dapat menambahkan tombol ke media ${row.user_id}: ${e.message}`
-              );
+          // Broadcast media dengan copyMessage
+          sent = await bot.telegram.copyMessage(row.user_id, ctx.chat.id, reply.message_id);
+        } else if (inputText) {
+          // Broadcast teks + tombol URL
+          sent = await bot.telegram.sendMessage(row.user_id, inputText, {
+            parse_mode: "Markdown",
+            reply_markup: {
+              inline_keyboard: [
+                [
+                  { text: "🌐 WhatsApp Admin", url: `https://wa.me/${ADMIN_WA}` }
+                ]
+              ]
             }
-          }
-
-        } else {
-
-          // ==================================================
-          // 📝 BROADCAST TEXT
-          // ==================================================
-
-          const messageText = getBroadcastTemplate(
-            type,
-            inputText
-          );
-
-          const buttons = getBroadcastButtons(type);
-
-          const options = {
-            parse_mode: 'HTML'
-          };
-
-          if (buttons.length) {
-            options.reply_markup = {
-              inline_keyboard: buttons
-            };
-          }
-
-          sent = await bot.telegram.sendMessage(
-            row.user_id,
-            messageText,
-            options
-          );
+          });
         }
 
-        // ====================================================
-        // 📌 PIN PESAN
-        // ====================================================
-
-        const messageIdToPin =
-          sent?.message_id || sent;
-
+        // === 2) PIN PESAN YANG BARU DIKIRIM ===
+        // Antisipasi bentuk return: copyMessage balikin { message_id: n }
+        // sendMessage balikin object Message penuh
+        const messageIdToPin = sent?.message_id || sent;
         if (messageIdToPin) {
           try {
-            await bot.telegram.pinChatMessage(
-              row.user_id,
-              messageIdToPin,
-              {
-                disable_notification: false
-              }
-            );
+            await bot.telegram.pinChatMessage(row.user_id, messageIdToPin, {
+              disable_notification: false
+            });
+            logger.info(`📌 Pesan dipin di chat ${row.user_id}`);
           } catch (e) {
-            logger.debug(
-              `Skip pin untuk ${row.user_id}: ${e.message}`
-            );
+            // Kalau targetnya user private → gagal pin (dilewatin aja)
+            logger.debug(`Skip pin untuk ${row.user_id} (kemungkinan private chat)`);
           }
         }
 
         success++;
-
-        logger.info(
-          `✅ Broadcast ${type} sukses ke ${row.user_id}`
-        );
-
+        logger.info(`✅ Broadcast sukses ke ${row.user_id}`);
       } catch (error) {
-
         failed++;
 
-        if (error.response?.error_code === 403) {
-
-          logger.warn(
-            `🚫 User ${row.user_id} blokir bot / belum start`
-          );
-
-        } else if (error.response?.error_code === 429) {
-
-          const retryAfter =
-            error.response.parameters?.retry_after || 5;
-
-          logger.warn(
-            `⏳ Telegram rate limit: tunggu ${retryAfter} detik`
-          );
-
-          await new Promise(resolve =>
-            setTimeout(
-              resolve,
-              (retryAfter + 1) * 1000
-            )
-          );
-
+        if (error.response && error.response.error_code === 403) {
+          logger.warn(`🚫 User ${row.user_id} blokir bot / belum start`);
+        } else if (error.response && error.response.error_code === 429) {
+          const retryAfter = error.response.parameters?.retry_after || 5;
+          logger.warn(`⏳ Telegram rate limit: tunggu ${retryAfter} detik`);
+          await new Promise(resolve => setTimeout(resolve, (retryAfter + 1) * 1000));
         } else {
-
-          logger.warn(
-            `❌ Gagal broadcast ke ${row.user_id}: ${error.message}`
-          );
+          logger.warn(`❌ Gagal broadcast/pin ke ${row.user_id}: ${error.message}`);
         }
       }
 
-      // Delay agar tidak terlalu cepat
-      await new Promise(resolve =>
-        setTimeout(resolve, 500)
-      );
+      // Delay antar user (hindari flood)
+      await new Promise(resolve => setTimeout(resolve, 500));
     }
 
-    delete broadcastState[ctx.from.id];
-
-    // ======================================================
-    // 📊 HASIL BROADCAST
-    // ======================================================
-
-    await ctx.reply(
-      `📣 <b>Broadcast ${type.toUpperCase()} selesai!</b>\n\n` +
-      `✅ Berhasil: ${success}\n` +
-      `❌ Gagal: ${failed}`,
-      {
-        parse_mode: 'HTML'
-      }
-    );
+    ctx.reply(`📣 Broadcast selesai!\n✅ Berhasil: ${success}\n❌ Gagal: ${failed}`);
   });
-}
-
-
-// ============================================================
-// 📣 COMMAND /BROADCAST
-// ============================================================
-
-bot.command('broadcast', async (ctx) => {
-
-  const userId = ctx.message.from.id;
-
-  // Cek admin
-  if (!adminIds.includes(userId)) {
-    return ctx.reply(
-      '⚠️ Anda tidak memiliki izin untuk menggunakan perintah ini.',
-      {
-        parse_mode: 'Markdown'
-      }
-    );
-  }
-
-  const reply =
-    ctx.message.reply_to_message;
-
-  const inputText =
-    ctx.message.text
-      .split(' ')
-      .slice(1)
-      .join(' ')
-      .trim();
-
-
-  // ==========================================================
-  // /broadcast
-  // Buka menu template
-  // ==========================================================
-
-  if (!reply && !inputText) {
-    return sendBroadcastTemplateMenu(ctx);
-  }
-
-
-  // ==========================================================
-  // /broadcast + reply media
-  // ==========================================================
-
-  if (!inputText && reply) {
-    return executeBroadcast(
-      ctx,
-      'pengumuman',
-      '',
-      reply
-    );
-  }
-
-
-  // ==========================================================
-  // FORMAT:
-  //
-  // /broadcast promo Isi pesan
-  // /broadcast information Isi pesan
-  // /broadcast pengumuman Isi pesan
-  // ==========================================================
-
-  const parts =
-    inputText.split(/\s+/);
-
-  const first =
-    String(parts.shift() || '')
-      .toLowerCase();
-
-  const aliases = {
-
-    pengumuman:
-      'pengumuman',
-
-    announcement:
-      'pengumuman',
-
-    information:
-      'information',
-
-    info:
-      'information',
-
-    promo:
-      'promo'
-  };
-
-  const type =
-    aliases[first];
-
-
-  if (type) {
-
-    const body =
-      parts.join(' ').trim();
-
-
-    // Kalau hanya mengetik:
-    // /broadcast promo
-    //
-    // bot menunggu isi pesan
-
-    if (!body && !reply) {
-
-      broadcastState[userId] = {
-        type
-      };
-
-      return ctx.reply(
-        `📝 <b>Template ${type.toUpperCase()}</b>\n\n` +
-        `Silakan kirim isi pesan yang ingin dibroadcast.`,
-        {
-          parse_mode: 'HTML'
-        }
-      );
-    }
-
-    return executeBroadcast(
-      ctx,
-      type,
-      body,
-      reply
-    );
-  }
-
-
-  // ==========================================================
-  // FORMAT LAMA
-  //
-  // /broadcast Pesan saya
-  //
-  // otomatis dianggap sebagai pengumuman
-  // ==========================================================
-
-  return executeBroadcast(
-    ctx,
-    'pengumuman',
-    inputText,
-    reply
-  );
-});
-
-
-// ============================================================
-// 📢 PILIH TEMPLATE DARI MENU
-// ============================================================
-
-bot.action(
-  /^broadcast_template_(pengumuman|information|promo)$/,
-  async (ctx) => {
-
-    const userId =
-      ctx.from.id;
-
-    if (!adminIds.includes(userId)) {
-      return ctx.answerCbQuery(
-        'Ditolak!'
-      );
-    }
-
-    const type =
-      ctx.match[1];
-
-    broadcastState[userId] = {
-      type
-    };
-
-    await ctx.answerCbQuery(
-      `Template ${type} dipilih`
-    );
-
-    return ctx.reply(
-      `📝 <b>Template ${type.toUpperCase()}</b>\n\n` +
-      `Kirim isi pesan sekarang.\n\n` +
-
-      (
-        type === 'promo'
-          ? '🎉 Setelah terkirim, user akan mendapat tombol <b>TOP UP SEKARANG</b> yang langsung membuka menu top up.'
-
-          : type === 'information'
-            ? 'ℹ️ User akan mendapat tombol <b>HUBUNGI ADMIN</b>.'
-
-            : '📢 Template pengumuman akan dikirim tanpa tombol.'
-      ),
-
-      {
-        parse_mode: 'HTML'
-      }
-    );
-  }
-);
-
-
-// ============================================================
-// ❌ BATAL BROADCAST
-// ============================================================
-
-bot.action(
-  'broadcast_cancel',
-  async (ctx) => {
-
-    if (!adminIds.includes(ctx.from.id)) {
-      return ctx.answerCbQuery(
-        'Ditolak!'
-      );
-    }
-
-    delete broadcastState[
-      ctx.from.id
-    ];
-
-    await ctx.answerCbQuery(
-      'Broadcast dibatalkan'
-    );
-
-    return ctx.reply(
-      '❌ Broadcast dibatalkan.'
-    );
-  }
-);
-
-
-bot.on('text', async (ctx, next) => {
-
-  const userId = ctx.from.id;
-  const text = ctx.message?.text?.trim();
-
-  // ============================================================
-  // 📣 HANDLE INPUT BROADCAST
-  // ============================================================
-
-  const state = broadcastState[userId];
-
-  // Tidak sedang menunggu input broadcast
-  if (!state || !state.type) {
-    return next();
-  }
-
-  // Jangan tangkap command
-  if (!text || text.startsWith('/')) {
-    return next();
-  }
-
-  // Simpan tipe broadcast
-  const broadcastType = state.type;
-
-  // ============================================================
-  // ⚠️ PENTING:
-  // HAPUS STATE SEBELUM EXECUTE BROADCAST
-  // Supaya pesan berikutnya TIDAK ikut dianggap broadcast
-  // ============================================================
-
-  delete broadcastState[userId];
-
-  logger.info(
-    `📣 Admin ${userId} mengirim isi broadcast ${broadcastType}`
-  );
-
-  try {
-
-    await executeBroadcast(
-      ctx,
-      broadcastType,
-      text
-    );
-
-  } catch (error) {
-
-    logger.error(
-      `❌ Error broadcast ${broadcastType}: ${error.message}`
-    );
-
-    await ctx.reply(
-      '❌ Terjadi kesalahan saat menjalankan broadcast.'
-    );
-  }
-
-  return;
 });
 
 function formatRupiah(angka) {
@@ -5198,65 +2005,52 @@ bot.action('topup_gopay', async (ctx) => {
 
     logger.info(`📝 Menunggu input nominal dari user ${userId} untuk QRIS Gopay`);
 
-// 💬 Kirim instruksi
-const sent = await ctx.reply(
+    // 💬 Kirim instruksi
+    const sent = await ctx.reply(
 `💳━━━━━━━━━━━━━━━━━━━━💳
         *Qʀɪꜱ Gᴏᴘᴀʏ Tᴏᴘ-ᴜᴘ*
 💳━━━━━━━━━━━━━━━━━━━━💳
 
-⚡ *ꜱɪʟᴀʜᴋᴀɴ ᴋᴇᴛɪᴋ ɴᴏᴍɪɴᴀʟ ᴛᴏᴘ-ᴜᴘ*
-ʏᴀɴɢ ɪɴɢɪɴ ᴀɴᴅᴀ ʙᴀʏᴀʀᴋᴀɴ ᴍᴇʟᴀʟᴜɪ ᴍᴇᴛᴏᴅᴇ Qʀɪꜱ Gᴏᴘᴀʏ.
+⚡ *ꜱɪʟᴀʜᴋᴀɴ ᴋᴇᴛɪᴋ ɴᴏᴍɪɴᴀʟ ᴛᴏᴘ-ᴜᴘ*  
+ʏᴀɴɢ ɪɴɢɪɴ ᴀɴᴅᴀ ʙᴀʏᴀʀᴋᴀɴ ᴍᴇʟᴀʟᴜɪ ᴍᴇᴛᴏᴅᴇ Qʀɪꜱ Gᴏᴘᴀʏ.  
 
-💰 ᴍɪɴɪᴍᴀʟ ᴛᴏᴘ-ᴜᴘ: *Rp 100*
+💰 ᴍɪɴɪᴍᴀʟ ᴛᴏᴘ-ᴜᴘ: *Rp 100*  
 🧾 ᴄᴏɴᴛᴏʜ: \`10000\`
 
 ━━━━━━━━━━━━━━━━━━━━━━━
-⌛ ᴋᴇᴍᴜᴅɪᴀɴ ᴛᴜɴɢɢᴜ ᴘʀᴏꜱᴇꜱ ᴏᴛᴏᴍᴀᴛɪꜱ.
-ᴀᴘᴀʙɪʟᴀ ꜱᴀʟᴅᴏ ʙᴇʟᴜᴍ ᴍᴀꜱᴜᴋ,
-ʜᴜʙᴜɴɢɪ ᴀᴅᴍɪɴ ᴅᴇɴɢᴀɴ ʙᴜᴋᴛɪ ᴛʀᴀɴꜱᴀᴋꜱɪ.
+⌛ ᴋᴇᴍᴜᴅɪᴀɴ ᴛᴜɴɢɢᴜ ᴘʀᴏꜱᴇꜱ ᴏᴛᴏᴍᴀᴛɪꜱ.  
+ᴀᴘᴀʙɪʟᴀ ꜱᴀʟᴅᴏ ʙᴇʟᴜᴍ ᴍᴀꜱᴜᴋ,  
+ʜᴜʙᴜɴɢɪ ᴀᴅᴍɪɴ ᴅᴇɴɢᴀɴ ʙᴜᴋᴛɪ ᴛʀᴀɴꜱᴀᴋꜱɪ.  
 ━━━━━━━━━━━━━━━━━━━━━━━`,
-{
-  parse_mode: 'Markdown',
-  reply_markup: {
-    inline_keyboard: [
-      [
-        {
-          text: '❌ Batal',
-          callback_data: 'send_main_menu',
-          style: 'danger'
-        }
-      ]
-    ]
-  }
-}); // ✅ ctx.reply ditutup
-
-// ✅ Simpan message_id untuk tracking
-if (sent?.message_id) {
-  lastMenus[userId] = sent.message_id;
-}
-
-return sent;
-
-} catch (error) {
-  logger.error(
-    '❌ Kesalahan saat memulai top-up saldo (QRIS Gopay):',
-    error
-  );
-
-  try {
-    await ctx.reply(
-      '❌ *GAGAL! Terjadi kesalahan saat memproses permintaan Anda. Silahkan coba lagi nanti.*',
       {
-        parse_mode: 'Markdown'
+        parse_mode: 'Markdown',
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: '❌ Batal', callback_data: 'send_main_menu' }]
+          ]
+        }
       }
     );
-  } catch (e) {
-    logger.error(
-      'Gagal kirim pesan error:',
-      e.message
-    );
+
+    // ✅ Simpan message_id untuk tracking
+    if (sent?.message_id) {
+      lastMenus[userId] = sent.message_id;
+    }
+
+    return sent;
+
+  } catch (error) {
+    logger.error('❌ Kesalahan saat memulai top-up saldo (QRIS Gopay):', error);
+
+    try {
+      await ctx.reply(
+        '❌ *GAGAL! Terjadi kesalahan saat memproses permintaan Anda. Silahkan coba lagi nanti.*',
+        { parse_mode: 'Markdown' }
+      );
+    } catch (e) {
+      logger.error('Gagal kirim pesan error:', e.message);
+    }
   }
-}
 });
 bot.action('topup_pakasir', async (ctx) => {
   const userId = ctx.from.id;
@@ -5294,8 +2088,8 @@ bot.action('topup_pakasir', async (ctx) => {
 
     logger.info(`📝 Menunggu input nominal dari user ${userId} untuk QRIS Pakasir`);
 
-// 💬 Kirim instruksi
-const sent = await ctx.reply(
+    // 💬 Kirim instruksi
+    const sent = await ctx.reply(
 `💳━━━━━━━━━━━━━━━━━━━━💳
        *Qʀɪꜱ Pᴀᴋᴀꜱɪʀ Tᴏᴘ-ᴜᴘ*
 💳━━━━━━━━━━━━━━━━━━━━💳
@@ -5311,48 +2105,35 @@ const sent = await ctx.reply(
 ᴀᴘᴀʙɪʟᴀ ꜱᴀʟᴅᴏ ʙᴇʟᴜᴍ ᴍᴀꜱᴜᴋ,
 ʜᴜʙᴜɴɢɪ ᴀᴅᴍɪɴ ᴅᴇɴɢᴀɴ ʙᴜᴋᴛɪ ᴛʀᴀɴꜱᴀᴋꜱɪ.
 ━━━━━━━━━━━━━━━━━━━━━━━`,
-{
-  parse_mode: 'Markdown',
-  reply_markup: {
-    inline_keyboard: [
-      [
-        {
-          text: '❌ Batal',
-          callback_data: 'send_main_menu',
-          style: 'danger'
-        }
-      ]
-    ]
-  }
-}); // ← INI PENUTUP YANG KURANG
-
-// ✅ Simpan message_id untuk tracking
-if (sent?.message_id) {
-  lastMenus[userId] = sent.message_id;
-}
-
-return sent;
-
-} catch (error) {
-  logger.error(
-    '❌ Kesalahan saat memulai top-up saldo (QRIS Pakasir):',
-    error
-  );
-
-  try {
-    await ctx.reply(
-      '❌ *GAGAL! Terjadi kesalahan saat memproses permintaan Anda. Silahkan coba lagi nanti.*',
       {
-        parse_mode: 'Markdown'
+        parse_mode: 'Markdown',
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: '❌ Batal', callback_data: 'send_main_menu' }]
+          ]
+        }
       }
     );
-  } catch (e) {
-    logger.error(
-      'Gagal kirim pesan error:',
-      e.message
-    );
+
+    // ✅ Simpan message_id untuk tracking
+    if (sent?.message_id) {
+      lastMenus[userId] = sent.message_id;
+    }
+
+    return sent;
+
+  } catch (error) {
+    logger.error('❌ Kesalahan saat memulai top-up saldo (QRIS Pakasir):', error);
+
+    try {
+      await ctx.reply(
+        '❌ *GAGAL! Terjadi kesalahan saat memproses permintaan Anda. Silahkan coba lagi nanti.*',
+        { parse_mode: 'Markdown' }
+      );
+    } catch (e) {
+      logger.error('Gagal kirim pesan error:', e.message);
+    }
   }
-}
 });
 // TOPUP PAKASIR YOOOOO
 
@@ -5591,8 +2372,7 @@ const qrMessage = await ctx.replyWithPhoto(
             [
               {
                 text: '❌ Batal',
-                callback_data: `batal_topup_${uniqueCode}`,
-                style: 'danger'
+                callback_data: `batal_topup_${uniqueCode}`
               }
             ]
           ]
@@ -5681,55 +2461,21 @@ bot.action('menu_topup', async (ctx) => {
           topup_pakasir: true
         };
 
-const keyboard = [];
-
-if (config.topup_saldo) {
-  keyboard.push([
-    {
-      text: "💸 Topup QRIS Orkut",
-      callback_data: "topup_saldo",
-      style: "primary"
+    const keyboard = [];
+    if (config.topup_saldo) {
+      keyboard.push([{ text: "💸 Topup QRIS Orkut", callback_data: "topup_saldo" }]);
     }
-  ]);
-}
-
-if (config.topup_saweria) {
-  keyboard.push([
-    {
-      text: "💸 Topup QRIS Saweria",
-      callback_data: "topup_saweria",
-      style: "primary"
+    if (config.topup_saweria) {
+      keyboard.push([{ text: "💸 Topup QRIS Saweria", callback_data: "topup_saweria" }]);
     }
-  ]);
-}
-
-if (config.topup_gopay) {
-  keyboard.push([
-    {
-      text: "💸 Topup QRIS Gopay",
-      callback_data: "topup_gopay",
-      style: "primary"
+    if (config.topup_gopay) {
+      keyboard.push([{ text: "💸 Topup QRIS Gopay", callback_data: "topup_gopay" }]);
     }
-  ]);
-}
-
-if (config.topup_pakasir) {
-  keyboard.push([
-    {
-      text: "💸 Topup QRIS Pakasir",
-      callback_data: "topup_pakasir",
-      style: "primary"
+    if (config.topup_pakasir) {
+      keyboard.push([{ text: "💸 Topup QRIS Pakasir", callback_data: "topup_pakasir" }]);
     }
-  ]);
-}
+    keyboard.push([{ text: "🔙 Kembali ke Menu Utama", callback_data: "send_main_menu" }]);
 
-keyboard.push([
-  {
-    text: "🔙 Kembali ke Menu Utama",
-    callback_data: "send_main_menu",
-    style: "danger"
-  }
-]);
     const messageText = `
 💳 <b>ᴍᴇɴᴜ ᴛᴏᴘ-ᴜᴘ ꜱᴀʟᴅᴏ</b>
 ᴘɪʟɪʜ ᴍᴇᴛᴏᴅᴇ ᴛᴏᴘ-ᴜᴘ ʏᴀɴɢ ᴋᴀᴍᴜ ɪɴɢɪɴᴋᴀɴ ᴅɪ ʙᴀᴡᴀʜ ɪɴɪ ⤵️
@@ -6237,154 +2983,31 @@ bot.command('edittotalcreate', async (ctx) => {
 });
 async function handleServiceAction(ctx, action) {
   let keyboard;
-
   if (action === 'trial') {
     keyboard = [
-      [
-        {
-          text: '💠 SSH',
-          callback_data: 'trial_ssh',
-          style: 'primary'
-        }
-      ],
-      [
-        {
-          text: '💠 Vmess',
-          callback_data: 'trial_vmess',
-          style: 'primary'
-        },
-        {
-          text: '💠 Vless',
-          callback_data: 'trial_vless',
-          style: 'primary'
-        }
-      ],
-      [
-        {
-          text: '💠 Trojan',
-          callback_data: 'trial_trojan',
-          style: 'primary'
-        },
-        {
-          text: '💠 Shadowsocks',
-          callback_data: 'trial_shadowsocks',
-          style: 'primary'
-        }
-      ],
-      [
-        {
-          text: '🔙 Kembali',
-          callback_data: 'send_main_menu',
-          style: 'danger'
-        }
-      ]
+      [{ text: '💠 SSH', callback_data: 'trial_ssh' }],
+      [{ text: '💠 Vmess', callback_data: 'trial_vmess' }, { text: '💠 Vless', callback_data: 'trial_vless' }],
+      [{ text: '💠 Trojan', callback_data: 'trial_trojan' }, { text: '💠 Shadowsocks', callback_data: 'trial_shadowsocks' }],
+      [{ text: '🔙 Kembali', callback_data: 'send_main_menu' }]
     ];
-
   } else if (action === 'create') {
     keyboard = [
-      [
-        {
-          text: '✨ SSH',
-          callback_data: 'create_ssh',
-          style: 'primary'
-        }
-      ],
-      [
-        {
-          text: '✨ Vmess',
-          callback_data: 'create_vmess',
-          style: 'primary'
-        },
-        {
-          text: '✨ Vless',
-          callback_data: 'create_vless',
-          style: 'primary'
-        }
-      ],
-      [
-        {
-          text: '✨ Trojan',
-          callback_data: 'create_trojan',
-          style: 'primary'
-        },
-        {
-          text: '✨ Shadowsocks',
-          callback_data: 'create_shadowsocks',
-          style: 'primary'
-        }
-      ],
-      [
-        {
-          text: '🔙 Kembali',
-          callback_data: 'send_main_menu',
-          style: 'danger'
-        }
-      ]
+      [{ text: '✨ SSH', callback_data: 'create_ssh' }],
+      [{ text: '✨ Vmess', callback_data: 'create_vmess' }, { text: '✨ Vless', callback_data: 'create_vless' }],
+      [{ text: '✨ Trojan', callback_data: 'create_trojan' }, { text: '✨ Shadowsocks', callback_data: 'create_shadowsocks' }],
+      [{ text: '🔙 Kembali', callback_data: 'send_main_menu' }]
     ];
-
   } else if (action === 'sewascript') {
     keyboard = [
-      [
-        {
-          text: '🥇 Regist IP',
-          callback_data: 'sewascript_daftar',
-          style: 'primary'
-        },
-        {
-          text: '🥈 Renew IP',
-          callback_data: 'sewascript_perpanjang',
-          style: 'success'
-        }
-      ],
-      [
-        {
-          text: '🔙 Kembali',
-          callback_data: 'send_main_menu',
-          style: 'danger'
-        }
-      ]
+      [{ text: '🥇 Regist IP', callback_data: 'sewascript_daftar' }, { text: '🥈 Renew IP', callback_data: 'sewascript_perpanjang' }],
+      [{ text: '🔙 Kembali', callback_data: 'send_main_menu' }]
     ];
-
   } else if (action === 'renew') {
     keyboard = [
-      [
-        {
-          text: '♻️ SSH',
-          callback_data: 'renew_ssh',
-          style: 'success'
-        }
-      ],
-      [
-        {
-          text: '♻️ Vmess',
-          callback_data: 'renew_vmess',
-          style: 'success'
-        },
-        {
-          text: '♻️ Vless',
-          callback_data: 'renew_vless',
-          style: 'success'
-        }
-      ],
-      [
-        {
-          text: '♻️ Trojan',
-          callback_data: 'renew_trojan',
-          style: 'success'
-        },
-        {
-          text: '♻️ Shadowsocks',
-          callback_data: 'renew_shadowsocks',
-          style: 'success'
-        }
-      ],
-      [
-        {
-          text: '🔙 Kembali',
-          callback_data: 'send_main_menu',
-          style: 'danger'
-        }
-      ]
+      [{ text: '♻️ SSH', callback_data: 'renew_ssh' }],
+      [{ text: '♻️ Vmess', callback_data: 'renew_vmess' }, { text: '♻️ Vless', callback_data: 'renew_vless' }],
+      [{ text: '♻️ Trojan', callback_data: 'renew_trojan' }, { text: '♻️ Shadowsocks', callback_data: 'renew_shadowsocks' }],
+      [{ text: '🔙 Kembali', callback_data: 'send_main_menu' }]
     ];
   }
   try {
@@ -6530,197 +3153,29 @@ const showSewaScript = await new Promise((resolve) => {
     });
 });
 
-const adminKeyboard = [
-  [
-    {
-      text: '✏️ Tambah Server',
-      callback_data: 'addserver',
-      style: 'primary'
-    },
-    {
-      text: '❌ Hapus Server',
-      callback_data: 'deleteserver',
-      style: 'danger'
-    }
-  ],
-
-  [
-    {
-      text: '💲 Edit Harga',
-      callback_data: 'editserver_harga',
-      style: 'primary'
-    },
-    {
-      text: '📝 Edit Nama',
-      callback_data: 'nama_server_edit',
-      style: 'primary'
-    }
-  ],
-
-  [
-    {
-      text: '🌐 Edit Domain',
-      callback_data: 'editserver_domain',
-      style: 'primary'
-    },
-    {
-      text: '🔑 Edit Auth',
-      callback_data: 'editserver_auth',
-      style: 'primary'
-    }
-  ],
-
-  [
-    {
-      text: '📊 Edit Quota',
-      callback_data: 'editserver_quota',
-      style: 'primary'
-    },
-    {
-      text: '📶 Edit Limit IP',
-      callback_data: 'editserver_limit_ip',
-      style: 'primary'
-    }
-  ],
-
-  [
-    {
-      text: '🔢 Edit Batas Create',
-      callback_data: 'editserver_batas_create_akun',
-      style: 'primary'
-    },
-    {
-      text: '🔢 Edit Total Create',
-      callback_data: 'editserver_total_create_akun',
-      style: 'primary'
-    }
-  ],
-
-  [
-    {
-      text: '💵 Tambah Saldo',
-      callback_data: 'addsaldo_user',
-      style: 'success'
-    },
-    {
-      text: '📋 List Server',
-      callback_data: 'listserver',
-      style: 'primary'
-    }
-  ],
-
-  [
-    {
-      text: '♻️ Reset Server',
-      callback_data: 'resetdb',
-      style: 'danger'
-    },
-    {
-      text: 'ℹ️ Detail Server',
-      callback_data: 'detailserver',
-      style: 'primary'
-    }
-  ],
-
-  [
-    {
-      text: '🎁 Set Bonus TopUp',
-      callback_data: 'bonus_topup_setting',
-      style: 'success'
-    },
-    {
-      text: '📜 Log Bonus TopUp',
-      callback_data: 'log_bonus_topup',
-      style: 'primary'
-    }
-  ],
-
-  [
-    {
-      text: `${config.topup_saldo ? '✅' : '❌'} Topup QRIS Orkut`,
-      callback_data: 'toggle_topup_saldo',
-      style: config.topup_saldo ? 'success' : 'danger'
-    },
-    {
-      text: `${config.topup_saweria ? '✅' : '❌'} Topup QRIS Saweria`,
-      callback_data: 'toggle_topup_saweria',
-      style: config.topup_saweria ? 'success' : 'danger'
-    }
-  ],
-
-  [
-    {
-      text: `${showTrial ? '✅' : '❌'} Tombol Trial`,
-      callback_data: `toggle_trial_btn_${showTrial ? 'off' : 'on'}`,
-      style: showTrial ? 'success' : 'danger'
-    },
-    {
-      text: `${showSewaScript ? '✅' : '❌'} Tombol Sewa Script`,
-      callback_data: `toggle_sewascript_btn_${showSewaScript ? 'off' : 'on'}`,
-      style: showSewaScript ? 'success' : 'danger'
-    }
-  ],
-
-  [
-    {
-      text: '📈 Hasil Penjualan',
-      callback_data: 'statistik_penjualan',
-      style: 'success'
-    },
-    {
-      text: '📑 Log Topup',
-      callback_data: 'log_topup',
-      style: 'primary'
-    }
-  ],
-
-  [
-    {
-      text: `${config.topup_gopay ? '✅' : '❌'} Topup GoPay`,
-      callback_data: 'toggle_topup_gopay',
-      style: config.topup_gopay ? 'success' : 'danger'
-    },
-    {
-      text: `💸 Topup Pakasir ${config.topup_pakasir ? '✅' : '❌'}`,
-      callback_data: 'toggle_topup_pakasir',
-      style: config.topup_pakasir ? 'success' : 'danger'
-    }
-  ],
-
-  [
-    {
-      text: '👥 List Reseller',
-      callback_data: 'listreseller',
-      style: 'primary'
-    },
-    {
-      text: '☁️ Edit CloudFront',
-      callback_data: 'edit_cloudfront',
-      style: 'primary'
-    }
-  ],
-
-  [
-    {
-      text: '📦 Backup Database',
-      callback_data: 'backup_database',
-      style: 'success'
-    },
-    {
-      text: '♻️ Restore Database',
-      callback_data: 'restore_database',
-      style: 'danger'
-    }
-  ],
-
-  [
-    {
-      text: '🔙 Kembali',
-      callback_data: 'send_main_menu',
-      style: 'danger'
-    }
-  ]
-];
+    const adminKeyboard = [
+        [{ text: '✏️ Tambah Server', callback_data: 'addserver' }, { text: '❌ Hapus Server', callback_data: 'deleteserver' }],
+        [{ text: '💲 Edit Harga', callback_data: 'editserver_harga' }, { text: '📝 Edit Nama', callback_data: 'nama_server_edit' }],
+        [{ text: '🌐 Edit Domain', callback_data: 'editserver_domain' }, { text: '🔑 Edit Auth', callback_data: 'editserver_auth' }],
+        [{ text: '📊 Edit Quota', callback_data: 'editserver_quota' }, { text: '📶 Edit Limit IP', callback_data: 'editserver_limit_ip' }],
+        [{ text: '🔢 Edit Batas Create', callback_data: 'editserver_batas_create_akun' }, { text: '🔢 Edit Total Create', callback_data: 'editserver_total_create_akun' }],
+        [{ text: '💵 Tambah Saldo', callback_data: 'addsaldo_user' }, { text: '📋 List Server', callback_data: 'listserver' }],
+        [{ text: '♻️ Reset Server', callback_data: 'resetdb' }, { text: 'ℹ️ Detail Server', callback_data: 'detailserver' }],
+        [{ text: '🎁 Set Bonus TopUp', callback_data: 'bonus_topup_setting' }, { text: '📜 Log Bonus TopUp', callback_data: 'log_bonus_topup' }],
+        [{ text: `${config.topup_saldo ? '✅' : '❌'} Topup QRIS Orkut`, callback_data: 'toggle_topup_saldo' }, { text: `${config.topup_saweria ? '✅' : '❌'} Topup QRIS Saweria`, callback_data: 'toggle_topup_saweria' }],
+        [{text: `${showTrial ? '✅' : '❌'} Tombol Trial`, callback_data: `toggle_trial_btn_${showTrial ? 'off' : 'on'}`}, {text: `${showSewaScript ? '✅' : '❌'} Tombol Sewa Script`, callback_data: `toggle_sewascript_btn_${showSewaScript ? 'off' : 'on'}`}],
+        [{ text: '📈 Hasil Penjualan', callback_data: 'statistik_penjualan' }, { text: '📑 Log Topup', callback_data: 'log_topup' }],
+        [{text: `${config.topup_gopay ? '✅' : '❌'} Topup GoPay`, 
+  callback_data: 'toggle_topup_gopay' }, {
+    text: `💸 Topup Pakasir ${config.topup_pakasir ? '✅' : '❌'}`,
+    callback_data: 'toggle_topup_pakasir'
+}],
+        [{ text: '👥 List Reseller', callback_data: 'listreseller' },{ text: "☁️ Edit CloudFront", callback_data: "edit_cloudfront" }],
+        [
+    { text: "📦 Backup Database", callback_data: "backup_database" },
+    { text: "♻️ Restore Database", callback_data: "restore_database" }],
+        [{ text: '🔙 Kembali', callback_data: 'send_main_menu' }]
+    ];
 
     const messageText = `
 ╔════════════════════════╗
@@ -6805,16 +3260,14 @@ bot.action("edit_cloudfront", async (ctx) => {
       const keyboard = rows.map(server => [
         {
           text: server.nama_server,
-          callback_data: `edit_cloudfront_${server.id}`,
-          style: "primary"
+          callback_data: `edit_cloudfront_${server.id}`
         }
       ]);
 
       keyboard.push([
         {
           text: "🔙 Kembali",
-          callback_data: "admin_server",
-          style: "danger"
+          callback_data: "admin_server"
         }
       ]);
 
@@ -6853,37 +3306,17 @@ bot.action('sewascript_daftar', async (ctx) => {
         console.warn("Gagal menghapus pesan sebelumnya:", e.message);
     }
 
-    userState[ctx.from.id] = {
-        step: 'sewascript_daftar_pilih_bulan'
-    };
+    userState[ctx.from.id] = { step: 'sewascript_daftar_pilih_bulan' };
 
     await ctx.reply('📅 Pilih Durasi Sewa Script:', {
         reply_markup: {
             inline_keyboard: [
                 [
-                    {
-                        text: '1 Bulan 10K',
-                        callback_data: 'daftar_1bln',
-                        style: 'primary'
-                    },
-                    {
-                        text: '2 Bulan 20K',
-                        callback_data: 'daftar_2bln',
-                        style: 'primary'
-                    },
-                    {
-                        text: '3 Bulan 30K',
-                        callback_data: 'daftar_3bln',
-                        style: 'primary'
-                    }
+                    { text: '1 Bulan 10K', callback_data: 'daftar_1bln' },
+                    { text: '2 Bulan 20K', callback_data: 'daftar_2bln' },
+                    { text: '3 Bulan 30K', callback_data: 'daftar_3bln' }
                 ],
-                [
-                    {
-                        text: '🔙 Kembali',
-                        callback_data: 'service_sewascript',
-                        style: 'danger'
-                    }
-                ]
+                [{ text: '🔙 Kembali', callback_data: 'service_sewascript' }]
             ]
         }
     });
@@ -6895,37 +3328,17 @@ bot.action('sewascript_perpanjang', async (ctx) => {
         console.warn("Gagal menghapus pesan sebelumnya:", e.message);
     }
 
-    userState[ctx.from.id] = {
-        step: 'sewascript_perpanjang_pilih_bulan'
-    };
+    userState[ctx.from.id] = { step: 'sewascript_perpanjang_pilih_bulan' };
 
     await ctx.reply('📅 Pilih Durasi Perpanjangan Script:', {
         reply_markup: {
             inline_keyboard: [
                 [
-                    {
-                        text: '1 Bulan 10K',
-                        callback_data: 'perpanjang_1bln',
-                        style: 'primary'
-                    },
-                    {
-                        text: '2 Bulan 20K',
-                        callback_data: 'perpanjang_2bln',
-                        style: 'primary'
-                    },
-                    {
-                        text: '3 Bulan 30K',
-                        callback_data: 'perpanjang_3bln',
-                        style: 'primary'
-                    }
+                    { text: '1 Bulan 10K', callback_data: 'perpanjang_1bln' },
+                    { text: '2 Bulan 20K', callback_data: 'perpanjang_2bln' },
+                    { text: '3 Bulan 30K', callback_data: 'perpanjang_3bln' }
                 ],
-                [
-                    {
-                        text: '🔙 Kembali',
-                        callback_data: 'service_sewascript',
-                        style: 'danger'
-                    }
-                ]
+                [{ text: '🔙 Kembali', callback_data: 'service_sewascript' }]
             ]
         }
     });
@@ -7209,98 +3622,73 @@ async function startSelectServer(ctx, action, type, page = 0) {
       const end = start + serversPerPage;
       const currentServers = servers.slice(start, end);
 
-const keyboard = [];
+      const keyboard = [];
 
-for (const server of currentServers) {
-  const totalCreate = Number(server.total_create_akun || 0);
-  const batasCreate = Number(server.batas_create_akun || 0);
-  const percent = batasCreate > 0
-    ? (totalCreate / batasCreate) * 100
-    : 0;
+      for (const server of currentServers) {
+        const totalCreate = Number(server.total_create_akun || 0);
+        const batasCreate = Number(server.batas_create_akun || 0);
+        const percent = batasCreate > 0 ? (totalCreate / batasCreate) * 100 : 0;
 
-  let statusBadge = '🟢';
+        let statusBadge = '🟢';
+        if (totalCreate >= batasCreate) statusBadge = '🔴';
+        else if (percent >= 80) statusBadge = '🟡';
 
-  if (totalCreate >= batasCreate) {
-    statusBadge = '🔴';
-  } else if (percent >= 80) {
-    statusBadge = '🟡';
-  }
+        keyboard.push([
+          {
+            text: `${statusBadge} ${server.nama_server}`,
+            callback_data: `${action}_username_${type}_${server.id}`
+          }
+        ]);
+      }
 
-  keyboard.push([
-    {
-      text: `${statusBadge} ${server.nama_server}`,
-      callback_data: `${action}_username_${type}_${server.id}`,
-      style: 'primary'
-    }
-  ]);
-}
+      const navButtons = [];
+      if (totalPages > 1) {
+        if (currentPage > 0) {
+          navButtons.push({
+            text: '⬅️ Prev',
+            callback_data: `navigate_${action}_${type}_${currentPage - 1}`
+          });
+        }
 
-const navButtons = [];
+        navButtons.push({
+          text: `📄 ${currentPage + 1}/${totalPages}`,
+          callback_data: 'noop'
+        });
 
-if (totalPages > 1) {
+        if (currentPage < totalPages - 1) {
+          navButtons.push({
+            text: '➡️ Next',
+            callback_data: `navigate_${action}_${type}_${currentPage + 1}`
+          });
+        }
+      }
 
-  if (currentPage > 0) {
-    navButtons.push({
-      text: '⬅️ Prev',
-      callback_data: `navigate_${action}_${type}_${currentPage - 1}`,
-      style: 'primary'
-    });
-  }
+      if (navButtons.length > 0) {
+        keyboard.push(navButtons);
+      }
 
-  navButtons.push({
-    text: `📄 ${currentPage + 1}/${totalPages}`,
-    callback_data: 'noop',
-    style: 'primary'
-  });
+      let backMenu = 'menu_vpn';
+      if (action === 'trial') backMenu = 'menu_trial';
+      if (action === 'create') backMenu = 'menu_create';
+      if (action === 'renew') backMenu = 'menu_renew';
 
-  if (currentPage < totalPages - 1) {
-    navButtons.push({
-      text: '➡️ Next',
-      callback_data: `navigate_${action}_${type}_${currentPage + 1}`,
-      style: 'primary'
-    });
-  }
-}
+      keyboard.push([
+        { text: '🔙 Kembali', callback_data: backMenu }
+      ]);
 
-if (navButtons.length > 0) {
-  keyboard.push(navButtons);
-}
+      const actionTitle =
+        action === 'trial'
+          ? '💠 PILIH SERVER TRIAL'
+          : action === 'create'
+          ? '✏️ PILIH SERVER CREATE'
+          : '♻️ PILIH SERVER RENEW';
 
-let backMenu = 'menu_vpn';
-
-if (action === 'trial') {
-  backMenu = 'menu_trial';
-}
-
-if (action === 'create') {
-  backMenu = 'menu_create';
-}
-
-if (action === 'renew') {
-  backMenu = 'menu_renew';
-}
-
-keyboard.push([
-  {
-    text: '🔙 Kembali',
-    callback_data: backMenu,
-    style: 'danger'
-  }
-]);
-
-const actionTitle =
-  action === 'trial'
-    ? '💠 PILIH SERVER TRIAL'
-    : action === 'create'
-    ? '✏️ PILIH SERVER CREATE'
-    : '♻️ PILIH SERVER RENEW';
-
-const actionDesc =
-  action === 'trial'
-    ? 'Pilih server untuk uji coba akun'
-    : action === 'create'
-    ? 'Pilih server untuk membuat akun baru'
-    : 'Pilih server untuk memperpanjang akun';
+      const actionDesc =
+        action === 'trial'
+          ? 'Pilih server untuk uji coba akun'
+          : action === 'create'
+          ? 'Pilih server untuk membuat akun baru'
+          : 'Pilih server untuk memperpanjang akun';
 
       const typeTitle = String(type || '').toUpperCase();
 
@@ -7705,21 +4093,12 @@ async function sendPaginatedResellerList(ctx, page = 1, messageId = null) {
     const totalPages = Math.ceil(totalResellers / limit);
     const navButtons = [];
 
-if (page > 1) {
-  navButtons.push({
-    text: '⬅️ Prev',
-    callback_data: `listreseller_prev_${page}`,
-    style: 'primary'
-  });
-}
-
-if (page < totalPages) {
-  navButtons.push({
-    text: 'Next ➡️',
-    callback_data: `listreseller_next_${page}`,
-    style: 'primary'
-  });
-}
+    if (page > 1) {
+      navButtons.push({ text: '⬅️ Prev', callback_data: `listreseller_prev_${page}` });
+    }
+    if (page < totalPages) {
+      navButtons.push({ text: 'Next ➡️', callback_data: `listreseller_next_${page}` });
+    }
 
     const replyOptions = {
       parse_mode: 'Markdown',
@@ -7884,16 +4263,6 @@ bot.action(/^(create|renew|trial)_username_(vmess|vless|trojan|shadowsocks|ssh)_
     });
   }
 });
-
-function getUserConfig(userId) {
-  return global.userConfigs?.[userId] || null;
-}
-
-function removeUserConfig(userId) {
-  if (global.userConfigs?.[userId]) {
-    delete global.userConfigs[userId];
-  }
-}
 async function handleTrial(ctx, type, serverId) {
   try {
     const username = `trial${Math.floor(Math.random() * 10000)}`;
@@ -7902,98 +4271,34 @@ async function handleTrial(ctx, type, serverId) {
     const quota = 1;
     const iplimit = 1;
 
-    let result;
-
+    let msg;
     switch (type) {
       case 'vmess':
-        result = await trialvmess(username, exp, quota, iplimit, serverId);
+        msg = await trialvmess(username, exp, quota, iplimit, serverId);
         break;
-
       case 'vless':
-        result = await trialvless(username, exp, quota, iplimit, serverId);
+        msg = await trialvless(username, exp, quota, iplimit, serverId);
         break;
-
       case 'trojan':
-        result = await trialtrojan(username, exp, quota, iplimit, serverId);
+        msg = await trialtrojan(username, exp, quota, iplimit, serverId);
         break;
-
       case 'shadowsocks':
-        result = await trialshadowsocks(username, exp, quota, iplimit, serverId);
+        msg = await trialshadowsocks(username, exp, quota, iplimit, serverId);
         break;
-
       case 'ssh':
-        result = await trialssh(username, password, exp, iplimit, serverId);
+        msg = await trialssh(username, password, exp, iplimit, serverId);
         break;
-
       default:
-        result = {
-          success: false,
-          message: '❌ *Tipe layanan tidak dikenali.*'
-        };
+        msg = '❌ *Tipe layanan tidak dikenali.*';
     }
 
-    if (result.success && result.config) {
-      global.userConfigs ??= {};
-
-      global.userConfigs[ctx.from.id] = {
-        userId: ctx.from.id,
-        username,
-        type,
-        createdAt: Date.now(),
-        ...result.config
-      };
-
-      console.log("CONFIG TERSIMPAN:");
-      console.log(global.userConfigs[ctx.from.id]);
+    if (msg) {
+      await ctx.reply(msg, { parse_mode: 'Markdown' });
     }
-
-await ctx.reply(result.message, {
-  parse_mode: 'Markdown',
-  reply_markup: {
-    inline_keyboard: [
-      [
-        {
-          text: '📲 HTTP Custom',
-          callback_data: 'convert_hc',
-          style: 'primary'
-        },
-        {
-          text: '🌐 NetMod',
-          callback_data: 'convert_nm',
-          style: 'primary'
-        }
-      ],
-      [
-        {
-          text: '📦 Clash',
-          callback_data: 'convert_clash',
-          style: 'primary'
-        },
-        {
-          text: '⚡ V2Ray',
-          callback_data: 'convert_yaml',
-          style: 'primary'
-        }
-      ],
-      [
-        {
-          text: '❌ Tutup',
-          callback_data: 'close_convert',
-          style: 'danger'
-        }
-      ]
-    ]
-  }
-});
 
   } catch (error) {
     logger.error(`❌ Error trial ${type}:`, error);
-
-    await ctx.reply(
-      '❌ *Gagal membuat akun trial. Silahkan coba lagi nanti.*',
-      { parse_mode: 'Markdown' }
-    );
-
+    await ctx.reply('❌ *Gagal membuat akun trial. Silahkan coba lagi nanti.*', { parse_mode: 'Markdown' });
   } finally {
     delete userState[ctx.chat.id];
   }
@@ -8586,185 +4891,65 @@ if (state && state.step === 'atur_bonus_input') {
                     return ctx.reply(`❌ *Saldo Anda tidak mencukupi untuk melakukan transaksi ini. Saldo Anda: Rp${saldo.toLocaleString('id-ID')}, Harga: Rp${totalHarga.toLocaleString('id-ID')}*`, { parse_mode: 'Markdown' });
                 }
 
-let result;
-let msg;
-let successAction = false;
-let actionTypeLabel = '';
+                let msg;
+                let successAction = false;
+                let actionTypeLabel = '';
+                const loadingState = await showLoading(ctx);
+                const waitMsgId = loadingState.messageId;
+                const intervalId = loadingState.intervalId;
 
-const loadingState = await showLoading(ctx);
-const waitMsgId = loadingState.messageId;
-const intervalId = loadingState.intervalId;
+                try {
+                    logger.info(`Mencoba ${state.action} ${state.type} untuk user ${userId} di server ${server.nama_server}`);
+                    if (state.action === 'create') {
+                        actionTypeLabel = 'Buat Akun';
+                        switch (state.type) {
+                            case 'vmess': msg = await createvmess(state.username, exp, server.quota, server.iplimit, state.serverId); break;
+                            case 'vless': msg = await createvless(state.username, exp, server.quota, server.iplimit, state.serverId); break;
+                            case 'trojan': msg = await createtrojan(state.username, exp, server.quota, server.iplimit, state.serverId); break;
+                            case 'shadowsocks': msg = await createshadowsocks(state.username, exp, server.quota, server.iplimit, state.serverId); break;
+                            case 'ssh': msg = await createssh(state.username, state.password, exp, server.iplimit, state.serverId); break;
+                            default: msg = '❌ *Tipe layanan tidak dikenali.*'; break;
+                        }
+                    } else if (state.action === 'renew') {
+                        actionTypeLabel = 'Perpanjang Akun';
+                        switch (state.type) {
+                            case 'vmess': msg = await renewvmess(state.username, exp, server.quota, server.iplimit, state.serverId); break;
+                            case 'vless': msg = await renewvless(state.username, exp, server.quota, server.iplimit, state.serverId); break;
+                            case 'trojan': msg = await renewtrojan(state.username, exp, server.quota, server.iplimit, state.serverId); break;
+                            case 'shadowsocks': msg = await renewshadowsocks(state.username, exp, server.quota, server.iplimit, state.serverId); break;
+                            case 'ssh': msg = await renewssh(state.username, exp, server.iplimit, state.serverId); break;
+                            default: msg = '❌ *Tipe layanan tidak dikenali.*'; break;
+                        }
+                    }
 
-try {
-    logger.info(`Mencoba ${state.action} ${state.type} untuk user ${userId} di server ${server.nama_server}`);
-
-    if (state.action === 'create') {
-
-        actionTypeLabel = 'Buat Akun';
-
-        switch (state.type) {
-
-            case 'vmess':
-                result = await createvmess(state.username, exp, server.quota, server.iplimit, state.serverId);
-                break;
-
-            case 'vless':
-                result = await createvless(state.username, exp, server.quota, server.iplimit, state.serverId);
-                break;
-
-            case 'trojan':
-                result = await createtrojan(state.username, exp, server.quota, server.iplimit, state.serverId);
-                break;
-
-            case 'shadowsocks':
-                result = await createshadowsocks(state.username, exp, server.quota, server.iplimit, state.serverId);
-                break;
-
-            case 'ssh':
-                result = await createssh(state.username, state.password, exp, server.iplimit, state.serverId);
-                break;
-
-            default:
-                result = {
-                    success: false,
-                    message: '❌ *Tipe layanan tidak dikenali.*'
-                };
-        }
-
-        msg = typeof result === "string" ? result : result.message;
-console.log("RESULT =", result);
-console.log("RESULT.DATA =", result?.data);
-console.log("CONFIG JSON =", JSON.stringify(result?.data || {}));
-
-if (state.action === "create" && result?.config) {
-    global.userConfigs ??= {};
-
-    global.userConfigs[userId] = {
-        userId,
-        username: state.username,
-        type: state.type,
-        createdAt: Date.now(),
-        ...result.config
-    };
-}
-        console.log("RESULT =", JSON.stringify(result, null, 2));
-
-    } else if (state.action === 'renew') {
-
-        actionTypeLabel = 'Perpanjang Akun';
-
-        switch (state.type) {
-
-            case 'vmess':
-                msg = await renewvmess(state.username, exp, server.quota, server.iplimit, state.serverId);
-                break;
-
-            case 'vless':
-                msg = await renewvless(state.username, exp, server.quota, server.iplimit, state.serverId);
-                break;
-
-            case 'trojan':
-                msg = await renewtrojan(state.username, exp, server.quota, server.iplimit, state.serverId);
-                break;
-
-            case 'shadowsocks':
-                msg = await renewshadowsocks(state.username, exp, server.quota, server.iplimit, state.serverId);
-                break;
-
-            case 'ssh':
-                msg = await renewssh(state.username, exp, server.iplimit, state.serverId);
-                break;
-
-            default:
-                msg = '❌ *Tipe layanan tidak dikenali.*';
-        }
-    }
-
-    if (
-        (result && result.success) ||
-        (typeof msg === 'string' &&
-            !msg.toLowerCase().includes('gagal') &&
-            !msg.toLowerCase().includes('error'))
-    ) {
-
-        successAction = true;
-
-        logger.info(`✅ Aksi ${actionTypeLabel} ${state.type} berhasil untuk user ${userId}.`);
-
-    } else {
-
-        logger.warn(`Aksi ${actionTypeLabel} ${state.type} mengembalikan pesan gagal/error untuk user ${userId}: ${msg}`);
-
-        msg = msg || `❌ Gagal ${actionTypeLabel} akun. Mohon coba lagi atau hubungi admin.`;
-    }
-
-} catch (e) {
-
-    logger.error(`Error saat memanggil fungsi ${actionTypeLabel} akun ${state.type} untuk user ${userId}:`, e.message);
-
-    msg = '❌ Terjadi kesalahan internal saat memproses akun Anda. Mohon coba lagi nanti.';
-    successAction = false;
-
-} finally {
-
-    clearInterval(intervalId);
-
-    try {
-        await ctx.telegram.deleteMessage(ctx.chat.id, waitMsgId);
-    } catch (e) {
-        logger.warn(`Gagal menghapus pesan loading untuk user ${userId}: ${e.message}`);
-    }
-}
-
-if (msg && !String(msg).includes('❌')) {
-
-    let configData = result?.data || {};
-
-    if (typeof msg === "string") {
-
-        const username = msg.match(/ᴜꜱᴇʀɴᴀᴍᴇ\s*: `([^`]+)`/i)?.[1];
-        const password = msg.match(/ᴘᴀꜱꜱᴡᴏʀᴅ\s*: `([^`]+)`/i)?.[1];
-        const domain   = msg.match(/ᴅᴏᴍᴀɪɴ\s*: `([^`]+)`/i)?.[1];
-
-        const uuid   = msg.match(/UUID\s*: `([^`]+)`/i)?.[1];
-        const id     = msg.match(/ID\s*: `([^`]+)`/i)?.[1];
-        const host   = msg.match(/Host\s*: `([^`]+)`/i)?.[1];
-        const path   = msg.match(/Path\s*: `([^`]+)`/i)?.[1];
-
-        const vmess  = msg.match(/vmess:\/\/[^\s`]+/)?.[0];
-        const vless  = msg.match(/vless:\/\/[^\s`]+/)?.[0];
-        const trojan = msg.match(/trojan:\/\/[^\s`]+/)?.[0];
-        const ss     = msg.match(/ss:\/\/[^\s`]+/)?.[0];
-
-        configData = {
-            username,
-            password,
-            domain,
-            uuid,
-            id,
-            host,
-            path,
-            vmess,
-            vless,
-            trojan,
-            shadowsocks: ss
-        };
-
-        if (username) {
-            state.username = username;
-        }
-    }
-
-    await saveOrUpdateUserAccount({
-        userId,
-        username: state.username,
-        serverId: state.serverId,
-        serverName: server.nama_server,
-        accountType: state.type,
-        expDays: state.exp,
-        configJson: JSON.stringify(configData)
-    });
-
+                    if (msg && typeof msg === 'string' && !msg.toLowerCase().includes('gagal') && !msg.toLowerCase().includes('error')) {
+                        successAction = true;
+                        logger.info(`✅ Aksi ${actionTypeLabel} ${state.type} berhasil untuk user ${userId}.`);
+                    } else {
+                        logger.warn(`Aksi ${actionTypeLabel} ${state.type} mengembalikan pesan gagal/error untuk user ${userId}: ${msg}`);
+                        msg = msg || `❌ Gagal ${actionTypeLabel} akun. Mohon coba lagi atau hubungi admin.`;
+                    }
+                } catch (e) {
+                    logger.error(`Error saat memanggil fungsi ${actionTypeLabel} akun ${state.type} untuk user ${userId}:`, e.message);
+                    msg = '❌ Terjadi kesalahan internal saat memproses akun Anda. Mohon coba lagi nanti.';
+                    successAction = false;
+                } finally {
+                    clearInterval(intervalId);
+                    try {
+                        await ctx.telegram.deleteMessage(ctx.chat.id, waitMsgId);
+                    } catch (e) {
+                        logger.warn(`Gagal menghapus pesan loading untuk user ${userId}: ${e.message}`);
+                    }
+                }
+                if (msg && !String(msg).includes('❌')) {
+  await saveOrUpdateUserAccount({
+    userId,
+    username: state.username,
+    serverId: state.serverId,
+    serverName: server.nama_server,
+    accountType: state.type,
+    expDays: state.exp
+  });
 }
 
                 if (!successAction) {
@@ -8829,59 +5014,18 @@ Pesan Error: ${err.message}
                     }
                 });
 
-await afterAccountTransaction({
-    userId: userId,
-    username: ctx.from.username,
-    produk: state.type.toUpperCase(),
-    serverId: state.serverId,
-    jenis: actionTypeLabel,
-    durasi: state.exp,
-    accountUsername: state.username
-});
+                await afterAccountTransaction({
+                    userId: userId,
+                    username: ctx.from.username,
+                    produk: state.type.toUpperCase(),
+                    serverId: state.serverId,
+                    jenis: actionTypeLabel,
+                    durasi: state.exp,
+                    accountUsername: state.username
+                });
 
-await ctx.reply(msg, {
-    parse_mode: 'Markdown',
-    reply_markup:
-        state.action === "create" && result?.config
-            ? {
-                inline_keyboard: [
-                    [
-                        {
-                            text: "📲 HTTP Custom",
-                            callback_data: "convert_hc",
-                            style: "primary"
-                        },
-                        {
-                            text: "🌐 NetMod",
-                            callback_data: "convert_nm",
-                            style: "primary"
-                        }
-                    ],
-                    [
-                        {
-                            text: "📦 Clash",
-                            callback_data: "convert_clash",
-                            style: "primary"
-                        },
-                        {
-                            text: "⚡ V2Ray",
-                            callback_data: "convert_yaml",
-                            style: "primary"
-                        }
-                    ],
-                    [
-                        {
-                            text: "❌ Tutup",
-                            callback_data: "close_convert",
-                            style: "danger"
-                        }
-                    ]
-                ]
-            }
-            : undefined
-});
-
-delete userState[userId];
+                await ctx.reply(msg, { parse_mode: 'Markdown' });
+                delete userState[userId];
             });
         });
         return;
@@ -9109,267 +5253,7 @@ delete userState[userId];
         return;
     }
 });
-bot.action("close_convert", async (ctx) => {
-  try {
-    await ctx.deleteMessage();
-  } catch (e) {
-    await ctx.answerCbQuery();
-  }
-});
-// ============================================================
-// 📲 CONVERT HTTP CUSTOM
-// ============================================================
 
-bot.action("convert_hc", async (ctx) => {
-
-    const userId = ctx.from.id;
-
-    try {
-
-        console.log(
-            `📲 HC CONVERTER REQUEST | user=${userId}`
-        );
-
-        // ----------------------------------------------------
-        // CALLBACK RESPONSE
-        // ----------------------------------------------------
-
-        await ctx.answerCbQuery(
-            "⏳ Membuat file HTTP Custom..."
-        );
-
-        // ----------------------------------------------------
-        // GET CONFIG
-        // ----------------------------------------------------
-
-        const config =
-            global.userConfigs?.[userId];
-
-        if (!config) {
-
-            return ctx.reply(
-                "❌ *Config akun tidak ditemukan.*\n\n" +
-                "Silakan buat akun terlebih dahulu.",
-                {
-                    parse_mode: "Markdown"
-                }
-            );
-
-        }
-
-        console.log(
-            "📦 HC SOURCE CONFIG:",
-            JSON.stringify(
-                config,
-                null,
-                2
-            )
-        );
-
-        // ----------------------------------------------------
-        // VALIDATE
-        // ----------------------------------------------------
-
-        if (!config.type) {
-
-            return ctx.reply(
-                "❌ Tipe akun tidak ditemukan."
-            );
-
-        }
-
-        if (!config.username) {
-
-            return ctx.reply(
-                "❌ Username akun tidak ditemukan."
-            );
-
-        }
-
-        // ----------------------------------------------------
-        // LOADING MESSAGE
-        // ----------------------------------------------------
-
-        const loading =
-            await ctx.reply(
-                "⏳ *Membuat HTTP Custom...*\n\n" +
-                `👤 User: \`${config.username}\`\n` +
-                `📡 Type: \`${String(config.type).toUpperCase()}\`\n\n` +
-                "Mohon tunggu...",
-                {
-                    parse_mode: "Markdown"
-                }
-            );
-
-        // ----------------------------------------------------
-        // GENERATE HC
-        // ----------------------------------------------------
-
-        const result =
-            await createHcFile(config);
-
-        console.log(
-            "📦 HC RESULT:",
-            result
-        );
-
-        // ----------------------------------------------------
-        // GENERATOR FAILED
-        // ----------------------------------------------------
-
-        if (
-            !result ||
-            !result.success
-        ) {
-
-            try {
-                await ctx.telegram.deleteMessage(
-                    ctx.chat.id,
-                    loading.message_id
-                );
-            } catch {}
-
-            return ctx.reply(
-                "❌ *Gagal membuat file HTTP Custom.*\n\n" +
-                `📌 ${result?.message || "Unknown error"}`,
-                {
-                    parse_mode: "Markdown"
-                }
-            );
-
-        }
-
-        // ----------------------------------------------------
-        // CHECK OUTPUT
-        // ----------------------------------------------------
-
-        if (
-            !result.outputPath ||
-            !fs.existsSync(result.outputPath)
-        ) {
-
-            try {
-                await ctx.telegram.deleteMessage(
-                    ctx.chat.id,
-                    loading.message_id
-                );
-            } catch {}
-
-            return ctx.reply(
-                "❌ File HC berhasil diproses tetapi file output tidak ditemukan."
-            );
-
-        }
-
-        // ----------------------------------------------------
-        // DELETE LOADING
-        // ----------------------------------------------------
-
-        try {
-
-            await ctx.telegram.deleteMessage(
-                ctx.chat.id,
-                loading.message_id
-            );
-
-        } catch {}
-
-        // ----------------------------------------------------
-        // SEND HC
-        // ----------------------------------------------------
-
-        await ctx.replyWithDocument(
-            {
-                source: result.outputPath,
-                filename: result.filename
-            },
-            {
-                caption:
-                    "╭━━━━━━━━━━━━━━━━━━━━━━╮\n" +
-                    "┃ 📲 *HTTP CUSTOM*\n" +
-                    "╰━━━━━━━━━━━━━━━━━━━━━━╯\n\n" +
-
-                    `👤 Username : \`${config.username}\`\n` +
-                    `📡 Type     : \`${String(config.type).toUpperCase()}\`\n` +
-                    `📁 File     : \`${result.filename}\`\n\n` +
-
-                    "✅ *Config HC berhasil dibuat.*\n" +
-                    "📲 Silakan import file ini ke HTTP Custom.",
-                parse_mode: "Markdown"
-            }
-        );
-
-        console.log(
-            `✅ HC SENT | user=${userId} | file=${result.filename}`
-        );
-
-        // ----------------------------------------------------
-        // CLEANUP
-        // ----------------------------------------------------
-
-        setTimeout(() => {
-
-            deleteHcFile(
-                result.outputPath
-            );
-
-        }, 5000);
-
-    } catch (error) {
-
-        console.error(
-            "❌ HC CONVERTER ERROR:",
-            error
-        );
-
-        try {
-
-            await ctx.reply(
-                "❌ *Terjadi kesalahan saat membuat file HC.*\n\n" +
-                `\`${error.message || error}\``,
-                {
-                    parse_mode: "Markdown"
-                }
-            );
-
-        } catch {}
-
-    }
-
-});
-bot.action("convert_nm", async (ctx) => {
-
-  const config = global.userConfigs?.[ctx.from.id];
-
-  if (!config)
-    return ctx.answerCbQuery("Config tidak ditemukan!", {
-      show_alert: true
-    });
-
-  await ctx.answerCbQuery();
-
-  await ctx.reply("🚧 Convert ke NetMod masih akan kita sambungkan.");
-});
-
-bot.action("convert_clash", async (ctx) => {
-
-  const config = global.userConfigs?.[ctx.from.id];
-
-  if (!config)
-    return ctx.answerCbQuery("Config tidak ditemukan!", {
-      show_alert: true
-    });
-
-  await ctx.answerCbQuery();
-
-  const yaml = convertToYaml(config.tls);
-
-  await ctx.replyWithDocument({
-    source: Buffer.from(yaml),
-    filename: `${config.username}.yaml`
-  });
-
-});
 
 bot.action('addserver', async (ctx) => {
   try {
@@ -9580,71 +5464,32 @@ bot.action('cek_saldo', async (ctx) => {
     const userId = ctx.from.id;
 
     const row = await new Promise((resolve, reject) => {
-      db.get(
-        'SELECT saldo FROM users WHERE user_id = ?',
-        [userId],
-        (err, row) => {
-          if (err) {
-            logger.error(
-              '❌ Kesalahan saat memeriksa saldo:',
-              err.message
-            );
-
-            return reject(
-              '❌ *Terjadi kesalahan saat memeriksa saldo Anda. Silahkan coba lagi nanti.*'
-            );
-          }
-
-          resolve(row);
+      db.get('SELECT saldo FROM users WHERE user_id = ?', [userId], (err, row) => {
+        if (err) {
+          logger.error('❌ Kesalahan saat memeriksa saldo:', err.message);
+          return reject('❌ *Terjadi kesalahan saat memeriksa saldo Anda. Silahkan coba lagi nanti.*');
         }
-      );
+        resolve(row);
+      });
     });
 
     if (row) {
-      await ctx.reply(
-        `📊 *Cek Saldo*\n\n🆔 ID Telegram: ${userId}\n💰 Sisa Saldo: Rp${row.saldo}`,
-        {
-          parse_mode: 'Markdown',
-
-          reply_markup: {
-            inline_keyboard: [
-              [
-                {
-                  text: '💸 Top Up',
-                  callback_data: 'menu_topup',
-                  style: 'success'
-                },
-                {
-                  text: '📝 Menu Utama',
-                  callback_data: 'send_main_menu',
-                  style: 'primary'
-                }
-              ]
-            ]
-          }
+      await ctx.reply(`📊 *Cek Saldo*\n\n🆔 ID Telegram: ${userId}\n💰 Sisa Saldo: Rp${row.saldo}`,
+      {
+        parse_mode: 'Markdown',
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: '💸 Top Up', callback_data: 'menu_topup' }, { text: '📝 Menu Utama', callback_data: 'send_main_menu' }]
+          ]
         }
-      );
+      });
     } else {
-      await ctx.reply(
-        '⚠️ *Anda belum memiliki saldo. Silahkan tambahkan saldo terlebih dahulu.*',
-        {
-          parse_mode: 'Markdown'
-        }
-      );
+      await ctx.reply('⚠️ *Anda belum memiliki saldo. Silahkan tambahkan saldo terlebih dahulu.*', { parse_mode: 'Markdown' });
     }
 
   } catch (error) {
-    logger.error(
-      '❌ Kesalahan saat memeriksa saldo:',
-      error
-    );
-
-    await ctx.reply(
-      `❌ *${error.message}*`,
-      {
-        parse_mode: 'Markdown'
-      }
-    );
+    logger.error('❌ Kesalahan saat memeriksa saldo:', error);
+    await ctx.reply(`❌ *${error.message}*`, { parse_mode: 'Markdown' });
   }
 });
 
@@ -9716,15 +5561,12 @@ bot.action('addsaldo_user', async (ctx) => {
       inline_keyboard: [...buttons]
     };
 
-if (totalUsers > 20) {
-  replyMarkup.inline_keyboard.push([
-    {
-      text: '➡️ Next',
-      callback_data: `next_users_${currentPage + 1}`,
-      style: 'primary'
+    if (totalUsers > 20) {
+      replyMarkup.inline_keyboard.push([{
+        text: '➡️ Next',
+        callback_data: `next_users_${currentPage + 1}`
+      }]);
     }
-  ]);
-}
 
     await ctx.reply('📊 *Silahkan pilih user untuk menambahkan saldo:*', {
       reply_markup: replyMarkup,
@@ -9792,15 +5634,12 @@ bot.action(/next_users_(\d+)/, async (ctx) => {
         callback_data: `prev_users_${currentPage - 1}`
       }]);
     }
-if (offset + 20 < totalUsers) {
-  navigationButtons.push([
-    {
-      text: '➡️ Next',
-      callback_data: `next_users_${currentPage + 1}`,
-      style: 'primary'
+    if (offset + 20 < totalUsers) {
+      navigationButtons.push([{
+        text: '➡️ Next',
+        callback_data: `next_users_${currentPage + 1}`
+      }]);
     }
-  ]);
-}
 
     replyMarkup.inline_keyboard.push(...navigationButtons);
 
@@ -10215,7 +6054,7 @@ bot.action('topup_saldo', async (ctx) => {
 
     logger.info(`📝 Menunggu input nominal dari user ${userId} untuk QRIS Orkut`);
 
-// Kirim instruksi ke user untuk mengetik nominal
+    // Kirim instruksi ke user untuk mengetik nominal
 const sent = await ctx.reply(
 `
 💳━━━━━━━━━━━━━━━━━━━━💳
@@ -10373,13 +6212,7 @@ bot.action('bonus_topup_setting', async (ctx) => {
                 parse_mode: 'Markdown',
                 reply_markup: {
                     inline_keyboard: [
-                        [
-                            {
-                                text: '🔧 Atur Bonus TopUp',
-                                callback_data: 'atur_bonus_topup',
-                                style: 'success'
-                            }
-                        ]
+                        [{ text: '🔧 Atur Bonus TopUp', callback_data: 'atur_bonus_topup' }]
                     ]
                 }
             }
@@ -11176,21 +7009,15 @@ async function processDepositGopay(ctx, amount) {
       `┗━━━━━━━━━━━━━━━━━━━━━┛`
     ].join('\n');
 
-const qrMessage = await ctx.replyWithPhoto(safeQrUrl, {
-  caption,
-  parse_mode: 'Markdown',
-  reply_markup: {
-    inline_keyboard: [
-      [
-        {
-          text: '❌ Batal',
-          callback_data: `batal_topup_${uniqueCode}`,
-          style: 'danger'
-        }
-      ]
-    ]
-  }
-});
+    const qrMessage = await ctx.replyWithPhoto(safeQrUrl, {
+      caption,
+      parse_mode: 'Markdown',
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: '❌ Batal', callback_data: `batal_topup_${uniqueCode}` }]
+        ]
+      }
+    });
 
     if (!global.pendingDeposits) global.pendingDeposits = {};
 
@@ -11302,18 +7129,10 @@ async function processDeposit(ctx, amount) {
 
 const inlineKeyboard = [
   [
-    {
-      text: "📢 Join Channel",
-      url: `https://t.me/${GROUP_USERNAME}`,
-      style: "primary"
-    }
+    { text: "📢 Join Channel", url: `https://t.me/${GROUP_USERNAME}` }
   ],
   [
-    {
-      text: "❌ Batal Topup",
-      callback_data: `batal_topup_${uniqueCode}`,
-      style: "danger"
-    }
+    { text: "❌ Batal Topup", callback_data: `batal_topup_${uniqueCode}` }
   ]
 ];
 // === Generate QRIS ===
@@ -11789,7 +7608,8 @@ async function checkQRISStatus() {
           );
         } catch (err) {
           logger.error(
-            "Error saat menghapus pembayaran expired: " + err.message
+            "Error saat menghapus pembayaran expired:",
+            err.message
           );
         } finally {
           delete global.pendingDeposits[uniqueCode];
@@ -11804,39 +7624,21 @@ async function checkQRISStatus() {
       }
 
       try {
-
         const checkPaymentUrl =
-          `https://bat.aroma.web.id/mutasi?token=${API_KEY}`;
+          `https://mutasi-orkut.autsc.my.id/mutasi?username=${MERCHANT_ID}&token=${API_KEY}`;
 
         const { data } = await axios.get(checkPaymentUrl);
 
-        // Support API lama & baru
-        const transactions = Array.isArray(data.data)
-          ? data.data
-          : data.data?.data;
-
         if (
-          !(data.status === true || data.status === "success") ||
-          !Array.isArray(transactions)
+          data.status !== "success" ||
+          !Array.isArray(data.data)
         ) {
-          logger.warn("[QRIS] Format response API tidak valid");
           continue;
         }
 
-        for (const transaction of transactions) {
+        for (const transaction of data.data) {
 
-          // Hanya transaksi sukses
-          if (
-            transaction.transaction_status &&
-            transaction.transaction_status !== 2
-          ) {
-            continue;
-          }
-
-          const paidAmount = Number(
-            transaction.total || transaction.amount
-          );
-
+          const paidAmount = Number(transaction.amount);
           const expectedAmount = Number(
             deposit.total_payment || deposit.amount
           );
@@ -11851,8 +7653,8 @@ async function checkQRISStatus() {
 
           const transactionKey = `${
             transaction.transaction_id ||
-            transaction.reference_id ||
             transaction.issuer_reff ||
+            transaction.reference_id ||
             transaction.id
           }_${paidAmount}`;
 
@@ -11867,7 +7669,7 @@ async function checkQRISStatus() {
             `[QRIS MATCH] Match ditemukan ${uniqueCode}`
           );
 
-          // Lock agar tidak diproses dua kali
+          // LOCK AGAR INTERVAL BERIKUTNYA TIDAK MEMPROSES LAGI
           deposit.status = "processing";
 
           const success = await processMatchingPayment(
@@ -11877,12 +7679,9 @@ async function checkQRISStatus() {
           );
 
           if (success) {
-
             logger.info(
               `✅ Pembayaran berhasil diproses | ${uniqueCode}`
             );
-
-            global.processedTransactions.add(transactionKey);
 
             deposit.status = "success";
 
@@ -11894,156 +7693,75 @@ async function checkQRISStatus() {
             );
 
             break;
-
           } else {
-
-            logger.warn(
-              `❌ processMatchingPayment gagal | ${uniqueCode}`
-            );
-
+            // Gagal, boleh dicoba lagi interval berikutnya
             deposit.status = "pending";
           }
         }
 
       } catch (err) {
-
         deposit.status = "pending";
 
         logger.error(
-          `Error cek pembayaran ${uniqueCode}: ${
-            err.response?.data
-              ? JSON.stringify(err.response.data)
-              : err.message
-          }`
+          `Error cek pembayaran ${uniqueCode}:`,
+          err.response?.data || err.message
         );
       }
     }
 
   } catch (err) {
-
     logger.error(
-      "Error di checkQRISStatus: " +
-      (err.response?.data
-        ? JSON.stringify(err.response.data)
-        : err.message)
+      "Error di checkQRISStatus:",
+      err.response?.data || err.message
     );
-
   }
 }
 
 function keyboard_abc() {
   const alphabet = 'abcdefghijklmnopqrstuvwxyz';
   const buttons = [];
-
   for (let i = 0; i < alphabet.length; i += 3) {
     const row = alphabet.slice(i, i + 3).split('').map(char => ({
       text: char,
-      callback_data: char,
-      style: 'primary'
+      callback_data: char
     }));
-
     buttons.push(row);
   }
-
-  buttons.push([
-    {
-      text: '🔙 Hapus',
-      callback_data: 'delete',
-      style: 'danger'
-    },
-    {
-      text: '✅ Konfirmasi',
-      callback_data: 'confirm',
-      style: 'success'
-    }
-  ]);
-
-  buttons.push([
-    {
-      text: '🔙 Kembali ke Menu Utama',
-      callback_data: 'send_main_menu',
-      style: 'danger'
-    }
-  ]);
-
+  buttons.push([{ text: '🔙 Hapus', callback_data: 'delete' }, { text: '✅ Konfirmasi', callback_data: 'confirm' }]);
+  buttons.push([{ text: '🔙 Kembali ke Menu Utama', callback_data: 'send_main_menu' }]);
   return buttons;
 }
 
 function keyboard_nomor() {
   const alphabet = '1234567890';
   const buttons = [];
-
   for (let i = 0; i < alphabet.length; i += 3) {
     const row = alphabet.slice(i, i + 3).split('').map(char => ({
       text: char,
-      callback_data: char,
-      style: 'primary'
+      callback_data: char
     }));
-
     buttons.push(row);
   }
-
-  buttons.push([
-    {
-      text: '🔙 Hapus',
-      callback_data: 'delete',
-      style: 'danger'
-    },
-    {
-      text: '✅ Konfirmasi',
-      callback_data: 'confirm',
-      style: 'success'
-    }
-  ]);
-
-  buttons.push([
-    {
-      text: '🔙 Kembali ke Menu Utama',
-      callback_data: 'send_main_menu',
-      style: 'danger'
-    }
-  ]);
-
+  buttons.push([{ text: '🔙 Hapus', callback_data: 'delete' }, { text: '✅ Konfirmasi', callback_data: 'confirm' }]);
+  buttons.push([{ text: '🔙 Kembali ke Menu Utama', callback_data: 'send_main_menu' }]);
   return buttons;
 }
 
 function keyboard_full() {
   const alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789';
   const buttons = [];
-
   for (let i = 0; i < alphabet.length; i += 3) {
     const row = alphabet.slice(i, i + 3).split('').map(char => ({
       text: char,
-      callback_data: char,
-      style: 'primary'
+      callback_data: char
     }));
-
     buttons.push(row);
   }
-
-  buttons.push([
-    {
-      text: '🔙 Hapus',
-      callback_data: 'delete',
-      style: 'danger'
-    },
-    {
-      text: '✅ Konfirmasi',
-      callback_data: 'confirm',
-      style: 'success'
-    }
-  ]);
-
-  buttons.push([
-    {
-      text: '🔙 Kembali ke Menu Utama',
-      callback_data: 'send_main_menu',
-      style: 'danger'
-    }
-  ]);
-
+  buttons.push([{ text: '🔙 Hapus', callback_data: 'delete' }, { text: '✅ Konfirmasi', callback_data: 'confirm' }]);
+  buttons.push([{ text: '🔙 Kembali ke Menu Utama', callback_data: 'send_main_menu' }]);
   return buttons;
 }
+
 global.processedTransactions = new Set();
 async function updateUserBalance(userId, amount) {
   return new Promise((resolve, reject) => {
@@ -12379,7 +8097,7 @@ async function sendPaymentSuccessNotificationByUserId(
       ? `🎁 Bonus           : Rp${bonusAmount.toLocaleString('id-ID')} (${bonusPercent}%)\n`
       : '';
 
-const messageText =
+    const messageText =
 `╭──────────────╮
    📦 TOP UP BERHASIL 📦
 ╰──────────────╯
@@ -12426,13 +8144,11 @@ try {
           [
             {
               text: "💸 Top Up",
-              callback_data: "menu_topup",
-              style: "success"
+              callback_data: "menu_topup"
             },
             {
               text: "📝 Menu Utama",
-              callback_data: "send_main_menu",
-              style: "primary"
+              callback_data: "send_main_menu"
             }
           ]
         ]
@@ -12448,18 +8164,18 @@ try {
   throw err;
 }
 
-if (deposit.qrMessageId) {
-  try {
-    await bot.telegram.deleteMessage(
-      userId,
-      deposit.qrMessageId
-    );
-  } catch (e) {
-    logger.warn(
-      `Gagal hapus pesan QRIS user ${userId}: ${e.message}`
-    );
-  }
-}
+    if (deposit.qrMessageId) {
+      try {
+        await bot.telegram.deleteMessage(
+          userId,
+          deposit.qrMessageId
+        );
+      } catch (e) {
+        logger.warn(
+          `Gagal hapus pesan QRIS user ${userId}: ${e.message}`
+        );
+      }
+    }
 
     const group = getBotGroupData();
 
@@ -12935,21 +8651,8 @@ async function sendPaginatedUserSaldo(ctx, page = 1, isEdit = false) {
 
     const keyboard = {
       inline_keyboard: [[
-        ...(page > 1
-          ? [{
-              text: '⬅️ Prev',
-              callback_data: `listsaldo_${page - 1}`,
-              style: 'primary'
-            }]
-          : []),
-
-        ...(hasNext
-          ? [{
-              text: '➡️ Next',
-              callback_data: `listsaldo_${page + 1}`,
-              style: 'primary'
-            }]
-          : [])
+        ...(page > 1 ? [{ text: '⬅️ Prev', callback_data: `listsaldo_${page - 1}` }] : []),
+        ...(hasNext ? [{ text: '➡️ Next', callback_data: `listsaldo_${page + 1}` }] : [])
       ]]
     };
 
@@ -12959,10 +8662,7 @@ async function sendPaginatedUserSaldo(ctx, page = 1, isEdit = false) {
         ctx.callbackQuery.message.message_id,
         null,
         message,
-        {
-          parse_mode: 'HTML',
-          reply_markup: keyboard
-        }
+        { parse_mode: 'HTML', reply_markup: keyboard }
       );
     } else {
       return ctx.reply(message, {
@@ -12973,9 +8673,7 @@ async function sendPaginatedUserSaldo(ctx, page = 1, isEdit = false) {
 
   } catch (err) {
     logger.error('❌ Gagal mengambil daftar saldo:', err);
-    return ctx.reply(
-      '❌ Terjadi kesalahan saat mengambil daftar saldo.'
-    );
+    return ctx.reply('❌ Terjadi kesalahan saat mengambil daftar saldo.');
   }
 }
 
