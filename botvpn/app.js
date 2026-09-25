@@ -4439,7 +4439,7 @@ const keyboard = [
   [
     {
       text: '🔐 SSH Trial',
-      callback_data: 'trialssh',
+      callback_data: 'trial_ssh',
       style: 'primary'
     },
     {
