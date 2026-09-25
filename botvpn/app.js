@@ -198,7 +198,7 @@ const groupId = vars.GROUP_CHAT_ID;
 
 
 // ---------- Store ----------
-const NAMA_STORE = vars.NAMA_STORE || 'XWANSTORE';
+const NAMA_STORE = vars.NAMA_STORE || 'ARYABLITAR';
 
 
 // ---------- Admin ----------
@@ -3725,6 +3725,16 @@ if (bolehLihatTrial) {
   ]);
 }
 
+if (tombolSewaScriptAktif) {
+  finalKeyboard.push([
+    {
+      text: '🛒 Sewa Script',
+      callback_data: 'service_sewascript',
+      style: 'primary'
+    }
+  ]);
+}
+
 finalKeyboard.push([
   {
     text: '📜 Riwayat Transaksi',
@@ -4158,7 +4168,6 @@ case "ssh": {
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
-
 `;
 
     return ctx.reply(msg, {
@@ -4431,8 +4440,8 @@ bot.action('menu_trial', async (ctx) => {
 ┗━━━━━━━━━━━━━━━━━━━━━┛
 
 ⚡ <b>Daftar Trial:</b>
-• SSH WSOKET
-• VRAY VMESS
+• SSH
+• VMESS
 `;
 
 const keyboard = [
@@ -4445,7 +4454,7 @@ const keyboard = [
     {
       text: '⚡ VMESS Trial',
       callback_data: 'trial_vmess',
-      style: 'primary'  
+      style: 'primary'
     }
   ],
   [
@@ -6309,9 +6318,9 @@ keyboard.push([
 ☎️ <b>ʜᴜʙᴜɴɢɪ ᴀᴅᴍɪɴ:</b>
 ╰<a href="https://t.me/${adminUsername}">@${adminUsername}</a>
 
-📦━━━━━━━━━━━━━━━━━━━━📦
-     <code>🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ ${namaStore} ɴᴇᴛᴡᴏʀᴋ</code>
-📦━━━━━━━━━━━━━━━━━━━━📦
+📦━━━━━━━━━━━━━━━━━━━━━📦
+     <code>  💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ </code>
+📦━━━━━━━━━━━━━━━━━━━━━📦
 `;
 
     let sentMessage;
@@ -11730,7 +11739,7 @@ async function processDepositGopay(ctx, amount) {
       `🔗 [Buka QRIS](${safeQrUrl})`,
       ``,
       `┏━━━━━━━━━━━━━━━━━━━━━┓`,
-      `    🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ *ᴀɴꜱᴇɴᴅᴀɴᴛ ɴᴇᴛᴡᴏʀᴋ*`,
+      `       💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ `,
       `┗━━━━━━━━━━━━━━━━━━━━━┛`
     ].join('\n');
 
