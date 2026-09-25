@@ -2468,9 +2468,9 @@ bot.action('menu_topup', async (ctx) => {
 ☎️ <b>ʜᴜʙᴜɴɢɪ ᴀᴅᴍɪɴ:</b>
 ╰<a href="https://t.me/${adminUsername}">@${adminUsername}</a>
 
-📦━━━━━━━━━━━━━━━━━━━━📦
-     <code>🌐 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ</code>
-📦━━━━━━━━━━━━━━━━━━━━📦
+📦━━━━━━━━━━━━━━━━━━━━━📦
+     <code>   🌐 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ </code>
+📦━━━━━━━━━━━━━━━━━━━━━📦
 `;
 
     let sentMessage;
