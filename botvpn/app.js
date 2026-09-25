@@ -198,7 +198,7 @@ const groupId = vars.GROUP_CHAT_ID;
 
 
 // ---------- Store ----------
-const NAMA_STORE = vars.NAMA_STORE || 'ARYABLITAR';
+const NAMA_STORE = vars.NAMA_STORE || 'XWANSTORE';
 
 
 // ---------- Admin ----------
@@ -3709,7 +3709,7 @@ async function sendMainMenu(ctx) {
 <a href="https://t.me/${adminUsername}">╰📨 @${adminUsername}</a>
 
 📦━━━━━━━━━━━━━━━━━━━━━📦
-     <code>  💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ </code>
+     <code>🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ ${NAMA_STORE} ɴᴇᴛᴡᴏʀᴋ</code>
 📦━━━━━━━━━━━━━━━━━━━━━📦
 `;
 
@@ -4168,6 +4168,9 @@ case "ssh": {
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
+💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
+
+https://${sshData.domain}:81/ssh-${sshData.username}.txt
 `;
 
     return ctx.reply(msg, {
@@ -4240,6 +4243,9 @@ ${vmessData.vmess_grpc_link}
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
+💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
+
+https://${vmessData.domain}:81/vmess-${vmessData.username}.txt
 `;
 
     return ctx.reply(msg, {
@@ -4442,15 +4448,49 @@ bot.action('menu_trial', async (ctx) => {
 ⚡ <b>Daftar Trial:</b>
 • SSH
 • VMESS
+• VLESS
+• TROJAN
+• SHADOWSOCKS
 `;
 
-    const keyboard = [
+const keyboard = [
   [
-    { text: '🔐 SSH Trial', callback_data: 'trial_ssh' },
-    { text: '⚡ VMESS Trial', callback_data: 'trial_vmess' }
+    {
+      text: '🔐 SSH Trial',
+      callback_data: 'trial_ssh',
+      style: 'primary'
+    },
+    {
+      text: '⚡ VMESS Trial',
+      callback_data: 'trial_vmess',
+      style: 'primary'
+    }
   ],
   [
-    { text: '🔙 Kembali ke Menu VPN', callback_data: 'menu_vpn' }
+    {
+      text: '🛡️ VLESS Trial',
+      callback_data: 'trial_vless',
+      style: 'primary'
+    },
+    {
+      text: '🔥 TROJAN Trial',
+      callback_data: 'trial_trojan',
+      style: 'primary'
+    }
+  ],
+  [
+    {
+      text: '🌙 SHADOWSOCKS Trial',
+      callback_data: 'trial_shadowsocks',
+      style: 'primary'
+    }
+  ],
+  [
+    {
+      text: '🔙 Kembali ke Menu VPN',
+      callback_data: 'menu_vpn',
+      style: 'danger'
+    }
   ]
 ];
 
@@ -4488,6 +4528,9 @@ bot.action('menu_create', async (ctx) => {
 🚀 <b>Tersedia:</b>
 • SSH
 • VMESS
+• VLESS
+• TROJAN
+• SHADOWSOCKS
 `;
 
 const keyboard = [
@@ -4500,6 +4543,25 @@ const keyboard = [
     {
       text: '⚡ VMESS',
       callback_data: 'create_vmess',
+      style: 'primary'
+    }
+  ],
+  [
+    {
+      text: '🛡️ VLESS',
+      callback_data: 'create_vless',
+      style: 'primary'
+    },
+    {
+      text: '🔥 TROJAN',
+      callback_data: 'create_trojan',
+      style: 'primary'
+    }
+  ],
+  [
+    {
+      text: '🌙 SHADOWSOCKS',
+      callback_data: 'create_shadowsocks',
       style: 'primary'
     }
   ],
@@ -4546,6 +4608,9 @@ bot.action('menu_renew', async (ctx) => {
 🔄 <b>Tersedia:</b>
 • SSH
 • VMESS
+• VLESS
+• TROJAN
+• SHADOWSOCKS
 `;
 
 const keyboard = [
@@ -4558,6 +4623,25 @@ const keyboard = [
     {
       text: '⚡ VMESS',
       callback_data: 'renew_vmess',
+      style: 'primary'
+    }
+  ],
+  [
+    {
+      text: '🛡️ VLESS',
+      callback_data: 'renew_vless',
+      style: 'primary'
+    },
+    {
+      text: '🔥 TROJAN',
+      callback_data: 'renew_trojan',
+      style: 'primary'
+    }
+  ],
+  [
+    {
+      text: '🌙 SHADOWSOCKS',
+      callback_data: 'renew_shadowsocks',
       style: 'primary'
     }
   ],
@@ -6306,9 +6390,9 @@ keyboard.push([
 ☎️ <b>ʜᴜʙᴜɴɢɪ ᴀᴅᴍɪɴ:</b>
 ╰<a href="https://t.me/${adminUsername}">@${adminUsername}</a>
 
-📦━━━━━━━━━━━━━━━━━━━━━📦
-     <code>  💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ </code>
-📦━━━━━━━━━━━━━━━━━━━━━📦
+📦━━━━━━━━━━━━━━━━━━━━📦
+     <code>🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ ${namaStore} ɴᴇᴛᴡᴏʀᴋ</code>
+📦━━━━━━━━━━━━━━━━━━━━📦
 `;
 
     let sentMessage;
@@ -11727,7 +11811,7 @@ async function processDepositGopay(ctx, amount) {
       `🔗 [Buka QRIS](${safeQrUrl})`,
       ``,
       `┏━━━━━━━━━━━━━━━━━━━━━┓`,
-      `       💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ `,
+      `    🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ *ᴀɴꜱᴇɴᴅᴀɴᴛ ɴᴇᴛᴡᴏʀᴋ*`,
       `┗━━━━━━━━━━━━━━━━━━━━━┛`
     ].join('\n');
 
