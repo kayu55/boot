@@ -1036,7 +1036,7 @@ async function sendMainMenu(ctx) {
 <a href="https://t.me/${adminUsername}">╰📨 @${adminUsername}</a>
 
 📦━━━━━━━━━━━━━━━━━━━━━📦
-     <code>🌐 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ </code>
+     <code>   🌐 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ </code>
 📦━━━━━━━━━━━━━━━━━━━━━📦
 `;
 
@@ -1236,24 +1236,14 @@ bot.action('menu_trial', async (ctx) => {
 ┗━━━━━━━━━━━━━━━━━━━━━┛
 
 ⚡ <b>Daftar Trial:</b>
-• SSH
-• VMESS
-• VLESS
-• TROJAN
-• SHADOWSOCKS
+• SSH WSOKET
+• VRAY VMESS
 `;
 
     const keyboard = [
   [
     { text: '🔐 SSH Trial', callback_data: 'trial_ssh' },
     { text: '⚡ VMESS Trial', callback_data: 'trial_vmess' }
-  ],
-  [
-    { text: '🛡️ VLESS Trial', callback_data: 'trial_vless' },
-    { text: '🔥 TROJAN Trial', callback_data: 'trial_trojan' }
-  ],
-  [
-    { text: '🌙 SHADOWSOCKS Trial', callback_data: 'trial_shadowsocks' }
   ],
   [
     { text: '🔙 Kembali ke Menu VPN', callback_data: 'menu_vpn' }
@@ -1294,22 +1284,12 @@ bot.action('menu_create', async (ctx) => {
 🚀 <b>Tersedia:</b>
 • SSH
 • VMESS
-• VLESS
-• TROJAN
-• SHADOWSOCKS
 `;
 
     const keyboard = [
   [
     { text: '🔐 SSH', callback_data: 'create_ssh' },
     { text: '⚡ VMESS', callback_data: 'create_vmess' }
-  ],
-  [
-    { text: '🛡️ VLESS', callback_data: 'create_vless' },
-    { text: '🔥 TROJAN', callback_data: 'create_trojan' }
-  ],
-  [
-    { text: '🌙 SHADOWSOCKS', callback_data: 'create_shadowsocks' }
   ],
   [
     { text: '🔙 Kembali ke Menu VPN', callback_data: 'menu_vpn' }
@@ -1350,22 +1330,12 @@ bot.action('menu_renew', async (ctx) => {
 🔄 <b>Tersedia:</b>
 • SSH
 • VMESS
-• VLESS
-• TROJAN
-• SHADOWSOCKS
 `;
 
     const keyboard = [
   [
     { text: '🔐 SSH', callback_data: 'renew_ssh' },
     { text: '⚡ VMESS', callback_data: 'renew_vmess' }
-  ],
-  [
-    { text: '🛡️ VLESS', callback_data: 'renew_vless' },
-    { text: '🔥 TROJAN', callback_data: 'renew_trojan' }
-  ],
-  [
-    { text: '🌙 SHADOWSOCKS', callback_data: 'renew_shadowsocks' }
   ],
   [
     { text: '🔙 Kembali ke Menu VPN', callback_data: 'menu_vpn' }
