@@ -8602,6 +8602,85 @@ bot.on("document", async (ctx) => {
     }
 
 });
+bot.on("document", async (ctx) => {
+
+    const userId = ctx.from.id;
+
+    if (!adminIds.includes(userId)) return;
+
+    if (!restoreState[userId]) return;
+
+    const file = ctx.message.document;
+
+    if (!file.file_name.endsWith(".db")) {
+
+        restoreState[userId] = false;
+
+        return ctx.reply("❌ File harus .db");
+
+    }
+
+    try {
+
+        await ctx.reply("📥 Mengunduh database...");
+
+        const link = await ctx.telegram.getFileLink(file.file_id);
+
+        const tempFile = path.join(
+            BACKUP_DIR,
+            "restore.db"
+        );
+
+        const writer = fs.createWriteStream(tempFile);
+
+        await new Promise((resolve, reject) => {
+
+            https.get(link, res => {
+
+                res.pipe(writer);
+
+                writer.on("finish", resolve);
+
+                writer.on("error", reject);
+
+            });
+
+        });
+
+        await createDatabaseBackup();
+
+        db.close();
+
+        fs.copyFileSync(
+            tempFile,
+            FOLDER_TEMPATDB
+        );
+
+        restoreState[userId] = false;
+
+        await ctx.reply(
+`✅ Database berhasil direstore.
+
+🔄 Restart bot...`
+        );
+
+        setTimeout(() => {
+
+            process.exit(0);
+
+        }, 2000);
+
+    } catch (err) {
+
+        restoreState[userId] = false;
+
+        logger.error(err);
+
+        ctx.reply("❌ Restore gagal.");
+
+    }
+
+});
 bot.on('text', async (ctx, next) => {
     const userId = ctx.from.id;
     const teks = ctx.message?.text?.trim();
@@ -9338,6 +9417,47 @@ await afterAccountTransaction({
     accountUsername: state.username
 });
 
+await ctx.reply(msg, {
+    parse_mode: 'Markdown',
+    reply_markup:
+        state.action === "create" && result?.config
+            ? {
+                inline_keyboard: [
+                    [
+                        {
+                            text: "📲 HTTP Custom",
+                            callback_data: "convert_hc",
+                            style: "primary"
+                        },
+                        {
+                            text: "🌐 NetMod",
+                            callback_data: "convert_nm",
+                            style: "primary"
+                        }
+                    ],
+                    [
+                        {
+                            text: "📦 Clash",
+                            callback_data: "convert_clash",
+                            style: "primary"
+                        },
+                        {
+                            text: "⚡ V2Ray",
+                            callback_data: "convert_yaml",
+                            style: "primary"
+                        }
+                    ],
+                    [
+                        {
+                            text: "❌ Tutup",
+                            callback_data: "close_convert",
+                            style: "danger"
+                        }
+                    ]
+                ]
+            }
+            : undefined
+});
 
 delete userState[userId];
             });
@@ -10060,7 +10180,7 @@ bot.action('cek_saldo', async (ctx) => {
 
     if (row) {
       await ctx.reply(
-        `?? *Cek Saldo*\n\n🆔 ID Telegram: ${userId}\n💰 Sisa Saldo: Rp${row.saldo}`,
+        `📊 *Cek Saldo*\n\n🆔 ID Telegram: ${userId}\n💰 Sisa Saldo: Rp${row.saldo}`,
         {
           parse_mode: 'Markdown',
 
