@@ -51,7 +51,7 @@ setup_bot() {
 
     # Clone Bot
     if [ ! -d /root/BotVPN2 ]; then
-        git clone https://github.com/kayu55/BotVPN2.git /root/BotVPN2
+        git clone https://github.com/kayu55/tree/ipuk/modules/BotVPN2.git /root/BotVPN2
     fi
 
     # Install dependencies
@@ -77,7 +77,7 @@ setup_bot() {
 server_app() {
     clear
     echo -e "${orange}─────────────────────────────────────────${neutral}"
-    echo -e "${green}- BOT SELLVPN TELEGRAM MOD BY LITE & XWAN${neutral}"
+    echo -e "${green}- BOT SELLVPN TELEGRAM MOD${neutral}"
     echo -e "${orange}─────────────────────────────────────────${neutral}"
 
     read -p "Masukkan token bot: " token
