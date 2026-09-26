@@ -3729,16 +3729,6 @@ if (bolehLihatTrial) {
   ]);
 }
 
-if (tombolSewaScriptAktif) {
-  finalKeyboard.push([
-    {
-      text: '🛒 Sewa Script',
-      callback_data: 'service_sewascript',
-      style: 'primary'
-    }
-  ]);
-}
-
 finalKeyboard.push([
   {
     text: '📜 Riwayat Transaksi',
@@ -4172,9 +4162,6 @@ case "ssh": {
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
-💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
-
-https://${sshData.domain}:81/ssh-${sshData.username}.txt
 `;
 
     return ctx.reply(msg, {
@@ -4247,9 +4234,6 @@ ${vmessData.vmess_grpc_link}
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
-💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
-
-https://${vmessData.domain}:81/vmess-${vmessData.username}.txt
 `;
 
     return ctx.reply(msg, {
@@ -4324,9 +4308,6 @@ ${vlessData.vless_grpc_link}
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
-💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
-
-https://${vlessData.domain}:81/vless-${vlessData.username}.txt
 `;
 
     return ctx.reply(msg, {
@@ -6329,7 +6310,7 @@ keyboard.push([
 ╰<a href="https://t.me/${adminUsername}">@${adminUsername}</a>
 
 📦━━━━━━━━━━━━━━━━━━━━📦
-     <code>💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ</code>
+     <code> 💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ</code>
 📦━━━━━━━━━━━━━━━━━━━━📦
 `;
 
@@ -8479,98 +8460,34 @@ async function handleTrial(ctx, type, serverId) {
     const quota = 1;
     const iplimit = 1;
 
-    let result;
-
+    let msg;
     switch (type) {
       case 'vmess':
-        result = await trialvmess(username, exp, quota, iplimit, serverId);
+        msg = await trialvmess(username, exp, quota, iplimit, serverId);
         break;
-
       case 'vless':
-        result = await trialvless(username, exp, quota, iplimit, serverId);
+        msg = await trialvless(username, exp, quota, iplimit, serverId);
         break;
-
       case 'trojan':
-        result = await trialtrojan(username, exp, quota, iplimit, serverId);
+        msg = await trialtrojan(username, exp, quota, iplimit, serverId);
         break;
-
       case 'shadowsocks':
-        result = await trialshadowsocks(username, exp, quota, iplimit, serverId);
+        msg = await trialshadowsocks(username, exp, quota, iplimit, serverId);
         break;
-
       case 'ssh':
-        result = await trialssh(username, password, exp, iplimit, serverId);
+        msg = await trialssh(username, password, exp, iplimit, serverId);
         break;
-
       default:
-        result = {
-          success: false,
-          message: '❌ *Tipe layanan tidak dikenali.*'
-        };
+        msg = '❌ *Tipe layanan tidak dikenali.*';
     }
 
-    if (result.success && result.config) {
-      global.userConfigs ??= {};
-
-      global.userConfigs[ctx.from.id] = {
-        userId: ctx.from.id,
-        username,
-        type,
-        createdAt: Date.now(),
-        ...result.config
-      };
-
-      console.log("CONFIG TERSIMPAN:");
-      console.log(global.userConfigs[ctx.from.id]);
+    if (msg) {
+      await ctx.reply(msg, { parse_mode: 'Markdown' });
     }
-
-await ctx.reply(result.message, {
-  parse_mode: 'Markdown',
-  reply_markup: {
-    inline_keyboard: [
-      [
-        {
-          text: '📲 HTTP Custom',
-          callback_data: 'convert_hc',
-          style: 'primary'
-        },
-        {
-          text: '🌐 NetMod',
-          callback_data: 'convert_nm',
-          style: 'primary'
-        }
-      ],
-      [
-        {
-          text: '📦 Clash',
-          callback_data: 'convert_clash',
-          style: 'primary'
-        },
-        {
-          text: '⚡ V2Ray',
-          callback_data: 'convert_yaml',
-          style: 'primary'
-        }
-      ],
-      [
-        {
-          text: '❌ Tutup',
-          callback_data: 'close_convert',
-          style: 'danger'
-        }
-      ]
-    ]
-  }
-});
 
   } catch (error) {
     logger.error(`❌ Error trial ${type}:`, error);
-
-    await ctx.reply(
-      '❌ *Gagal membuat akun trial. Silahkan coba lagi nanti.*',
-      { parse_mode: 'Markdown' }
-    );
-
+    await ctx.reply('❌ *Gagal membuat akun trial. Silahkan coba lagi nanti.*', { parse_mode: 'Markdown' });
   } finally {
     delete userState[ctx.chat.id];
   }
@@ -9406,59 +9323,18 @@ Pesan Error: ${err.message}
                     }
                 });
 
-await afterAccountTransaction({
-    userId: userId,
-    username: ctx.from.username,
-    produk: state.type.toUpperCase(),
-    serverId: state.serverId,
-    jenis: actionTypeLabel,
-    durasi: state.exp,
-    accountUsername: state.username
-});
+                await afterAccountTransaction({
+                    userId: userId,
+                    username: ctx.from.username,
+                    produk: state.type.toUpperCase(),
+                    serverId: state.serverId,
+                    jenis: actionTypeLabel,
+                    durasi: state.exp,
+                    accountUsername: state.username
+                });
 
-await ctx.reply(msg, {
-    parse_mode: 'Markdown',
-    reply_markup:
-        state.action === "create" && result?.config
-            ? {
-                inline_keyboard: [
-                    [
-                        {
-                            text: "📲 HTTP Custom",
-                            callback_data: "convert_hc",
-                            style: "primary"
-                        },
-                        {
-                            text: "🌐 NetMod",
-                            callback_data: "convert_nm",
-                            style: "primary"
-                        }
-                    ],
-                    [
-                        {
-                            text: "📦 Clash",
-                            callback_data: "convert_clash",
-                            style: "primary"
-                        },
-                        {
-                            text: "⚡ V2Ray",
-                            callback_data: "convert_yaml",
-                            style: "primary"
-                        }
-                    ],
-                    [
-                        {
-                            text: "❌ Tutup",
-                            callback_data: "close_convert",
-                            style: "danger"
-                        }
-                    ]
-                ]
-            }
-            : undefined
-});
-
-delete userState[userId];
+                await ctx.reply(msg, { parse_mode: 'Markdown' });
+                delete userState[userId];
             });
         });
         return;
@@ -9685,267 +9561,6 @@ delete userState[userId];
         delete userState[userId];
         return;
     }
-});
-bot.action("close_convert", async (ctx) => {
-  try {
-    await ctx.deleteMessage();
-  } catch (e) {
-    await ctx.answerCbQuery();
-  }
-});
-// ============================================================
-// 📲 CONVERT HTTP CUSTOM
-// ============================================================
-
-bot.action("convert_hc", async (ctx) => {
-
-    const userId = ctx.from.id;
-
-    try {
-
-        console.log(
-            `📲 HC CONVERTER REQUEST | user=${userId}`
-        );
-
-        // ----------------------------------------------------
-        // CALLBACK RESPONSE
-        // ----------------------------------------------------
-
-        await ctx.answerCbQuery(
-            "⏳ Membuat file HTTP Custom..."
-        );
-
-        // ----------------------------------------------------
-        // GET CONFIG
-        // ----------------------------------------------------
-
-        const config =
-            global.userConfigs?.[userId];
-
-        if (!config) {
-
-            return ctx.reply(
-                "❌ *Config akun tidak ditemukan.*\n\n" +
-                "Silakan buat akun terlebih dahulu.",
-                {
-                    parse_mode: "Markdown"
-                }
-            );
-
-        }
-
-        console.log(
-            "📦 HC SOURCE CONFIG:",
-            JSON.stringify(
-                config,
-                null,
-                2
-            )
-        );
-
-        // ----------------------------------------------------
-        // VALIDATE
-        // ----------------------------------------------------
-
-        if (!config.type) {
-
-            return ctx.reply(
-                "❌ Tipe akun tidak ditemukan."
-            );
-
-        }
-
-        if (!config.username) {
-
-            return ctx.reply(
-                "❌ Username akun tidak ditemukan."
-            );
-
-        }
-
-        // ----------------------------------------------------
-        // LOADING MESSAGE
-        // ----------------------------------------------------
-
-        const loading =
-            await ctx.reply(
-                "⏳ *Membuat HTTP Custom...*\n\n" +
-                `👤 User: \`${config.username}\`\n` +
-                `📡 Type: \`${String(config.type).toUpperCase()}\`\n\n` +
-                "Mohon tunggu...",
-                {
-                    parse_mode: "Markdown"
-                }
-            );
-
-        // ----------------------------------------------------
-        // GENERATE HC
-        // ----------------------------------------------------
-
-        const result =
-            await createHcFile(config);
-
-        console.log(
-            "📦 HC RESULT:",
-            result
-        );
-
-        // ----------------------------------------------------
-        // GENERATOR FAILED
-        // ----------------------------------------------------
-
-        if (
-            !result ||
-            !result.success
-        ) {
-
-            try {
-                await ctx.telegram.deleteMessage(
-                    ctx.chat.id,
-                    loading.message_id
-                );
-            } catch {}
-
-            return ctx.reply(
-                "❌ *Gagal membuat file HTTP Custom.*\n\n" +
-                `📌 ${result?.message || "Unknown error"}`,
-                {
-                    parse_mode: "Markdown"
-                }
-            );
-
-        }
-
-        // ----------------------------------------------------
-        // CHECK OUTPUT
-        // ----------------------------------------------------
-
-        if (
-            !result.outputPath ||
-            !fs.existsSync(result.outputPath)
-        ) {
-
-            try {
-                await ctx.telegram.deleteMessage(
-                    ctx.chat.id,
-                    loading.message_id
-                );
-            } catch {}
-
-            return ctx.reply(
-                "❌ File HC berhasil diproses tetapi file output tidak ditemukan."
-            );
-
-        }
-
-        // ----------------------------------------------------
-        // DELETE LOADING
-        // ----------------------------------------------------
-
-        try {
-
-            await ctx.telegram.deleteMessage(
-                ctx.chat.id,
-                loading.message_id
-            );
-
-        } catch {}
-
-        // ----------------------------------------------------
-        // SEND HC
-        // ----------------------------------------------------
-
-        await ctx.replyWithDocument(
-            {
-                source: result.outputPath,
-                filename: result.filename
-            },
-            {
-                caption:
-                    "╭━━━━━━━━━━━━━━━━━━━━━━╮\n" +
-                    "┃ 📲 *HTTP CUSTOM*\n" +
-                    "╰━━━━━━━━━━━━━━━━━━━━━━╯\n\n" +
-
-                    `👤 Username : \`${config.username}\`\n` +
-                    `📡 Type     : \`${String(config.type).toUpperCase()}\`\n` +
-                    `📁 File     : \`${result.filename}\`\n\n` +
-
-                    "✅ *Config HC berhasil dibuat.*\n" +
-                    "📲 Silakan import file ini ke HTTP Custom.",
-                parse_mode: "Markdown"
-            }
-        );
-
-        console.log(
-            `✅ HC SENT | user=${userId} | file=${result.filename}`
-        );
-
-        // ----------------------------------------------------
-        // CLEANUP
-        // ----------------------------------------------------
-
-        setTimeout(() => {
-
-            deleteHcFile(
-                result.outputPath
-            );
-
-        }, 5000);
-
-    } catch (error) {
-
-        console.error(
-            "❌ HC CONVERTER ERROR:",
-            error
-        );
-
-        try {
-
-            await ctx.reply(
-                "❌ *Terjadi kesalahan saat membuat file HC.*\n\n" +
-                `\`${error.message || error}\``,
-                {
-                    parse_mode: "Markdown"
-                }
-            );
-
-        } catch {}
-
-    }
-
-});
-bot.action("convert_nm", async (ctx) => {
-
-  const config = global.userConfigs?.[ctx.from.id];
-
-  if (!config)
-    return ctx.answerCbQuery("Config tidak ditemukan!", {
-      show_alert: true
-    });
-
-  await ctx.answerCbQuery();
-
-  await ctx.reply("🚧 Convert ke NetMod masih akan kita sambungkan.");
-});
-
-bot.action("convert_clash", async (ctx) => {
-
-  const config = global.userConfigs?.[ctx.from.id];
-
-  if (!config)
-    return ctx.answerCbQuery("Config tidak ditemukan!", {
-      show_alert: true
-    });
-
-  await ctx.answerCbQuery();
-
-  const yaml = convertToYaml(config.tls);
-
-  await ctx.replyWithDocument({
-    source: Buffer.from(yaml),
-    filename: `${config.username}.yaml`
-  });
-
 });
 
 bot.action('addserver', async (ctx) => {
@@ -10952,7 +10567,7 @@ bot.action('bonus_topup_setting', async (ctx) => {
                     inline_keyboard: [
                         [
                             {
-                                text: '🔧 Atur Bonus TopUp',
+                                text: '?? Atur Bonus TopUp',
                                 callback_data: 'atur_bonus_topup',
                                 style: 'success'
                             }
@@ -11749,7 +11364,7 @@ async function processDepositGopay(ctx, amount) {
       `🔗 [Buka QRIS](${safeQrUrl})`,
       ``,
       `┏━━━━━━━━━━━━━━━━━━━━━┓`,
-      `          💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ`,
+      `        💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ`,
       `┗━━━━━━━━━━━━━━━━━━━━━┛`
     ].join('\n');
 
