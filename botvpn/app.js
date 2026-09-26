@@ -3709,7 +3709,7 @@ async function sendMainMenu(ctx) {
 <a href="https://t.me/${adminUsername}">╰📨 @${adminUsername}</a>
 
 📦━━━━━━━━━━━━━━━━━━━━━📦
-     <code>🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ ${NAMA_STORE} ɴᴇᴛᴡᴏʀᴋ</code>
+     <code>  🌐 UPLOAD ARYA BLITAR </code>
 📦━━━━━━━━━━━━━━━━━━━━━📦
 `;
 
@@ -3721,16 +3721,6 @@ if (bolehLihatTrial) {
       text: '🌐 Menu VPN',
       callback_data: 'menu_vpn',
       style: 'success'
-    }
-  ]);
-}
-
-if (tombolSewaScriptAktif) {
-  finalKeyboard.push([
-    {
-      text: '🛒 Sewa Script',
-      callback_data: 'service_sewascript',
-      style: 'primary'
     }
   ]);
 }
@@ -4448,9 +4438,6 @@ bot.action('menu_trial', async (ctx) => {
 ⚡ <b>Daftar Trial:</b>
 • SSH
 • VMESS
-• VLESS
-• TROJAN
-• SHADOWSOCKS
 `;
 
 const keyboard = [
@@ -4463,25 +4450,6 @@ const keyboard = [
     {
       text: '⚡ VMESS Trial',
       callback_data: 'trial_vmess',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🛡️ VLESS Trial',
-      callback_data: 'trial_vless',
-      style: 'primary'
-    },
-    {
-      text: '🔥 TROJAN Trial',
-      callback_data: 'trial_trojan',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🌙 SHADOWSOCKS Trial',
-      callback_data: 'trial_shadowsocks',
       style: 'primary'
     }
   ],
@@ -4528,9 +4496,6 @@ bot.action('menu_create', async (ctx) => {
 🚀 <b>Tersedia:</b>
 • SSH
 • VMESS
-• VLESS
-• TROJAN
-• SHADOWSOCKS
 `;
 
 const keyboard = [
@@ -4543,25 +4508,6 @@ const keyboard = [
     {
       text: '⚡ VMESS',
       callback_data: 'create_vmess',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🛡️ VLESS',
-      callback_data: 'create_vless',
-      style: 'primary'
-    },
-    {
-      text: '🔥 TROJAN',
-      callback_data: 'create_trojan',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🌙 SHADOWSOCKS',
-      callback_data: 'create_shadowsocks',
       style: 'primary'
     }
   ],
@@ -4608,9 +4554,6 @@ bot.action('menu_renew', async (ctx) => {
 🔄 <b>Tersedia:</b>
 • SSH
 • VMESS
-• VLESS
-• TROJAN
-• SHADOWSOCKS
 `;
 
 const keyboard = [
@@ -4623,25 +4566,6 @@ const keyboard = [
     {
       text: '⚡ VMESS',
       callback_data: 'renew_vmess',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🛡️ VLESS',
-      callback_data: 'renew_vless',
-      style: 'primary'
-    },
-    {
-      text: '🔥 TROJAN',
-      callback_data: 'renew_trojan',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🌙 SHADOWSOCKS',
-      callback_data: 'renew_shadowsocks',
       style: 'primary'
     }
   ],
@@ -8586,7 +8510,57 @@ async function handleTrial(ctx, type, serverId) {
       console.log(global.userConfigs[ctx.from.id]);
     }
 
+await ctx.reply(result.message, {
+  parse_mode: 'Markdown',
+  reply_markup: {
+    inline_keyboard: [
+      [
+        {
+          text: '📲 HTTP Custom',
+          callback_data: 'convert_hc',
+          style: 'primary'
+        },
+        {
+          text: '🌐 NetMod',
+          callback_data: 'convert_nm',
+          style: 'primary'
+        }
+      ],
+      [
+        {
+          text: '📦 Clash',
+          callback_data: 'convert_clash',
+          style: 'primary'
+        },
+        {
+          text: '⚡ V2Ray',
+          callback_data: 'convert_yaml',
+          style: 'primary'
+        }
+      ],
+      [
+        {
+          text: '❌ Tutup',
+          callback_data: 'close_convert',
+          style: 'danger'
+        }
+      ]
+    ]
+  }
+});
 
+  } catch (error) {
+    logger.error(`❌ Error trial ${type}:`, error);
+
+    await ctx.reply(
+      '❌ *Gagal membuat akun trial. Silahkan coba lagi nanti.*',
+      { parse_mode: 'Markdown' }
+    );
+
+  } finally {
+    delete userState[ctx.chat.id];
+  }
+}
 function kaburMark(text) {
   return text.replace(/[_*[\]()~`>#+\-=|{}.!\\]/g, '\\$&');
 }
@@ -9428,6 +9402,7 @@ await afterAccountTransaction({
     accountUsername: state.username
 });
 
+
 delete userState[userId];
             });
         });
@@ -9655,6 +9630,266 @@ delete userState[userId];
         delete userState[userId];
         return;
     }
+});
+bot.action("close_convert", async (ctx) => {
+  try {
+    await ctx.deleteMessage();
+  } catch (e) {
+    await ctx.answerCbQuery();
+  }
+});
+// ============================================================
+// 📲 CONVERT HTTP CUSTOM
+// ============================================================
+
+bot.action("convert_hc", async (ctx) => {
+
+    const userId = ctx.from.id;
+
+    try {
+
+        console.log(
+            `📲 HC CONVERTER REQUEST | user=${userId}`
+        );
+
+        // ----------------------------------------------------
+        // CALLBACK RESPONSE
+        // ----------------------------------------------------
+
+        await ctx.answerCbQuery(
+            "⏳ Membuat file HTTP Custom..."
+        );
+
+        // ----------------------------------------------------
+        // GET CONFIG
+        // ----------------------------------------------------
+
+        const config =
+            global.userConfigs?.[userId];
+
+        if (!config) {
+
+            return ctx.reply(
+                "❌ *Config akun tidak ditemukan.*\n\n" +
+                "Silakan buat akun terlebih dahulu.",
+                {
+                    parse_mode: "Markdown"
+                }
+            );
+
+        }
+
+        console.log(
+            "📦 HC SOURCE CONFIG:",
+            JSON.stringify(
+                config,
+                null,
+                2
+            )
+        );
+
+        // ----------------------------------------------------
+        // VALIDATE
+        // ----------------------------------------------------
+
+        if (!config.type) {
+
+            return ctx.reply(
+                "❌ Tipe akun tidak ditemukan."
+            );
+
+        }
+
+        if (!config.username) {
+
+            return ctx.reply(
+                "❌ Username akun tidak ditemukan."
+            );
+
+        }
+
+        // ----------------------------------------------------
+        // LOADING MESSAGE
+        // ----------------------------------------------------
+
+        const loading =
+            await ctx.reply(
+                "⏳ *Membuat HTTP Custom...*\n\n" +
+                `👤 User: \`${config.username}\`\n` +
+                `📡 Type: \`${String(config.type).toUpperCase()}\`\n\n` +
+                "Mohon tunggu...",
+                {
+                    parse_mode: "Markdown"
+                }
+            );
+
+        // ----------------------------------------------------
+        // GENERATE HC
+        // ----------------------------------------------------
+
+        const result =
+            await createHcFile(config);
+
+        console.log(
+            "📦 HC RESULT:",
+            result
+        );
+
+        // ----------------------------------------------------
+        // GENERATOR FAILED
+        // ----------------------------------------------------
+
+        if (
+            !result ||
+            !result.success
+        ) {
+
+            try {
+                await ctx.telegram.deleteMessage(
+                    ctx.chat.id,
+                    loading.message_id
+                );
+            } catch {}
+
+            return ctx.reply(
+                "❌ *Gagal membuat file HTTP Custom.*\n\n" +
+                `📌 ${result?.message || "Unknown error"}`,
+                {
+                    parse_mode: "Markdown"
+                }
+            );
+
+        }
+
+        // ----------------------------------------------------
+        // CHECK OUTPUT
+        // ----------------------------------------------------
+
+        if (
+            !result.outputPath ||
+            !fs.existsSync(result.outputPath)
+        ) {
+
+            try {
+                await ctx.telegram.deleteMessage(
+                    ctx.chat.id,
+                    loading.message_id
+                );
+            } catch {}
+
+            return ctx.reply(
+                "❌ File HC berhasil diproses tetapi file output tidak ditemukan."
+            );
+
+        }
+
+        // ----------------------------------------------------
+        // DELETE LOADING
+        // ----------------------------------------------------
+
+        try {
+
+            await ctx.telegram.deleteMessage(
+                ctx.chat.id,
+                loading.message_id
+            );
+
+        } catch {}
+
+        // ----------------------------------------------------
+        // SEND HC
+        // ----------------------------------------------------
+
+        await ctx.replyWithDocument(
+            {
+                source: result.outputPath,
+                filename: result.filename
+            },
+            {
+                caption:
+                    "╭━━━━━━━━━━━━━━━━━━━━━━╮\n" +
+                    "┃ 📲 *HTTP CUSTOM*\n" +
+                    "╰━━━━━━━━━━━━━━━━━━━━━━╯\n\n" +
+
+                    `👤 Username : \`${config.username}\`\n` +
+                    `📡 Type     : \`${String(config.type).toUpperCase()}\`\n` +
+                    `📁 File     : \`${result.filename}\`\n\n` +
+
+                    "✅ *Config HC berhasil dibuat.*\n" +
+                    "📲 Silakan import file ini ke HTTP Custom.",
+                parse_mode: "Markdown"
+            }
+        );
+
+        console.log(
+            `✅ HC SENT | user=${userId} | file=${result.filename}`
+        );
+
+        // ----------------------------------------------------
+        // CLEANUP
+        // ----------------------------------------------------
+
+        setTimeout(() => {
+
+            deleteHcFile(
+                result.outputPath
+            );
+
+        }, 5000);
+
+    } catch (error) {
+
+        console.error(
+            "❌ HC CONVERTER ERROR:",
+            error
+        );
+
+        try {
+
+            await ctx.reply(
+                "❌ *Terjadi kesalahan saat membuat file HC.*\n\n" +
+                `\`${error.message || error}\``,
+                {
+                    parse_mode: "Markdown"
+                }
+            );
+
+        } catch {}
+
+    }
+
+});
+bot.action("convert_nm", async (ctx) => {
+
+  const config = global.userConfigs?.[ctx.from.id];
+
+  if (!config)
+    return ctx.answerCbQuery("Config tidak ditemukan!", {
+      show_alert: true
+    });
+
+  await ctx.answerCbQuery();
+
+  await ctx.reply("🚧 Convert ke NetMod masih akan kita sambungkan.");
+});
+
+bot.action("convert_clash", async (ctx) => {
+
+  const config = global.userConfigs?.[ctx.from.id];
+
+  if (!config)
+    return ctx.answerCbQuery("Config tidak ditemukan!", {
+      show_alert: true
+    });
+
+  await ctx.answerCbQuery();
+
+  const yaml = convertToYaml(config.tls);
+
+  await ctx.replyWithDocument({
+    source: Buffer.from(yaml),
+    filename: `${config.username}.yaml`
+  });
 
 });
 
@@ -9889,7 +10124,7 @@ bot.action('cek_saldo', async (ctx) => {
 
     if (row) {
       await ctx.reply(
-        `📊 *Cek Saldo*\n\n🆔 ID Telegram: ${userId}\n💰 Sisa Saldo: Rp${row.saldo}`,
+        `?? *Cek Saldo*\n\n🆔 ID Telegram: ${userId}\n💰 Sisa Saldo: Rp${row.saldo}`,
         {
           parse_mode: 'Markdown',
 
