@@ -3689,6 +3689,9 @@ async function sendMainMenu(ctx) {
 <blockquote>ꜱᴇʟᴀᴍᴀᴛ ᴅᴀᴛᴀɴɢ ᴅɪ <b>${NAMA_STORE}</b> 💎
 ɴɪᴋᴍᴀᴛɪ ᴘᴇɴɢᴀʟᴀᴍᴀɴ ᴍᴇᴍʙᴇʟɪ ᴀᴋᴜɴ ᴠᴘɴ ᴛᴇʀᴄᴇᴘᴀᴛ, ᴀᴍᴀɴ, ᴅᴀɴ ᴀᴜᴛᴏᴍᴀᴛɪꜱ 🚀</blockquote>
 
+😍 <b>𝙰𝚈𝙾 𝙱𝙴𝙻𝙸 𝙳𝙾𝙽𝙺 𝚂𝙰𝚈𝙰𝙽𝙺.. !!</b>
+😌 <b>𝙹𝙰𝙽𝙶𝙰𝙽 𝙽𝙰𝙺𝙰𝙻 𝚈𝙰 𝙺𝙰𝙼𝚄.. !!</b>
+
 🧭 <b>ɪɴꜰᴏʀᴍᴀꜱɪ ᴀᴋᴜɴ</b>
 ┏━━━━━━━━━━━━━━━━━━━━━┓
 ┃ 💰 <b>ꜱᴀʟᴅᴏ:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>
@@ -3709,7 +3712,8 @@ async function sendMainMenu(ctx) {
 <a href="https://t.me/${adminUsername}">╰📨 @${adminUsername}</a>
 
 📦━━━━━━━━━━━━━━━━━━━━━📦
-     <code>  🌐 UPLOAD ARYA BLITAR </code>
+     <code>  💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ </code>
+     <code>  📢 ᵂᴬ 081450330727 </code>
 📦━━━━━━━━━━━━━━━━━━━━━📦
 `;
 
@@ -4158,9 +4162,6 @@ case "ssh": {
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
-💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
-
-https://${sshData.domain}:81/ssh-${sshData.username}.txt
 `;
 
     return ctx.reply(msg, {
@@ -4233,9 +4234,6 @@ ${vmessData.vmess_grpc_link}
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
-💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
-
-https://${vmessData.domain}:81/vmess-${vmessData.username}.txt
 `;
 
     return ctx.reply(msg, {
@@ -4436,8 +4434,8 @@ bot.action('menu_trial', async (ctx) => {
 ┗━━━━━━━━━━━━━━━━━━━━━┛
 
 ⚡ <b>Daftar Trial:</b>
-• SSH
-• VMESS
+• SSH WSOKET
+• VRAY VMESS
 `;
 
 const keyboard = [
@@ -4494,8 +4492,8 @@ bot.action('menu_create', async (ctx) => {
 ┗━━━━━━━━━━━━━━━━━━━━━┛
 
 🚀 <b>Tersedia:</b>
-• SSH
-• VMESS
+• SSH WSOKET
+• VRAY VMESS
 `;
 
 const keyboard = [
@@ -4552,8 +4550,8 @@ bot.action('menu_renew', async (ctx) => {
 ┗━━━━━━━━━━━━━━━━━━━━━┛
 
 🔄 <b>Tersedia:</b>
-• SSH
-• VMESS
+• SSH WSOKET
+• VRAY VMESS
 `;
 
 const keyboard = [
@@ -6315,7 +6313,7 @@ keyboard.push([
 ╰<a href="https://t.me/${adminUsername}">@${adminUsername}</a>
 
 📦━━━━━━━━━━━━━━━━━━━━📦
-     <code>🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ ${namaStore} ɴᴇᴛᴡᴏʀᴋ</code>
+     <code> 💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ</code>
 📦━━━━━━━━━━━━━━━━━━━━📦
 `;
 
@@ -11369,7 +11367,7 @@ async function processDepositGopay(ctx, amount) {
       `🔗 [Buka QRIS](${safeQrUrl})`,
       ``,
       `┏━━━━━━━━━━━━━━━━━━━━━┓`,
-      `    🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ *ᴀɴꜱᴇɴᴅᴀɴᴛ ɴᴇᴛᴡᴏʀᴋ*`,
+      `        💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ`,
       `┗━━━━━━━━━━━━━━━━━━━━━┛`
     ].join('\n');
 
