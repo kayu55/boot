@@ -77,7 +77,7 @@ setup_bot() {
 server_app() {
     clear
     echo -e "${orange}─────────────────────────────────────────${neutral}"
-    echo -e "${green}- BOT SELLVPN TELEGRAM MOD ${neutral}"
+    echo -e "${green}- BOT SELLVPN TELEGRAM MOD ARYA BLITAR ${neutral}"
     echo -e "${orange}─────────────────────────────────────────${neutral}"
 
     read -p "Masukkan token bot: " token
@@ -107,10 +107,10 @@ server_app() {
     read -p "Masukkan Email Saweria: " saweria_email
     while [ -z "$apikey" ]; do read -p "Masukkan API KEY: " saweria_email; done
     
-    read -p "Masukkan Username Grup ( grup ): " username_grup
+    read -p "Masukkan Username Grup ( id-grup ): " username_grup
     while [ -z "$username_grup" ]; do read -p "Masukkan USERNAME GRUP: " username_grup; done
     
-    read -p "Masukkan Username channel ( channel ): " username_channel
+    read -p "Masukkan Username channel ( grup-channel ): " username_channel
     while [ -z "$username_channel" ]; do read -p "Masukkan USERNAME CHANNEL: " username_channel; done
     
     read -p "Masukkan Nomor Wa ( 62xxxxx ) : " nomor_wa
@@ -208,6 +208,16 @@ LimitNOFILE=10000
 WantedBy=multi-user.target
 EOF
 
+# bikin cron job tiap jam 7pagi
+cat >/etc/cron.d/backup_sellvpn <<'EOF'
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+0 7 * * * root /usr/bin/backup_sellvpn
+EOF
+
+chmod +x /usr/bin/backup_sellvpn
+chmod +x /usr/bin/sellvpn
+    service cron restart
     systemctl daemon-reload
     systemctl enable sellvpn
     systemctl start sellvpn
