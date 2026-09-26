@@ -9407,56 +9407,7 @@ Pesan Error: ${err.message}
                     }
                 });
 
-await afterAccountTransaction({
-    userId: userId,
-    username: ctx.from.username,
-    produk: state.type.toUpperCase(),
-    serverId: state.serverId,
-    jenis: actionTypeLabel,
-    durasi: state.exp,
-    accountUsername: state.username
-});
 
-await ctx.reply(msg, {
-    parse_mode: 'Markdown',
-    reply_markup:
-        state.action === "create" && result?.config
-            ? {
-                inline_keyboard: [
-                    [
-                        {
-                            text: "📲 HTTP Custom",
-                            callback_data: "convert_hc",
-                            style: "primary"
-                        },
-                        {
-                            text: "🌐 NetMod",
-                            callback_data: "convert_nm",
-                            style: "primary"
-                        }
-                    ],
-                    [
-                        {
-                            text: "📦 Clash",
-                            callback_data: "convert_clash",
-                            style: "primary"
-                        },
-                        {
-                            text: "⚡ V2Ray",
-                            callback_data: "convert_yaml",
-                            style: "primary"
-                        }
-                    ],
-                    [
-                        {
-                            text: "❌ Tutup",
-                            callback_data: "close_convert",
-                            style: "danger"
-                        }
-                    ]
-                ]
-            }
-            : undefined
 });
 
 delete userState[userId];
