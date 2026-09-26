@@ -107,10 +107,10 @@ server_app() {
     read -p "Masukkan Email Saweria: " saweria_email
     while [ -z "$apikey" ]; do read -p "Masukkan API KEY: " saweria_email; done
     
-    read -p "Masukkan Username Grup ( myridtunnel ): " username_grup
+    read -p "Masukkan Username Grup ( grup ): " username_grup
     while [ -z "$username_grup" ]; do read -p "Masukkan USERNAME GRUP: " username_grup; done
     
-    read -p "Masukkan Username channel ( ansendant ): " username_channel
+    read -p "Masukkan Username channel ( channel ): " username_channel
     while [ -z "$username_channel" ]; do read -p "Masukkan USERNAME CHANNEL: " username_channel; done
     
     read -p "Masukkan Nomor Wa ( 62xxxxx ) : " nomor_wa
