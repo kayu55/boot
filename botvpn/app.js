@@ -8465,98 +8465,34 @@ async function handleTrial(ctx, type, serverId) {
     const quota = 1;
     const iplimit = 1;
 
-    let result;
-
+    let msg;
     switch (type) {
       case 'vmess':
-        result = await trialvmess(username, exp, quota, iplimit, serverId);
+        msg = await trialvmess(username, exp, quota, iplimit, serverId);
         break;
-
       case 'vless':
-        result = await trialvless(username, exp, quota, iplimit, serverId);
+        msg = await trialvless(username, exp, quota, iplimit, serverId);
         break;
-
       case 'trojan':
-        result = await trialtrojan(username, exp, quota, iplimit, serverId);
+        msg = await trialtrojan(username, exp, quota, iplimit, serverId);
         break;
-
       case 'shadowsocks':
-        result = await trialshadowsocks(username, exp, quota, iplimit, serverId);
+        msg = await trialshadowsocks(username, exp, quota, iplimit, serverId);
         break;
-
       case 'ssh':
-        result = await trialssh(username, password, exp, iplimit, serverId);
+        msg = await trialssh(username, password, exp, iplimit, serverId);
         break;
-
       default:
-        result = {
-          success: false,
-          message: '❌ *Tipe layanan tidak dikenali.*'
-        };
+        msg = '❌ *Tipe layanan tidak dikenali.*';
     }
 
-    if (result.success && result.config) {
-      global.userConfigs ??= {};
-
-      global.userConfigs[ctx.from.id] = {
-        userId: ctx.from.id,
-        username,
-        type,
-        createdAt: Date.now(),
-        ...result.config
-      };
-
-      console.log("CONFIG TERSIMPAN:");
-      console.log(global.userConfigs[ctx.from.id]);
+    if (msg) {
+      await ctx.reply(msg, { parse_mode: 'Markdown' });
     }
-
-await ctx.reply(result.message, {
-  parse_mode: 'Markdown',
-  reply_markup: {
-    inline_keyboard: [
-      [
-        {
-          text: '📲 HTTP Custom',
-          callback_data: 'convert_hc',
-          style: 'primary'
-        },
-        {
-          text: '🌐 NetMod',
-          callback_data: 'convert_nm',
-          style: 'primary'
-        }
-      ],
-      [
-        {
-          text: '📦 Clash',
-          callback_data: 'convert_clash',
-          style: 'primary'
-        },
-        {
-          text: '⚡ V2Ray',
-          callback_data: 'convert_yaml',
-          style: 'primary'
-        }
-      ],
-      [
-        {
-          text: '❌ Tutup',
-          callback_data: 'close_convert',
-          style: 'danger'
-        }
-      ]
-    ]
-  }
-});
 
   } catch (error) {
     logger.error(`❌ Error trial ${type}:`, error);
-
-    await ctx.reply(
-      '❌ *Gagal membuat akun trial. Silahkan coba lagi nanti.*',
-      { parse_mode: 'Markdown' }
-    );
-
+    await ctx.reply('❌ *Gagal membuat akun trial. Silahkan coba lagi nanti.*', { parse_mode: 'Markdown' });
   } finally {
     delete userState[ctx.chat.id];
   }
