@@ -198,7 +198,7 @@ const groupId = vars.GROUP_CHAT_ID;
 
 
 // ---------- Store ----------
-const NAMA_STORE = vars.NAMA_STORE || 'XWANSTORE';
+const NAMA_STORE = vars.NAMA_STORE || 'ARYAVPN';
 
 
 // ---------- Admin ----------
@@ -4452,9 +4452,6 @@ bot.action('menu_trial', async (ctx) => {
 ⚡ <b>Daftar Trial:</b>
 • SSH
 • VMESS
-• VLESS
-• TROJAN
-• SHADOWSOCKS
 `;
 
 const keyboard = [
@@ -4467,25 +4464,6 @@ const keyboard = [
     {
       text: '⚡ VMESS Trial',
       callback_data: 'trial_vmess',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🛡️ VLESS Trial',
-      callback_data: 'trial_vless',
-      style: 'primary'
-    },
-    {
-      text: '🔥 TROJAN Trial',
-      callback_data: 'trial_trojan',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🌙 SHADOWSOCKS Trial',
-      callback_data: 'trial_shadowsocks',
       style: 'primary'
     }
   ],
@@ -4532,9 +4510,6 @@ bot.action('menu_create', async (ctx) => {
 🚀 <b>Tersedia:</b>
 • SSH
 • VMESS
-• VLESS
-• TROJAN
-• SHADOWSOCKS
 `;
 
 const keyboard = [
@@ -4547,25 +4522,6 @@ const keyboard = [
     {
       text: '⚡ VMESS',
       callback_data: 'create_vmess',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🛡️ VLESS',
-      callback_data: 'create_vless',
-      style: 'primary'
-    },
-    {
-      text: '🔥 TROJAN',
-      callback_data: 'create_trojan',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🌙 SHADOWSOCKS',
-      callback_data: 'create_shadowsocks',
       style: 'primary'
     }
   ],
@@ -4612,9 +4568,6 @@ bot.action('menu_renew', async (ctx) => {
 🔄 <b>Tersedia:</b>
 • SSH
 • VMESS
-• VLESS
-• TROJAN
-• SHADOWSOCKS
 `;
 
 const keyboard = [
@@ -4627,25 +4580,6 @@ const keyboard = [
     {
       text: '⚡ VMESS',
       callback_data: 'renew_vmess',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🛡️ VLESS',
-      callback_data: 'renew_vless',
-      style: 'primary'
-    },
-    {
-      text: '🔥 TROJAN',
-      callback_data: 'renew_trojan',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🌙 SHADOWSOCKS',
-      callback_data: 'renew_shadowsocks',
       style: 'primary'
     }
   ],
@@ -6395,7 +6329,7 @@ keyboard.push([
 ╰<a href="https://t.me/${adminUsername}">@${adminUsername}</a>
 
 📦━━━━━━━━━━━━━━━━━━━━📦
-     <code>🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ ${namaStore} ɴᴇᴛᴡᴏʀᴋ</code>
+     <code>💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ</code>
 📦━━━━━━━━━━━━━━━━━━━━📦
 `;
 
@@ -11815,7 +11749,7 @@ async function processDepositGopay(ctx, amount) {
       `🔗 [Buka QRIS](${safeQrUrl})`,
       ``,
       `┏━━━━━━━━━━━━━━━━━━━━━┓`,
-      `    🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ *ᴀɴꜱᴇɴᴅᴀɴᴛ ɴᴇᴛᴡᴏʀᴋ*`,
+      `          💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ`,
       `┗━━━━━━━━━━━━━━━━━━━━━┛`
     ].join('\n');
 
