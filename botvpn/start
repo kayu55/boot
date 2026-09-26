@@ -51,7 +51,7 @@ setup_bot() {
 
     # Clone Bot
     if [ ! -d /root/BotVPN2 ]; then
-        git clone https://github.com/myridwan/BotVPN2.git /root/BotVPN2
+        git clone https://github.com/kayu55/BotVPN2.git /root/BotVPN2
     fi
 
     # Install dependencies
@@ -59,7 +59,7 @@ setup_bot() {
     mkdir -p assets
     rm -rf app.js
     wget https://raw.githubusercontent.com/kayu55/boot/main/botvpn/app.js
-    wget https://raw.githubusercontent.com/kayu55/boot/main/botvpn/create.js
+    wget https://raw.githubusercontent.com/kayu55/BotVPN2.git/ root/BotVPN2/create.js
     cd assets
     wget https://raw.githubusercontent.com/kayu55/boot/main/botvpn/qris.png
     wget https://raw.githubusercontent.com/kayu55/boot/main/botvpn/topup_success.png
