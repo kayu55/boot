@@ -8602,85 +8602,6 @@ bot.on("document", async (ctx) => {
     }
 
 });
-bot.on("document", async (ctx) => {
-
-    const userId = ctx.from.id;
-
-    if (!adminIds.includes(userId)) return;
-
-    if (!restoreState[userId]) return;
-
-    const file = ctx.message.document;
-
-    if (!file.file_name.endsWith(".db")) {
-
-        restoreState[userId] = false;
-
-        return ctx.reply("❌ File harus .db");
-
-    }
-
-    try {
-
-        await ctx.reply("📥 Mengunduh database...");
-
-        const link = await ctx.telegram.getFileLink(file.file_id);
-
-        const tempFile = path.join(
-            BACKUP_DIR,
-            "restore.db"
-        );
-
-        const writer = fs.createWriteStream(tempFile);
-
-        await new Promise((resolve, reject) => {
-
-            https.get(link, res => {
-
-                res.pipe(writer);
-
-                writer.on("finish", resolve);
-
-                writer.on("error", reject);
-
-            });
-
-        });
-
-        await createDatabaseBackup();
-
-        db.close();
-
-        fs.copyFileSync(
-            tempFile,
-            FOLDER_TEMPATDB
-        );
-
-        restoreState[userId] = false;
-
-        await ctx.reply(
-`✅ Database berhasil direstore.
-
-🔄 Restart bot...`
-        );
-
-        setTimeout(() => {
-
-            process.exit(0);
-
-        }, 2000);
-
-    } catch (err) {
-
-        restoreState[userId] = false;
-
-        logger.error(err);
-
-        ctx.reply("❌ Restore gagal.");
-
-    }
-
-});
 bot.on('text', async (ctx, next) => {
     const userId = ctx.from.id;
     const teks = ctx.message?.text?.trim();
@@ -9407,10 +9328,18 @@ Pesan Error: ${err.message}
                     }
                 });
 
+                await afterAccountTransaction({
+                    userId: userId,
+                    username: ctx.from.username,
+                    produk: state.type.toUpperCase(),
+                    serverId: state.serverId,
+                    jenis: actionTypeLabel,
+                    durasi: state.exp,
+                    accountUsername: state.username
+                });
 
-});
-
-delete userState[userId];
+                await ctx.reply(msg, { parse_mode: 'Markdown' });
+                delete userState[userId];
             });
         });
         return;
