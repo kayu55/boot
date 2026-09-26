@@ -3709,7 +3709,7 @@ async function sendMainMenu(ctx) {
 <a href="https://t.me/${adminUsername}">╰📨 @${adminUsername}</a>
 
 📦━━━━━━━━━━━━━━━━━━━━━📦
-     <code>  🌐 UPLOAD ARYA BLITAR </code>
+     <code>  💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ </code>
 📦━━━━━━━━━━━━━━━━━━━━━📦
 `;
 
@@ -4158,9 +4158,6 @@ case "ssh": {
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
-💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
-
-https://${sshData.domain}:81/ssh-${sshData.username}.txt
 `;
 
     return ctx.reply(msg, {
@@ -4233,9 +4230,6 @@ ${vmessData.vmess_grpc_link}
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
-💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
-
-https://${vmessData.domain}:81/vmess-${vmessData.username}.txt
 `;
 
     return ctx.reply(msg, {
@@ -6315,7 +6309,7 @@ keyboard.push([
 ╰<a href="https://t.me/${adminUsername}">@${adminUsername}</a>
 
 📦━━━━━━━━━━━━━━━━━━━━📦
-     <code>🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ ${namaStore} ɴᴇᴛᴡᴏʀᴋ</code>
+     <code>💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ </code>
 📦━━━━━━━━━━━━━━━━━━━━📦
 `;
 
@@ -10124,7 +10118,7 @@ bot.action('cek_saldo', async (ctx) => {
 
     if (row) {
       await ctx.reply(
-        `?? *Cek Saldo*\n\n🆔 ID Telegram: ${userId}\n💰 Sisa Saldo: Rp${row.saldo}`,
+        `📊 *Cek Saldo*\n\n🆔 ID Telegram: ${userId}\n💰 Sisa Saldo: Rp${row.saldo}`,
         {
           parse_mode: 'Markdown',
 
@@ -11694,7 +11688,7 @@ async function processDepositGopay(ctx, amount) {
       `🔗 [Buka QRIS](${safeQrUrl})`,
       ``,
       `┏━━━━━━━━━━━━━━━━━━━━━┓`,
-      `    🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ *ᴀɴꜱᴇɴᴅᴀɴᴛ ɴᴇᴛᴡᴏʀᴋ*`,
+      `       💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ `,
       `┗━━━━━━━━━━━━━━━━━━━━━┛`
     ].join('\n');
 
