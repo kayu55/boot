@@ -4433,9 +4433,7 @@ bot.action('menu_trial', async (ctx) => {
 ┃ <code>Setiap tipe akun punya format trial berbeda</code>
 ┗━━━━━━━━━━━━━━━━━━━━━┛
 
-⚡ <b>Daftar Trial:</b>
-• SSH WSOKET
-• VRAY VMESS
+⚡ <b>𝙼𝙰𝙰𝙵 𝚂𝙰𝚈𝙰𝙽𝙺 𝚃𝚁𝙸𝙰𝙻𝙽𝚈𝙰 𝙳𝙸 𝚆𝚂𝙾𝙺𝙴𝚃 𝙰𝙹𝙰 𝚈𝙰 🙏:</b>
 `;
 
 const keyboard = [
@@ -4443,11 +4441,6 @@ const keyboard = [
     {
       text: '🔐 SSH Trial',
       callback_data: 'trial_ssh',
-      style: 'primary'
-    },
-    {
-      text: '⚡ VMESS Trial',
-      callback_data: 'trial_vmess',
       style: 'primary'
     }
   ],
