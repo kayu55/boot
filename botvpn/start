@@ -77,7 +77,7 @@ setup_bot() {
 server_app() {
     clear
     echo -e "${orange}─────────────────────────────────────────${neutral}"
-    echo -e "${green}- BOT SELLVPN TELEGRAM MOD BY LITE ETIL ${neutral}"
+    echo -e "${green}- BOT SELLVPN TELEGRAM MOD ${neutral}"
     echo -e "${orange}─────────────────────────────────────────${neutral}"
 
     read -p "Masukkan token bot: " token
@@ -107,10 +107,10 @@ server_app() {
     read -p "Masukkan Email Saweria: " saweria_email
     while [ -z "$apikey" ]; do read -p "Masukkan API KEY: " saweria_email; done
     
-    read -p "Masukkan Username Grup ( aryablitar77 ): " username_grup
+    read -p "Masukkan Username Grup ( myridtunnel ): " username_grup
     while [ -z "$username_grup" ]; do read -p "Masukkan USERNAME GRUP: " username_grup; done
     
-    read -p "Masukkan Username channel ( pusatevpn ): " username_channel
+    read -p "Masukkan Username channel ( ansendant ): " username_channel
     while [ -z "$username_channel" ]; do read -p "Masukkan USERNAME CHANNEL: " username_channel; done
     
     read -p "Masukkan Nomor Wa ( 62xxxxx ) : " nomor_wa
