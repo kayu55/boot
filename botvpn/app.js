@@ -4136,7 +4136,7 @@ case "ssh": {
 ├ 👤 ᴜꜱᴇʀɴᴀᴍᴇ : \`${sshData.username}\`
 ├ 🔑 ᴘᴀꜱꜱᴡᴏʀᴅ : \`${sshData.password}\`
 ├ 📅 ᴇxᴘɪʀᴇᴅ  : \`${sshData.expired || account.expired_at}\`
-├ 🌐 ɪᴘ ʟɪᴍɪᴛ : \`${sshData.ip_limit}\`
+├ 🌐 ɪᴘ ʟɪᴍɪᴛ : \`2 IP\`
 └ 🟢 ꜱᴛᴀᴛᴜꜱ   : \`${account.status.toUpperCase()}\`
 
 ━━━━━━━━━━━━━━━━━━━━━━
@@ -4198,17 +4198,17 @@ case "vmess": {
 ┌〔 📄 *ᴀᴄᴄᴏᴜɴᴛ ɪɴꜰᴏ* 〕
 ├ 👤 ᴜꜱᴇʀɴᴀᴍᴇ : \`${vmessData.username}\`
 ├ 🆔 ᴜᴜɪᴅ      : \`${vmessData.uuid}\`
-├ 📅 ᴇxᴘɪʀᴇᴅ   : \`${vmessData.expired || account.expired_at}\`
+├ 📅 ᴇxᴘɪʀᴇᴅ   : \`${vmessData.expired}\`
 ├ 📦 Qᴜᴏᴛᴀ     : \`${vmessData.quota === '0 GB' ? 'Unlimited' : vmessData.quota}\`
-├ 🌐 ɪᴘ ʟɪᴍɪᴛ  : \`${vmessData.ip_limit === '0' ? 'Unlimited' : vmessData.ip_limit} IP\`
-└ 🟢 ꜱᴛᴀᴛᴜꜱ    : \`${account.status.toUpperCase()}\`
+├ 🌐 ɪᴘ ʟɪᴍɪᴛ  : \`2 IP\`
+└ 🟢 ꜱᴛᴀᴛᴜꜱ    : \`ACTIVE\`
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
 ┌〔 🌍 *ꜱᴇʀᴠᴇʀ* 〕
 ├ 🌐 ᴅᴏᴍᴀɪɴ      : \`${vmessData.domain}\`
 ├ 🔐 ᴛʟꜱ ᴘᴏʀᴛ    : \`443,8443,2087,2096,2053,2083\`
-├ 🌍 ʜᴛᴛᴘ ᴘᴏʀᴛ   : \`80,8080,8880,2082,2086,2052,2095\`
+├ 🌍 ʜᴛᴛᴘ ᴘᴏʀᴛ   : \`8080,8880,2082,2086,2052,2095\`
 ├ 🔒 ꜱᴇᴄᴜʀɪᴛʏ    : \`Auto\`
 ├ 📂 ᴘᴀᴛʜ        : \`/vmess\`
 └ 🚀 ɢʀᴘᴄ ᴘᴀᴛʜ   : \`vmess-grpc\`
