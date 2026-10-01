@@ -4143,20 +4143,15 @@ case "ssh": {
 
 ┌〔 🌍 *ꜱᴇʀᴠᴇʀ* 〕
 ├ 🌐 ᴅᴏᴍᴀɪɴ      : \`${sshData.domain}\`
-├ ☁️ ᴄʟᴏᴜᴅꜰʀᴏɴᴛ  : \`${server.cloudfront || "-"}\`
-├ 🌍 ɴᴀᴍᴇꜱᴇʀᴠᴇʀ  : \`${sshData.ns_domain}\`
-└ 🔑 ᴘᴜʙ ᴋᴇʏ     : \`${sshData.pubkey}\`
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
 ┌〔 🔌 *ᴘᴏʀᴛ* 〕
-├ 🔐 ᴛʟꜱ        : \`443,8443\`
-├ 🌐 ʜᴛᴛᴘ       : \`80,8080,2086,8880\`
+├ 🔐 ᴛʟꜱ        : \`443,8443,2087,2096,2053,2083\`
+├ 🌐 ʜᴛᴛᴘ       : \`80,8080,8880,2082,2086,2052,2095\`
 ├ ⚡ ᴏᴘᴇɴꜱꜱʜ    : \`22\`
-├ 🚀 ᴜᴅᴘꜱꜱʜ      : \`1-65535\`
-├ 🌍 ᴅɴꜱ        : \`53,2222\`
-├ 📡 ᴅʀᴏᴘʙᴇᴀʀ   : \`109,110\`
-└ 🎮 ʙᴀᴅᴠᴘɴ      : \`7300\`
+├ 📡 ᴅʀᴏᴘʙᴇᴀʀ   : \`109,143\`
+└ 🎮 ʙᴀᴅᴠᴘɴ      : \`7100-7300\`
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
@@ -4168,13 +4163,14 @@ case "ssh": {
 
 📄 *ᴘᴀʏʟᴏᴀᴅ*
 
-\`GET /cdn-cgi/trace HTTP/1.1[crlf]Host: Bug_Kalian[crlf][crlf]GET-RAY / HTTP/1.1[crlf]Host: [host][crlf]Connection: Upgrade[crlf]User-Agent: [ua][crlf]Upgrade: websocket[crlf][crlf]\`
+\`GET / HTTP/1.1[crlf]Host: [host_port][crlf]Upgrade: Websocket[crlf]Connection: Keep-Alive[crlf][crlf]\`
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
-💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
-
-https://${sshData.domain}:81/ssh-${sshData.username}.txt
+📦━━━━━━━━━━━━━━━━━━━━━📦
+     <code>  💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ </code>
+     <code>  📢 ᵂᴬ 081450330727 </code>
+📦━━━━━━━━━━━━━━━━━━━━━📦
 `;
 
     return ctx.reply(msg, {
@@ -4214,9 +4210,8 @@ case "vmess": {
 
 ┌〔 🌍 *ꜱᴇʀᴠᴇʀ* 〕
 ├ 🌐 ᴅᴏᴍᴀɪɴ      : \`${vmessData.domain}\`
-├ ☁️ ᴄʟᴏᴜᴅꜰʀᴏɴᴛ  : \`${server.cloudfront || "-"}\`
-├ 🔐 ᴛʟꜱ ᴘᴏʀᴛ    : \`443,8443\`
-├ 🌍 ʜᴛᴛᴘ ᴘᴏʀᴛ   : \`80,8080,2086,8880\`
+├ 🔐 ᴛʟꜱ ᴘᴏʀᴛ    : \`443,8443,2087,2096,2053,2083\`
+├ 🌍 ʜᴛᴛᴘ ᴘᴏʀᴛ   : \`80,8080,8880,2082,2086,2052,2095\`
 ├ 🔒 ꜱᴇᴄᴜʀɪᴛʏ    : \`Auto\`
 ├ 📂 ᴘᴀᴛʜ        : \`/vmess\`
 └ 🚀 ɢʀᴘᴄ ᴘᴀᴛʜ   : \`vmess-grpc\`
@@ -4247,9 +4242,10 @@ ${vmessData.vmess_grpc_link}
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
-💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
-
-https://${vmessData.domain}:81/vmess-${vmessData.username}.txt
+📦━━━━━━━━━━━━━━━━━━━━━📦
+     <code>  💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ </code>
+     <code>  📢 ᵂᴬ 081450330727 </code>
+📦━━━━━━━━━━━━━━━━━━━━━📦
 `;
 
     return ctx.reply(msg, {
