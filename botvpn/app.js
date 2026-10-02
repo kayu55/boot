@@ -2020,7 +2020,7 @@ bot.action('menu_cek_kuota', async (ctx) => {
     cekKuotaState[userId] = true;
 
     const text = `
-<blockquote><b>📡 AYO CEK KUOTA XL / AXIS</b>
+<blockquote><b>📡 CEK KUOTA XL / AXIS</b>
 <code>Cek informasi paket dan kuota nomor XL/AXIS</code></blockquote>
 
 📱 <b>Masukkan nomor XL/AXIS</b>
@@ -4799,25 +4799,6 @@ const keyboard = [
   ],
   [
     {
-      text: '🛡️ VLESS',
-      callback_data: 'renew_vless',
-      style: 'primary'
-    },
-    {
-      text: '🔥 TROJAN',
-      callback_data: 'renew_trojan',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🌙 SHADOWSOCKS',
-      callback_data: 'renew_shadowsocks',
-      style: 'primary'
-    }
-  ],
-  [
-    {
       text: '🔙 Kembali ke Menu VPN',
       callback_data: 'menu_vpn',
       style: 'danger'
@@ -5862,7 +5843,7 @@ bot.on('text', async (ctx, next) => {
         '❌ <b>Nomor tidak valid.</b>\n\n' +
         'Silakan masukkan nomor XL/AXIS yang benar.\n\n' +
         'Contoh:\n' +
-        '<code>087812345678</code>',
+        '<code>083812385678</code>',
         {
           parse_mode: 'HTML'
         }
