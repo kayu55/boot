@@ -941,7 +941,7 @@ function addYamlNotes(
         `# ========================================\n`;
 
     notes +=
-        `# KONFIGURASI ${proxyType.toUpperCase()} - ANSENDANTVPN\n`;
+        `# KONFIGURASI ${proxyType.toUpperCase()} - ARYA-VPN\n`;
 
     notes +=
         `# ========================================\n`;
