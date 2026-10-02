@@ -201,7 +201,7 @@ const groupId = vars.GROUP_CHAT_ID;
 
 
 // ---------- Store ----------
-const NAMA_STORE = vars.NAMA_STORE || 'XWANSTORE';
+const NAMA_STORE = vars.NAMA_STORE || 'ARYA-VPN';
 
 
 // ---------- Admin ----------
