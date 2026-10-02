@@ -6786,7 +6786,7 @@ bot.action('menu_topup', async (ctx) => {
       logger.warn(`⚠️ Gagal ambil username admin: ${e.message}`);
     }
 
-    const namaStore = vars?.NAMA_STORE || 'XWANSTORE';
+    const namaStore = vars?.NAMA_STORE || 'ARYA-VPN';
     const config = typeof loadButtonConfig === 'function'
       ? loadButtonConfig()
       : {
