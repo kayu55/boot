@@ -1,0 +1,46 @@
+#!/bin/bash
+# ==========================================
+# Getting
+CHATID="6430177985"
+KEY="7567594287:AAGVeDwRq9QrNg6jSce30eOm9WiVtAWKxjA"
+export TIME="10"
+export URL="https://api.telegram.org/bot$KEY/sendMessage"
+clear
+cat >/etc/cron.d/backup_sellvpn <<'EOF'
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+0 7 * * * root /usr/bin/backup_sellvpn
+chmod +x /usr/bin/backup_sellvpn
+chmod +x /usr/bin/sellvpn
+service cron restart
+EOF
+clear
+CHATID="$CHATID"
+KEY="$KEY"
+TIME="$TIME"
+URL="$URL"
+TEXT="
+<code>◇━━━━━━━━━━━━━━◇</code>
+<b>   ⚠️BACKUP NOTIF⚠️</b>
+<b>     Detail Backup Sellvpn</b>
+<code>◇━━━━━━━━━━━━━━◇</code>
+<b>A  :</b> <code>$backup_sellvpn </code>
+<b>B  :</b> <code>backup_sellvpn</code>
+<b>Tanggal : $date</b>
+<code>◇━━━━━━━━━━━━━━◇</code>
+<b>Link Backup   :</b> $link
+<code>◇━━━━━━━━━━━━━━◇</code>
+"
+curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
+echo ""
+clear
+echo -e "
+Detail Backup 
+==================================
+IP VPS        : $backup_sellvpn
+Link Backup   : backup_sellvpn
+Tanggal       : $date
+==================================
+"
+echo "Silahkan copy Link dan restore di sellvpn baru"
+echo ""
