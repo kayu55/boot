@@ -4691,13 +4691,6 @@ const keyboard = [
   ],
   [
     {
-      text: '🌙 SHADOWSOCKS Trial',
-      callback_data: 'trial_shadowsocks',
-      style: 'primary'
-    }
-  ],
-  [
-    {
       text: '🔙 Kembali ke Menu VPN',
       callback_data: 'menu_vpn',
       style: 'danger'
@@ -4770,13 +4763,6 @@ const keyboard = [
   ],
   [
     {
-      text: '🌙 SHADOWSOCKS',
-      callback_data: 'create_shadowsocks',
-      style: 'primary'
-    }
-  ],
-  [
-    {
       text: '🔙 Kembali ke Menu VPN',
       callback_data: 'menu_vpn',
       style: 'danger'
@@ -4844,13 +4830,6 @@ const keyboard = [
     {
       text: '🔥 TROJAN',
       callback_data: 'renew_trojan',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🌙 SHADOWSOCKS',
-      callback_data: 'renew_shadowsocks',
       style: 'primary'
     }
   ],
