@@ -4499,16 +4499,15 @@ case "vless": {
 ├ 🆔 ᴜᴜɪᴅ      : \`${vlessData.uuid}\`
 ├ 📅 ᴇxᴘɪʀᴇᴅ   : \`${vlessData.expired || account.expired_at}\`
 ├ 📦 Qᴜᴏᴛᴀ     : \`${vlessData.quota === '0 GB' ? 'Unlimited' : vlessData.quota}\`
-├ 🌐 ɪᴘ ʟɪᴍɪᴛ  : \`${vlessData.ip_limit === '0' ? 'Unlimited' : vlessData.ip_limit} IP\`
+├ 🌐 ɪᴘ ʟɪᴍɪᴛ  : \`2 IP\`
 └ 🟢 ꜱᴛᴀᴛᴜꜱ    : \`${account.status.toUpperCase()}\`
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
 ┌〔 🌍 *ꜱᴇʀᴠᴇʀ* 〕
 ├ 🌐 ᴅᴏᴍᴀɪɴ      : \`${vlessData.domain}\`
-├ ☁️ ᴄʟᴏᴜᴅꜰʀᴏɴᴛ  : \`${server.cloudfront || "-"}\`
-├ 🔐 ᴛʟꜱ ᴘᴏʀᴛ    : \`443,8443\`
-├ 🌍 ʜᴛᴛᴘ ᴘᴏʀᴛ   : \`80,8080,2086,8880\`
+├ 🔐 ᴛʟꜱ ᴘᴏʀᴛ    : \`443,8443,2087,2096,2053,2083\`
+├ 🌍 ʜᴛᴛᴘ ᴘᴏʀᴛ   : \`8080,8880,2082,2086,2052,2095\`
 ├ 📂 ᴘᴀᴛʜ        : \`/vless\`
 └ 🚀 ɢʀᴘᴄ ᴘᴀᴛʜ   : \`vless-grpc\`
 
@@ -4538,9 +4537,7 @@ ${vlessData.vless_grpc_link}
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
-💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
-
-https://${vlessData.domain}:81/vless-${vlessData.username}.txt
+💥 *ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ*
 `;
 
     return ctx.reply(msg, {
@@ -4575,16 +4572,15 @@ case "trojan": {
 ├ 🆔 ᴜᴜɪᴅ      : \`${trojanData.uuid}\`
 ├ 📅 ᴇxᴘɪʀᴇᴅ   : \`${trojanData.expired || account.expired_at}\`
 ├ 📦 Qᴜᴏᴛᴀ     : \`${trojanData.quota === '0 GB' ? 'Unlimited' : trojanData.quota}\`
-├ 🌐 ɪᴘ ʟɪᴍɪᴛ  : \`${trojanData.ip_limit === '0' ? 'Unlimited' : trojanData.ip_limit} IP\`
+├ 🌐 ɪᴘ ʟɪᴍɪᴛ  : \`2 IP\`
 └ 🟢 ꜱᴛᴀᴛᴜꜱ    : \`${account.status.toUpperCase()}\`
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
 ┌〔 🌍 *ꜱᴇʀᴠᴇʀ* 〕
 ├ 🌐 ᴅᴏᴍᴀɪɴ      : \`${trojanData.domain}\`
-├ ☁️ ᴄʟᴏᴜᴅꜰʀᴏɴᴛ  : \`${server.cloudfront || "-"}\`
-├ 🔐 ᴛʟꜱ ᴘᴏʀᴛ    : \`443,8443\`
-├ 🌍 ʜᴛᴛᴘ ᴘᴏʀᴛ   : \`80,8080,2086,8880\`
+├ 🔐 ᴛʟꜱ ᴘᴏʀᴛ    : \`443,8443,2087,2096,2053,2083\`
+├ 🌍 ʜᴛᴛᴘ ᴘᴏʀᴛ   : \`8080,8880,2082,2086,2052,2095\`
 ├ 📂 ᴘᴀᴛʜ        : \`/trojan-ws\`
 └ 🚀 ɢʀᴘᴄ ᴘᴀᴛʜ   : \`trojan-grpc\`
 
@@ -4606,9 +4602,7 @@ ${trojanData.trojan_grpc_link}
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
-💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
-
-https://${trojanData.domain}:81/trojan-${trojanData.username}.txt
+💥 *ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ*
 `;
 
     return ctx.reply(msg, {
@@ -4666,6 +4660,8 @@ bot.action('menu_trial', async (ctx) => {
 ⚡ <b>Daftar Trial:</b>
 • SSH
 • VMESS
+• VLESS
+• TROJAN
 `;
 
 const keyboard = [
@@ -4678,6 +4674,25 @@ const keyboard = [
     {
       text: '⚡ VMESS Trial',
       callback_data: 'trial_vmess',
+      style: 'primary'
+    }
+  ],
+  [
+    {
+      text: '🛡️ VLESS Trial',
+      callback_data: 'trial_vless',
+      style: 'primary'
+    },
+    {
+      text: '🔥 TROJAN Trial',
+      callback_data: 'trial_trojan',
+      style: 'primary'
+    }
+  ],
+  [
+    {
+      text: '🌙 SHADOWSOCKS Trial',
+      callback_data: 'trial_shadowsocks',
       style: 'primary'
     }
   ],
@@ -4724,6 +4739,8 @@ bot.action('menu_create', async (ctx) => {
 🚀 <b>Tersedia:</b>
 • SSH
 • VMESS
+• VLESS
+• TROJAN
 `;
 
 const keyboard = [
@@ -4736,6 +4753,25 @@ const keyboard = [
     {
       text: '⚡ VMESS',
       callback_data: 'create_vmess',
+      style: 'primary'
+    }
+  ],
+  [
+    {
+      text: '🛡️ VLESS',
+      callback_data: 'create_vless',
+      style: 'primary'
+    },
+    {
+      text: '🔥 TROJAN',
+      callback_data: 'create_trojan',
+      style: 'primary'
+    }
+  ],
+  [
+    {
+      text: '🌙 SHADOWSOCKS',
+      callback_data: 'create_shadowsocks',
       style: 'primary'
     }
   ],
@@ -4782,6 +4818,8 @@ bot.action('menu_renew', async (ctx) => {
 🔄 <b>Tersedia:</b>
 • SSH
 • VMESS
+• VLESS
+• TROJAN
 `;
 
 const keyboard = [
@@ -4794,6 +4832,25 @@ const keyboard = [
     {
       text: '⚡ VMESS',
       callback_data: 'renew_vmess',
+      style: 'primary'
+    }
+  ],
+  [
+    {
+      text: '🛡️ VLESS',
+      callback_data: 'renew_vless',
+      style: 'primary'
+    },
+    {
+      text: '🔥 TROJAN',
+      callback_data: 'renew_trojan',
+      style: 'primary'
+    }
+  ],
+  [
+    {
+      text: '🌙 SHADOWSOCKS',
+      callback_data: 'renew_shadowsocks',
       style: 'primary'
     }
   ],
