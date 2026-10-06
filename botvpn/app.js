@@ -6511,7 +6511,7 @@ async function generateQrisTemplate(payment) {
   const qrData = payment.payment_number || payment.qrString;
 
   const qrBuffer = await QRCode.toBuffer(qrData, {
-    width: 850,
+    width: 550,
     margin: 2,
     errorCorrectionLevel: 'H'
   });
@@ -6530,17 +6530,17 @@ async function generateQrisTemplate(payment) {
   const total = Number(payment.total_payment || payment.amount).toLocaleString('id-ID');
 
   const textOverlay = Buffer.from(`
-  <svg width="2592" height="3232">
+  <svg width="1122" height="1402">
     <style>
       .normal {
         fill: white;
-        font-size: 55px;
+        font-size: 25px;
         font-family: Arial;
       }
 
       .total {
         fill: #00FFFF;
-        font-size: 55px;
+        font-size: 25px;
         font-family: Arial;
         font-weight: bold;
       }
@@ -6610,7 +6610,7 @@ async function generateTopupSuccessTemplate(data) {
   });
 
   const textOverlay = Buffer.from(`
-<svg width="1296" height="1616">
+<svg width="1024" height="1280">
 <style>
 .value{
 fill:#18F6FF;
