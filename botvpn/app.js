@@ -6530,7 +6530,7 @@ async function generateQrisTemplate(payment) {
   const total = Number(payment.total_payment || payment.amount).toLocaleString('id-ID');
 
   const textOverlay = Buffer.from(`
-  <svg width="1122" height="1402">
+  <svg width="2592" height="3232">
     <style>
       .normal {
         fill: white;
@@ -6610,7 +6610,7 @@ async function generateTopupSuccessTemplate(data) {
   });
 
   const textOverlay = Buffer.from(`
-<svg width="1024" height="1280">
+<svg width="1296" height="1616">
 <style>
 .value{
 fill:#18F6FF;
