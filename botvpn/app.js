@@ -6511,7 +6511,7 @@ async function generateQrisTemplate(payment) {
   const qrData = payment.payment_number || payment.qrString;
 
   const qrBuffer = await QRCode.toBuffer(qrData, {
-    width: 550,
+    width: 850,
     margin: 2,
     errorCorrectionLevel: 'H'
   });
@@ -6534,13 +6534,13 @@ async function generateQrisTemplate(payment) {
     <style>
       .normal {
         fill: white;
-        font-size: 25px;
+        font-size: 55px;
         font-family: Arial;
       }
 
       .total {
         fill: #00FFFF;
-        font-size: 25px;
+        font-size: 55px;
         font-family: Arial;
         font-weight: bold;
       }
