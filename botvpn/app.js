@@ -3208,148 +3208,6 @@ db.run(`
 });
 
 
-// ============================================================
-// 👤 USERS TABLE
-// ============================================================
-
-db.run(`
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER UNIQUE,
-        saldo INTEGER DEFAULT 0,
-        role TEXT DEFAULT 'member',
-        CONSTRAINT unique_user_id UNIQUE (user_id)
-    )
-`, (err) => {
-
-    // ========================================================
-    // ❌ USERS TABLE ERROR
-    // ========================================================
-
-    if (err) {
-
-        logger.error(
-            'Kesalahan membuat tabel users:',
-            err.message
-        );
-
-        return;
-    }
-
-
-    // ========================================================
-    // ✅ USERS TABLE READY
-    // ========================================================
-
-    logger.info(
-        'Users table created or already exists'
-    );
-
-
-    // ========================================================
-    // 🔍 CHECK USERS TABLE COLUMNS
-    // ========================================================
-
-    db.all(
-        "PRAGMA table_info(users)",
-        (err, columns) => {
-
-            // ==================================================
-            // ❌ PRAGMA ERROR
-            // ==================================================
-
-            if (err) {
-
-                logger.error(
-                    'Error getting table info:',
-                    err.message
-                );
-
-                return;
-            }
-
-
-            // ==================================================
-            // 🔎 VALIDATE PRAGMA RESULT
-            // ==================================================
-
-            if (
-                columns &&
-                Array.isArray(columns)
-            ) {
-
-                // ==============================================
-                // 🔍 CHECK ROLE COLUMN
-                // ==============================================
-
-                const hasRoleColumn =
-                    columns.some(
-                        col =>
-                            col.name === 'role'
-                    );
-
-
-                // ==============================================
-                // ➕ ADD ROLE COLUMN IF MISSING
-                // ==============================================
-
-                if (!hasRoleColumn) {
-
-                    db.run(
-                        "ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'member'",
-
-                        (err) => {
-
-                            if (err) {
-
-                                logger.error(
-                                    'Error adding role column to users table:',
-                                    err.message
-                                );
-
-                            } else {
-
-                                logger.info(
-                                    '✅ Added role column to users table'
-                                );
-
-                            }
-
-                        }
-                    );
-
-                }
-
-            } else {
-
-                // ==============================================
-                // ⚠️ INVALID PRAGMA RESULT
-                // ==============================================
-
-                logger.warn(
-                    'PRAGMA table_info(users) did not return an array for columns.'
-                );
-
-            }
-
-        }
-    );
-
-});
-
-
-// ============================================================
-// 🧪 TRIAL LOG TABLE
-// ============================================================
-
-db.run(`
-    CREATE TABLE IF NOT EXISTS TrialLog (
-        user_id INTEGER,
-        date TEXT,
-        count INTEGER DEFAULT 0,
-        UNIQUE(user_id, date)
-    )
-`);
 
 
 // ============================================================
@@ -3717,137 +3575,7 @@ async function sendMainMenu(ctx) {
       delete global.depositState[userId];
     }
 
-    // Ambil data user
-    const userName = ctx.from.username
-      ? `@${ctx.from.username}`
-      : (ctx.from.first_name || 'Member');
-
-    let saldo = 0;
-    let userRole = 'member';
-
-    try {
-      const row = await new Promise((resolve, reject) => {
-        db.get(
-          'SELECT saldo, role FROM users WHERE user_id = ?',
-          [userId],
-          (err, row) => {
-            if (err) reject(err);
-            else resolve(row);
-          }
-        );
-      });
-
-      saldo = row?.saldo || 0;
-      userRole = row?.role || 'member';
-    } catch (e) {
-      logger.error(`❌ Error fetching user data ${userId}: ${e.message}`);
-    }
-
-    const now = new Date();
-    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
-    const weekStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay()).toISOString();
-    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
-
-    let userToday = 0, userWeek = 0, userMonth = 0;
-    let globalToday = 0, globalWeek = 0, globalMonth = 0;
-
-    try {
-      [userToday, userWeek, userMonth] = await Promise.all([
-        new Promise((resolve) => {
-          db.get(
-            `SELECT COUNT(*) as count
-             FROM log_penjualan
-             WHERE user_id = ?
-             AND waktu_transaksi >= ?
-             AND action_type IN ("create","renew")`,
-            [userId, todayStart],
-            (err, row) => resolve(row?.count || 0)
-          );
-        }),
-        new Promise((resolve) => {
-          db.get(
-            `SELECT COUNT(*) as count
-             FROM log_penjualan
-             WHERE user_id = ?
-             AND waktu_transaksi >= ?
-             AND action_type IN ("create","renew")`,
-            [userId, weekStart],
-            (err, row) => resolve(row?.count || 0)
-          );
-        }),
-        new Promise((resolve) => {
-          db.get(
-            `SELECT COUNT(*) as count
-             FROM log_penjualan
-             WHERE user_id = ?
-             AND waktu_transaksi >= ?
-             AND action_type IN ("create","renew")`,
-            [userId, monthStart],
-            (err, row) => resolve(row?.count || 0)
-          );
-        })
-      ]);
-
-      [globalToday, globalWeek, globalMonth] = await Promise.all([
-        new Promise((resolve) => {
-          db.get(
-            `SELECT COUNT(*) as count
-             FROM log_penjualan
-             WHERE waktu_transaksi >= ?
-             AND action_type IN ("create","renew")`,
-            [todayStart],
-            (err, row) => resolve(row?.count || 0)
-          );
-        }),
-        new Promise((resolve) => {
-          db.get(
-            `SELECT COUNT(*) as count
-             FROM log_penjualan
-             WHERE waktu_transaksi >= ?
-             AND action_type IN ("create","renew")`,
-            [weekStart],
-            (err, row) => resolve(row?.count || 0)
-          );
-        }),
-        new Promise((resolve) => {
-          db.get(
-            `SELECT COUNT(*) as count
-             FROM log_penjualan
-             WHERE waktu_transaksi >= ?
-             AND action_type IN ("create","renew")`,
-            [monthStart],
-            (err, row) => resolve(row?.count || 0)
-          );
-        })
-      ]);
-    } catch (e) {
-      logger.error(`❌ Error fetching statistics ${userId}: ${e.message}`);
-    }
-
-    let jumlahPengguna = 0;
-    let jumlahServer = 0;
-
-    try {
-      const [userCount, serverCount] = await Promise.all([
-        new Promise((resolve) => {
-          db.get('SELECT COUNT(*) AS count FROM users', (err, row) => {
-            if (err) resolve(0);
-            else resolve(row?.count || 0);
-          });
-        }),
-        new Promise((resolve) => {
-          db.get('SELECT COUNT(*) AS count FROM Server', (err, row) => {
-            if (err) resolve(0);
-            else resolve(row?.count || 0);
-          });
-        })
-      ]);
-
-      jumlahPengguna = userCount;
-      jumlahServer = serverCount;
-    } catch (e) {
-      logger.error(`❌ Gagal ambil data jumlah user/server: ${e.message}`);
-    }
+    
 
     const [tombolTrialAktif, tombolSewaScriptAktif, isUnlimited] = await Promise.all([
       new Promise((resolve) => {
@@ -3910,8 +3638,6 @@ async function sendMainMenu(ctx) {
 
 🧭 <b>ɪɴꜰᴏʀᴍᴀꜱɪ ᴀᴋᴜɴ</b>
 ┏━━━━━━━━━━━━━━━━━━━━━┓
-┃ 💰 <b>ꜱᴀʟᴅᴏ:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>
-┃ ${statusText}
 ┃ 🌐 <b>ᴜꜱᴇʀɴᴀᴍᴇ:</b> ${userName}
 ┃ 🆔 <b>ɪᴅ ᴘᴇɴɢɢᴜɴᴀ:</b> <code>${userId}</code>
 ┗━━━━━━━━━━━━━━━━━━━━━┛
@@ -3978,7 +3704,7 @@ finalKeyboard.push([
 
 finalKeyboard.push([
   {
-    text: '💰 TopUp Saldo',
+    text: '💰 TopUp Salldo',
     callback_data: 'menu_topup',
     style: 'success'
   }
@@ -4922,7 +4648,7 @@ bot.action('menu_riwayat_transaksi', async (ctx) => {
       gabung.push({
         waktu: row.waktu,
         text:
-`💳 <b>TOP UP SALDO</b>
+`💳 <b>TOP UP SALLDO</b>
 ┣ 💰 Nominal: <code>Rp${Number(row.amount || 0).toLocaleString('id-ID')}</code>
 ┣ 🏦 Metode: <code>${row.method || '-'}</code>
 ┗ 🕒 Waktu: <code>${formatTanggalIndonesia(row.waktu)}</code>`
