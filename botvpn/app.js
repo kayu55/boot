@@ -1788,219 +1788,7 @@ async function sendBackupToAdmin(
 }
 
 
-// ============================================================
-// 🔐 REQUIRED JOIN GATE
-// 📢 CHANNEL + 👥 GROUP
-// ============================================================
 
-const REQUIRED_CHANNEL =
-    `@${CHANNEL_USERNAME}`;
-
-const REQUIRED_GROUP =
-    `@${GROUP_USERNAME}`;
-
-
-// ============================================================
-// 🔗 CHANNEL & GROUP LINK
-// ============================================================
-
-const channelLink =
-    `https://t.me/${CHANNEL_USERNAME}`;
-
-const groupLink =
-    `https://t.me/${GROUP_USERNAME}`;
-
-
-// ============================================================
-// 🚪 SEND JOIN GATE
-// ============================================================
-
-async function sendJoinGate(ctx) {
-
-    // ========================================================
-    // 📝 JOIN GATE MESSAGE
-    // ========================================================
-
-    const gateText =
-`🔔 *Selamat Datang Di ${NAMA_STORE} 🤗*
-
-\`\`\`
-Untuk menggunakan bot ini, Anda harus bergabung
-dengan komunitas kami terlebih dahulu.
-\`\`\`
-
-📢 *Channel*: ${REQUIRED_CHANNEL}
-👥 *Group*  : ${REQUIRED_GROUP}
-
-Silakan gabung ke keduanya, lalu tekan tombol
-"✅ Saya Sudah Bergabung" di bawah ini untuk lanjut.`;
-
-
-try {
-
-    // ====================================================
-    // 📤 SEND JOIN GATE MESSAGE
-    // ====================================================
-
-    await ctx.reply(
-        gateText,
-        {
-            parse_mode: 'Markdown',
-            disable_web_page_preview: true,
-
-            reply_markup: {
-                inline_keyboard: [
-
-                    // ------------------------------------
-                    // 📢 JOIN CHANNEL
-                    // 🔵 BIRU
-                    // ------------------------------------
-
-                    [
-                        {
-                            text: '🔗 Gabung Channel kami',
-                            url: channelLink,
-                            style: 'primary'
-                        }
-                    ],
-
-                    // ------------------------------------
-                    // 👥 JOIN GROUP
-                    // 🔵 BIRU
-                    // ------------------------------------
-
-                    [
-                        {
-                            text: '💬 Gabung Group kami',
-                            url: groupLink,
-                            style: 'primary'
-                        }
-                    ],
-
-                    // ------------------------------------
-                    // ✅ CONTINUE
-                    // 🟢 HIJAU
-                    // ------------------------------------
-
-                    [
-                        {
-                            text: '✅ Saya Sudah Bergabung, Lanjutkan',
-                            callback_data: 'continue_after_join',
-                            style: 'success'
-                        }
-                    ]
-
-                ]
-            }
-        }
-    );
-
-} catch (e) {
-
-    // ====================================================
-    // ❌ JOIN GATE ERROR
-    // ====================================================
-
-    logger.error(
-        'Gagal mengirim Join Gate: ' +
-        e.message
-    );
-
-}
-}
-
-// ============================================================
-// 👥 CHECK CHANNEL & GROUP MEMBERSHIP
-// ============================================================
-
-async function checkMembership(ctx) {
-
-    // ========================================================
-    // 🆔 GET USER ID
-    // ========================================================
-
-    const userId =
-        ctx.from?.id;
-
-    if (!userId) {
-        return false;
-    }
-
-
-    try {
-
-        // ====================================================
-        // 📢 CHECK CHANNEL MEMBERSHIP
-        // ====================================================
-
-        const ch =
-            await ctx.telegram.getChatMember(
-                REQUIRED_CHANNEL,
-                userId
-            );
-
-
-        // ====================================================
-        // 👥 CHECK GROUP MEMBERSHIP
-        // ====================================================
-
-        const gr =
-            await ctx.telegram.getChatMember(
-                REQUIRED_GROUP,
-                userId
-            );
-
-
-        // ====================================================
-        // 📝 LOG MEMBERSHIP STATUS
-        // ====================================================
-
-        logger.info(
-            `Status channel user ${userId}: ${ch?.status}`
-        );
-
-        logger.info(
-            `Status group user ${userId}: ${gr?.status}`
-        );
-
-
-        // ====================================================
-        // ✅ VALID MEMBERSHIP STATUS
-        // ====================================================
-
-        const okStatus =
-            new Set([
-                'creator',
-                'administrator',
-                'member',
-                'restricted'
-            ]);
-
-
-        // ====================================================
-        // 🔍 CHECK BOTH MEMBERSHIPS
-        // ====================================================
-
-        return (
-            okStatus.has(ch?.status) &&
-            okStatus.has(gr?.status)
-        );
-
-
-    } catch (e) {
-
-        // ====================================================
-        // ⚠️ MEMBERSHIP CHECK ERROR
-        // ====================================================
-
-        logger.warn(
-            'checkMembership warn: ' +
-            e.message
-        );
-
-        return false;
-    }
-}
 // ============================================================
 // 📡 MENU CEK KUOTA XL / AXIS
 // ============================================================
@@ -3208,6 +2996,148 @@ db.run(`
 });
 
 
+// ============================================================
+// 👤 USERS TABLE
+// ============================================================
+
+db.run(`
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER UNIQUE,
+        saldo INTEGER DEFAULT 0,
+        role TEXT DEFAULT 'member',
+        CONSTRAINT unique_user_id UNIQUE (user_id)
+    )
+`, (err) => {
+
+    // ========================================================
+    // ❌ USERS TABLE ERROR
+    // ========================================================
+
+    if (err) {
+
+        logger.error(
+            'Kesalahan membuat tabel users:',
+            err.message
+        );
+
+        return;
+    }
+
+
+    // ========================================================
+    // ✅ USERS TABLE READY
+    // ========================================================
+
+    logger.info(
+        'Users table created or already exists'
+    );
+
+
+    // ========================================================
+    // 🔍 CHECK USERS TABLE COLUMNS
+    // ========================================================
+
+    db.all(
+        "PRAGMA table_info(users)",
+        (err, columns) => {
+
+            // ==================================================
+            // ❌ PRAGMA ERROR
+            // ==================================================
+
+            if (err) {
+
+                logger.error(
+                    'Error getting table info:',
+                    err.message
+                );
+
+                return;
+            }
+
+
+            // ==================================================
+            // 🔎 VALIDATE PRAGMA RESULT
+            // ==================================================
+
+            if (
+                columns &&
+                Array.isArray(columns)
+            ) {
+
+                // ==============================================
+                // 🔍 CHECK ROLE COLUMN
+                // ==============================================
+
+                const hasRoleColumn =
+                    columns.some(
+                        col =>
+                            col.name === 'role'
+                    );
+
+
+                // ==============================================
+                // ➕ ADD ROLE COLUMN IF MISSING
+                // ==============================================
+
+                if (!hasRoleColumn) {
+
+                    db.run(
+                        "ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'member'",
+
+                        (err) => {
+
+                            if (err) {
+
+                                logger.error(
+                                    'Error adding role column to users table:',
+                                    err.message
+                                );
+
+                            } else {
+
+                                logger.info(
+                                    '✅ Added role column to users table'
+                                );
+
+                            }
+
+                        }
+                    );
+
+                }
+
+            } else {
+
+                // ==============================================
+                // ⚠️ INVALID PRAGMA RESULT
+                // ==============================================
+
+                logger.warn(
+                    'PRAGMA table_info(users) did not return an array for columns.'
+                );
+
+            }
+
+        }
+    );
+
+});
+
+
+// ============================================================
+// 🧪 TRIAL LOG TABLE
+// ============================================================
+
+db.run(`
+    CREATE TABLE IF NOT EXISTS TrialLog (
+        user_id INTEGER,
+        date TEXT,
+        count INTEGER DEFAULT 0,
+        UNIQUE(user_id, date)
+    )
+`);
 
 
 // ============================================================
@@ -3282,171 +3212,6 @@ logger.info(
 );
 
 
-// ============================================================
-// 🤖 HANDLER /START & /MENU
-// 🔐 DENGAN GATE WAJIB JOIN
-// ============================================================
-
-bot.command(
-    ['start', 'menu'],
-    async (ctx) => {
-
-        // ====================================================
-        // 📥 COMMAND RECEIVED
-        // ====================================================
-
-        logger.info(
-            '📥 Perintah /start atau /menu diterima'
-        );
-
-
-        // ====================================================
-        // 🆔 GET USER & CHAT ID
-        // ====================================================
-
-        const userId =
-            ctx.from.id;
-
-        const chatId =
-            ctx.chat.id;
-
-
-        // ====================================================
-        // 🧹 DELETE USER COMMAND MESSAGE
-        // ====================================================
-
-        try {
-
-            await ctx.telegram.deleteMessage(
-                chatId,
-                ctx.message.message_id
-            );
-
-        } catch (e) {
-
-            // Ignore delete message error
-
-        }
-
-
-        // ====================================================
-        // 👥 CHECK CHANNEL & GROUP MEMBERSHIP
-        // ====================================================
-
-        const joined =
-            await checkMembership(ctx);
-
-
-        // ====================================================
-        // 🚪 USER BELUM JOIN
-        // ====================================================
-
-        if (!joined) {
-
-            return sendJoinGate(ctx);
-
-        }
-
-
-        // ====================================================
-        // 👤 REGISTER / CHECK USER DATABASE
-        // ====================================================
-
-        await new Promise(
-            (resolve) => {
-
-                db.get(
-                    'SELECT * FROM users WHERE user_id = ?',
-
-                    [userId],
-
-                    (err, row) => {
-
-                        // ==========================================
-                        // ❌ DATABASE ERROR
-                        // ==========================================
-
-                        if (err) {
-
-                            logger.error(
-                                '❌ Kesalahan saat memeriksa user_id:',
-                                err.message
-                            );
-
-                            resolve();
-
-                            return;
-                        }
-
-
-                        // ==========================================
-                        // 🆕 USER BELUM TERDAFTAR
-                        // ==========================================
-
-                        if (!row) {
-
-                            db.run(
-                                'INSERT INTO users (user_id, role) VALUES (?, ?)',
-
-                                [
-                                    userId,
-                                    'member'
-                                ],
-
-                                (err) => {
-
-                                    if (err) {
-
-                                        logger.error(
-                                            '❌ Gagal menyimpan user_id:',
-                                            err.message
-                                        );
-
-                                    } else {
-
-                                        logger.info(
-                                            `✅ User ID ${userId} berhasil disimpan`
-                                        );
-
-                                    }
-
-                                    resolve();
-
-                                }
-                            );
-
-                        }
-
-
-                        // ==========================================
-                        // 👤 USER SUDAH TERDAFTAR
-                        // ==========================================
-
-                        else {
-
-                            logger.info(
-                                `ℹ️ User ID ${userId} sudah ada`
-                            );
-
-                            resolve();
-
-                        }
-
-                    }
-                );
-
-            }
-        );
-
-
-        // ====================================================
-        // 🏠 SEND MAIN MENU
-        // ====================================================
-
-        await sendMainMenu(ctx);
-
-    }
-);
 
 
 // ============================================================
@@ -3575,7 +3340,137 @@ async function sendMainMenu(ctx) {
       delete global.depositState[userId];
     }
 
-    
+    // Ambil data user
+    const userName = ctx.from.username
+      ? `@${ctx.from.username}`
+      : (ctx.from.first_name || 'Member');
+
+    let saldo = 0;
+    let userRole = 'member';
+
+    try {
+      const row = await new Promise((resolve, reject) => {
+        db.get(
+          'SELECT saldo, role FROM users WHERE user_id = ?',
+          [userId],
+          (err, row) => {
+            if (err) reject(err);
+            else resolve(row);
+          }
+        );
+      });
+
+      saldo = row?.saldo || 0;
+      userRole = row?.role || 'member';
+    } catch (e) {
+      logger.error(`❌ Error fetching user data ${userId}: ${e.message}`);
+    }
+
+    const now = new Date();
+    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
+    const weekStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay()).toISOString();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+
+    let userToday = 0, userWeek = 0, userMonth = 0;
+    let globalToday = 0, globalWeek = 0, globalMonth = 0;
+
+    try {
+      [userToday, userWeek, userMonth] = await Promise.all([
+        new Promise((resolve) => {
+          db.get(
+            `SELECT COUNT(*) as count
+             FROM log_penjualan
+             WHERE user_id = ?
+             AND waktu_transaksi >= ?
+             AND action_type IN ("create","renew")`,
+            [userId, todayStart],
+            (err, row) => resolve(row?.count || 0)
+          );
+        }),
+        new Promise((resolve) => {
+          db.get(
+            `SELECT COUNT(*) as count
+             FROM log_penjualan
+             WHERE user_id = ?
+             AND waktu_transaksi >= ?
+             AND action_type IN ("create","renew")`,
+            [userId, weekStart],
+            (err, row) => resolve(row?.count || 0)
+          );
+        }),
+        new Promise((resolve) => {
+          db.get(
+            `SELECT COUNT(*) as count
+             FROM log_penjualan
+             WHERE user_id = ?
+             AND waktu_transaksi >= ?
+             AND action_type IN ("create","renew")`,
+            [userId, monthStart],
+            (err, row) => resolve(row?.count || 0)
+          );
+        })
+      ]);
+
+      [globalToday, globalWeek, globalMonth] = await Promise.all([
+        new Promise((resolve) => {
+          db.get(
+            `SELECT COUNT(*) as count
+             FROM log_penjualan
+             WHERE waktu_transaksi >= ?
+             AND action_type IN ("create","renew")`,
+            [todayStart],
+            (err, row) => resolve(row?.count || 0)
+          );
+        }),
+        new Promise((resolve) => {
+          db.get(
+            `SELECT COUNT(*) as count
+             FROM log_penjualan
+             WHERE waktu_transaksi >= ?
+             AND action_type IN ("create","renew")`,
+            [weekStart],
+            (err, row) => resolve(row?.count || 0)
+          );
+        }),
+        new Promise((resolve) => {
+          db.get(
+            `SELECT COUNT(*) as count
+             FROM log_penjualan
+             WHERE waktu_transaksi >= ?
+             AND action_type IN ("create","renew")`,
+            [monthStart],
+            (err, row) => resolve(row?.count || 0)
+          );
+        })
+      ]);
+    } catch (e) {
+      logger.error(`❌ Error fetching statistics ${userId}: ${e.message}`);
+    }
+
+    let jumlahPengguna = 0;
+    let jumlahServer = 0;
+
+    try {
+      const [userCount, serverCount] = await Promise.all([
+        new Promise((resolve) => {
+          db.get('SELECT COUNT(*) AS count FROM users', (err, row) => {
+            if (err) resolve(0);
+            else resolve(row?.count || 0);
+          });
+        }),
+        new Promise((resolve) => {
+          db.get('SELECT COUNT(*) AS count FROM Server', (err, row) => {
+            if (err) resolve(0);
+            else resolve(row?.count || 0);
+          });
+        })
+      ]);
+
+      jumlahPengguna = userCount;
+      jumlahServer = serverCount;
+    } catch (e) {
+      logger.error(`❌ Gagal ambil data jumlah user/server: ${e.message}`);
+    }
 
     const [tombolTrialAktif, tombolSewaScriptAktif, isUnlimited] = await Promise.all([
       new Promise((resolve) => {
@@ -3638,6 +3533,8 @@ async function sendMainMenu(ctx) {
 
 🧭 <b>ɪɴꜰᴏʀᴍᴀꜱɪ ᴀᴋᴜɴ</b>
 ┏━━━━━━━━━━━━━━━━━━━━━┓
+┃ 💰 <b>ꜱᴀʟᴅᴏ:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>
+┃ ${statusText}
 ┃ 🌐 <b>ᴜꜱᴇʀɴᴀᴍᴇ:</b> ${userName}
 ┃ 🆔 <b>ɪᴅ ᴘᴇɴɢɢᴜɴᴀ:</b> <code>${userId}</code>
 ┗━━━━━━━━━━━━━━━━━━━━━┛
@@ -3704,7 +3601,7 @@ finalKeyboard.push([
 
 finalKeyboard.push([
   {
-    text: '💰 TopUp Salldo',
+    text: '💰 TopUp Saldo',
     callback_data: 'menu_topup',
     style: 'success'
   }
@@ -4648,7 +4545,7 @@ bot.action('menu_riwayat_transaksi', async (ctx) => {
       gabung.push({
         waktu: row.waktu,
         text:
-`💳 <b>TOP UP SALLDO</b>
+`💳 <b>TOP UP SALDO</b>
 ┣ 💰 Nominal: <code>Rp${Number(row.amount || 0).toLocaleString('id-ID')}</code>
 ┣ 🏦 Metode: <code>${row.method || '-'}</code>
 ┗ 🕒 Waktu: <code>${formatTanggalIndonesia(row.waktu)}</code>`
