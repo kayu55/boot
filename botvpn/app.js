@@ -1788,7 +1788,219 @@ async function sendBackupToAdmin(
 }
 
 
+// ============================================================
+// 🔐 REQUIRED JOIN GATE
+// 📢 CHANNEL + 👥 GROUP
+// ============================================================
 
+const REQUIRED_CHANNEL =
+    `@${CHANNEL_USERNAME}`;
+
+const REQUIRED_GROUP =
+    `@${GROUP_USERNAME}`;
+
+
+// ============================================================
+// 🔗 CHANNEL & GROUP LINK
+// ============================================================
+
+const channelLink =
+    `https://t.me/${CHANNEL_USERNAME}`;
+
+const groupLink =
+    `https://t.me/${GROUP_USERNAME}`;
+
+
+// ============================================================
+// 🚪 SEND JOIN GATE
+// ============================================================
+
+async function sendJoinGate(ctx) {
+
+    // ========================================================
+    // 📝 JOIN GATE MESSAGE
+    // ========================================================
+
+    const gateText =
+`🔔 *Selamat Datang Di ${NAMA_STORE} 🤗*
+
+\`\`\`
+Untuk menggunakan bot ini, Anda harus bergabung
+dengan komunitas kami terlebih dahulu.
+\`\`\`
+
+📢 *Channel*: ${REQUIRED_CHANNEL}
+👥 *Group*  : ${REQUIRED_GROUP}
+
+Silakan gabung ke keduanya, lalu tekan tombol
+"✅ Saya Sudah Bergabung" di bawah ini untuk lanjut.`;
+
+
+try {
+
+    // ====================================================
+    // 📤 SEND JOIN GATE MESSAGE
+    // ====================================================
+
+    await ctx.reply(
+        gateText,
+        {
+            parse_mode: 'Markdown',
+            disable_web_page_preview: true,
+
+            reply_markup: {
+                inline_keyboard: [
+
+                    // ------------------------------------
+                    // 📢 JOIN CHANNEL
+                    // 🔵 BIRU
+                    // ------------------------------------
+
+                    [
+                        {
+                            text: '🔗 Gabung Channel kami',
+                            url: channelLink,
+                            style: 'primary'
+                        }
+                    ],
+
+                    // ------------------------------------
+                    // 👥 JOIN GROUP
+                    // 🔵 BIRU
+                    // ------------------------------------
+
+                    [
+                        {
+                            text: '💬 Gabung Group kami',
+                            url: groupLink,
+                            style: 'primary'
+                        }
+                    ],
+
+                    // ------------------------------------
+                    // ✅ CONTINUE
+                    // 🟢 HIJAU
+                    // ------------------------------------
+
+                    [
+                        {
+                            text: '✅ Saya Sudah Bergabung, Lanjutkan',
+                            callback_data: 'continue_after_join',
+                            style: 'success'
+                        }
+                    ]
+
+                ]
+            }
+        }
+    );
+
+} catch (e) {
+
+    // ====================================================
+    // ❌ JOIN GATE ERROR
+    // ====================================================
+
+    logger.error(
+        'Gagal mengirim Join Gate: ' +
+        e.message
+    );
+
+}
+}
+
+// ============================================================
+// 👥 CHECK CHANNEL & GROUP MEMBERSHIP
+// ============================================================
+
+async function checkMembership(ctx) {
+
+    // ========================================================
+    // 🆔 GET USER ID
+    // ========================================================
+
+    const userId =
+        ctx.from?.id;
+
+    if (!userId) {
+        return false;
+    }
+
+
+    try {
+
+        // ====================================================
+        // 📢 CHECK CHANNEL MEMBERSHIP
+        // ====================================================
+
+        const ch =
+            await ctx.telegram.getChatMember(
+                REQUIRED_CHANNEL,
+                userId
+            );
+
+
+        // ====================================================
+        // 👥 CHECK GROUP MEMBERSHIP
+        // ====================================================
+
+        const gr =
+            await ctx.telegram.getChatMember(
+                REQUIRED_GROUP,
+                userId
+            );
+
+
+        // ====================================================
+        // 📝 LOG MEMBERSHIP STATUS
+        // ====================================================
+
+        logger.info(
+            `Status channel user ${userId}: ${ch?.status}`
+        );
+
+        logger.info(
+            `Status group user ${userId}: ${gr?.status}`
+        );
+
+
+        // ====================================================
+        // ✅ VALID MEMBERSHIP STATUS
+        // ====================================================
+
+        const okStatus =
+            new Set([
+                'creator',
+                'administrator',
+                'member',
+                'restricted'
+            ]);
+
+
+        // ====================================================
+        // 🔍 CHECK BOTH MEMBERSHIPS
+        // ====================================================
+
+        return (
+            okStatus.has(ch?.status) &&
+            okStatus.has(gr?.status)
+        );
+
+
+    } catch (e) {
+
+        // ====================================================
+        // ⚠️ MEMBERSHIP CHECK ERROR
+        // ====================================================
+
+        logger.warn(
+            'checkMembership warn: ' +
+            e.message
+        );
+
+        return false;
+    }
+}
 // ============================================================
 // 📡 MENU CEK KUOTA XL / AXIS
 // ============================================================
@@ -3212,6 +3424,171 @@ logger.info(
 );
 
 
+// ============================================================
+// 🤖 HANDLER /START & /MENU
+// 🔐 DENGAN GATE WAJIB JOIN
+// ============================================================
+
+bot.command(
+    ['start', 'menu'],
+    async (ctx) => {
+
+        // ====================================================
+        // 📥 COMMAND RECEIVED
+        // ====================================================
+
+        logger.info(
+            '📥 Perintah /start atau /menu diterima'
+        );
+
+
+        // ====================================================
+        // 🆔 GET USER & CHAT ID
+        // ====================================================
+
+        const userId =
+            ctx.from.id;
+
+        const chatId =
+            ctx.chat.id;
+
+
+        // ====================================================
+        // 🧹 DELETE USER COMMAND MESSAGE
+        // ====================================================
+
+        try {
+
+            await ctx.telegram.deleteMessage(
+                chatId,
+                ctx.message.message_id
+            );
+
+        } catch (e) {
+
+            // Ignore delete message error
+
+        }
+
+
+        // ====================================================
+        // 👥 CHECK CHANNEL & GROUP MEMBERSHIP
+        // ====================================================
+
+        const joined =
+            await checkMembership(ctx);
+
+
+        // ====================================================
+        // 🚪 USER BELUM JOIN
+        // ====================================================
+
+        if (!joined) {
+
+            return sendJoinGate(ctx);
+
+        }
+
+
+        // ====================================================
+        // 👤 REGISTER / CHECK USER DATABASE
+        // ====================================================
+
+        await new Promise(
+            (resolve) => {
+
+                db.get(
+                    'SELECT * FROM users WHERE user_id = ?',
+
+                    [userId],
+
+                    (err, row) => {
+
+                        // ==========================================
+                        // ❌ DATABASE ERROR
+                        // ==========================================
+
+                        if (err) {
+
+                            logger.error(
+                                '❌ Kesalahan saat memeriksa user_id:',
+                                err.message
+                            );
+
+                            resolve();
+
+                            return;
+                        }
+
+
+                        // ==========================================
+                        // 🆕 USER BELUM TERDAFTAR
+                        // ==========================================
+
+                        if (!row) {
+
+                            db.run(
+                                'INSERT INTO users (user_id, role) VALUES (?, ?)',
+
+                                [
+                                    userId,
+                                    'member'
+                                ],
+
+                                (err) => {
+
+                                    if (err) {
+
+                                        logger.error(
+                                            '❌ Gagal menyimpan user_id:',
+                                            err.message
+                                        );
+
+                                    } else {
+
+                                        logger.info(
+                                            `✅ User ID ${userId} berhasil disimpan`
+                                        );
+
+                                    }
+
+                                    resolve();
+
+                                }
+                            );
+
+                        }
+
+
+                        // ==========================================
+                        // 👤 USER SUDAH TERDAFTAR
+                        // ==========================================
+
+                        else {
+
+                            logger.info(
+                                `ℹ️ User ID ${userId} sudah ada`
+                            );
+
+                            resolve();
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+
+        // ====================================================
+        // 🏠 SEND MAIN MENU
+        // ====================================================
+
+        await sendMainMenu(ctx);
+
+    }
+);
 
 
 // ============================================================
