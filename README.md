@@ -25,5 +25,13 @@ service cron restart
 ````
 
 
+## Auto-start on reboot
+
+````
+pm2 startup
+````
+````
+pm2 save
+````
 
 
