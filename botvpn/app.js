@@ -13414,8 +13414,8 @@ async function checkQRISStatusGopay() {
 
       const depositAge = now - deposit.timestamp;
 
-      // EXPIRED 5 MENIT
-      if (depositAge > 5 * 60 * 1000) {
+      // EXPIRED 10 MENIT
+      if (depositAge > 10 * 60 * 1000) {
         logger.info(`⌛ EXPIRED GOPAY | ${uniqueCode}`);
 
         deposit.status = 'expired';
@@ -13425,7 +13425,7 @@ async function checkQRISStatusGopay() {
             deposit.userId,
             deposit.qrMessageId,
             null,
-            '❌ *QRIS GOPAY sudah expired (5 menit)*',
+            '❌ *QRIS GOPAY sudah expired (10 menit)*',
             { parse_mode: 'Markdown' }
           );
         } catch (e) {
