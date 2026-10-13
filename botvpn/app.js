@@ -3970,7 +3970,7 @@ finalKeyboard.push([
 
 finalKeyboard.push([
   {
-    text: '📡 Cek Kuota XL/AXIS',
+    text: '📡 Ayo Cek Kuota XL/AXIS',
     callback_data: 'menu_cek_kuota',
     style: 'primary'
   }
@@ -7036,7 +7036,7 @@ async function processDepositSaweria(ctx, amount) {
 🏷️ *» Waktu:* ${timestamp}
 
 🏷️ *» Silahkan scan QR berikut untuk membayar melalui QRIS.*
-🏷️ *» Expired:* 5 menit dari sekarang`,
+🏷️ *» Expired:* 10 menit dari sekarang`,
       parse_mode: 'Markdown',
     });
 
@@ -12494,7 +12494,7 @@ async function processDepositGopay(ctx, amount) {
       ``,
       `💵 ɴᴏᴍɪɴᴀʟ: *Rp ${finalAmount}*`,
       `🆔 ʀᴇꜰꜰ: \`${String(reff)}\``,
-      `⏳ ʙᴀᴛᴀꜱ ᴡᴀᴋᴛᴜ: *5 ᴍᴇɴɪᴛ*`,
+      `⏳ ʙᴀᴛᴀꜱ ᴡᴀᴋᴛᴜ: *10 ᴍᴇɴɪᴛ*`,
       `⚠️ ᴛʀᴀɴꜱꜰᴇʀ *ʜᴀʀᴜꜱ ꜱᴇꜱᴜᴀɪ ɴᴏᴍɪɴᴀʟ*`,
       ``,
       `✅ ᴘᴇᴍʙᴀʏᴀʀᴀɴ ᴏᴛᴏᴍᴀᴛɪꜱ`,
@@ -12677,7 +12677,7 @@ const payment = {
   fee,
   total_payment: finalAmount,
   order_id: uniqueCode,
-  expired_at: new Date(Date.now() + 5 * 60 * 1000).toISOString()
+  expired_at: new Date(Date.now() + 10 * 60 * 1000).toISOString()
 };
 
 const qrisImage = await generateQrisTemplate(payment);
@@ -13624,8 +13624,8 @@ async function checkQRISStatus() {
 
       const depositAge = Date.now() - deposit.timestamp;
 
-      // Expired 5 menit
-      if (depositAge > 5 * 60 * 1000) {
+      // Expired 10 menit
+      if (depositAge > 10 * 60 * 1000) {
         try {
           if (deposit.qrMessageId) {
             await bot.telegram.deleteMessage(
