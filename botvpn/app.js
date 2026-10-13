@@ -7061,8 +7061,8 @@ setInterval(async () => {
 
       const depositAge = Date.now() - dep.created_at;
 
-      // ⏳ Jika sudah lebih dari 5 menit = expired
-      if (depositAge > 5 * 60 * 1000) {
+      // ⏳ Jika sudah lebih dari 10 menit = expired
+      if (depositAge > 10 * 60 * 1000) {
         try {
           if (dep.qrMessageId) {
             await bot.telegram.deleteMessage(dep.userId, dep.qrMessageId).catch(e =>
