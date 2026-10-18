@@ -9149,7 +9149,7 @@ await ctx.reply(result.message, {
       [
         {
           text: 'Kembali Ke Menu Utama',
-          callback_data: 'kembali_ke_menu',
+          callback_data: 'send_main_menu',
           style: 'primary'
         }
       ]
@@ -10043,7 +10043,7 @@ await ctx.reply(msg, {
                     [
                         {
                             text: "Kembali Ke Menu Utama",
-                            callback_data: "kembali_ke_menu",
+                            callback_data: "send_main_menu",
                             style: "primary"
                         }
                     ]
