@@ -9148,9 +9148,9 @@ await ctx.reply(result.message, {
     inline_keyboard: [
       [
         {
-          text: 'TEAM SUCCES 🙏',
-          callback_data: 'close_convert',
-          style: 'danger'
+          text: 'Kembali Ke Menu Utama',
+          callback_data: 'kembali_ke_menu',
+          style: 'primary'
         }
       ]
     ]
@@ -10042,9 +10042,9 @@ await ctx.reply(msg, {
                 inline_keyboard: [
                     [
                         {
-                            text: "TEAM SUCCES 🤝",
-                            callback_data: "close_convert",
-                            style: "danger"
+                            text: "Kembali Ke Menu Utama",
+                            callback_data: "kembali_ke_menu",
+                            style: "primary"
                         }
                     ]
                 ]
