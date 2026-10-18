@@ -14,10 +14,6 @@ const fetch = require('node-fetch');
 const FormData = require('form-data');
 const winston = require('winston');
 const { exec } = require('child_process');
-const {
-    createHcFile,
-    deleteHcFile
-} = require("./modules/hc_converter");
 
 
 // ============================================================
