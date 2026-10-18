@@ -9148,7 +9148,7 @@ await ctx.reply(result.message, {
     inline_keyboard: [
       [
         {
-          text: 'Kembali Ke Menu Utama',
+          text: '🔙 Kembali Ke Menu Utama',
           callback_data: 'send_main_menu',
           style: 'primary'
         }
@@ -10042,7 +10042,7 @@ await ctx.reply(msg, {
                 inline_keyboard: [
                     [
                         {
-                            text: "Kembali Ke Menu Utama",
+                            text: "🔙 Kembali Ke Menu Utama",
                             callback_data: "send_main_menu",
                             style: "primary"
                         }
