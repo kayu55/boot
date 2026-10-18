@@ -9140,42 +9140,7 @@ async function handleTrial(ctx, type, serverId) {
 
       console.log("CONFIG TERSIMPAN:");
       console.log(global.userConfigs[ctx.from.id]);
-    }
-
-await ctx.reply(result.message, {
-  parse_mode: 'Markdown',
-  reply_markup: {
-    inline_keyboard: [
-      [
-        {
-          text: '📲 HTTP Custom',
-          callback_data: 'convert_hc',
-          style: 'primary'
-        },
-        {
-          text: '🌐 NetMod',
-          callback_data: 'convert_nm',
-          style: 'primary'
-        }
-      ],
-      [
-        {
-          text: '📦 Clash',
-          callback_data: 'convert_clash',
-          style: 'primary'
-        },
-        {
-          text: '⚡ V2Ray',
-          callback_data: 'convert_yaml',
-          style: 'primary'
-        }
-      ],
-      [
-        {
-          text: '❌ Tutup',
-          callback_data: 'close_convert',
-          style: 'danger'
-        }
+      }
       ]
     ]
   }
@@ -10058,47 +10023,6 @@ await afterAccountTransaction({
     accountUsername: state.username
 });
 
-await ctx.reply(msg, {
-    parse_mode: 'Markdown',
-    reply_markup:
-        state.action === "create" && result?.config
-            ? {
-                inline_keyboard: [
-                    [
-                        {
-                            text: "📲 HTTP Custom",
-                            callback_data: "convert_hc",
-                            style: "primary"
-                        },
-                        {
-                            text: "🌐 NetMod",
-                            callback_data: "convert_nm",
-                            style: "primary"
-                        }
-                    ],
-                    [
-                        {
-                            text: "📦 Clash",
-                            callback_data: "convert_clash",
-                            style: "primary"
-                        },
-                        {
-                            text: "⚡ V2Ray",
-                            callback_data: "convert_yaml",
-                            style: "primary"
-                        }
-                    ],
-                    [
-                        {
-                            text: "❌ Tutup",
-                            callback_data: "close_convert",
-                            style: "danger"
-                        }
-                    ]
-                ]
-            }
-            : undefined
-});
 
 delete userState[userId];
             });
