@@ -9148,9 +9148,33 @@ await ctx.reply(result.message, {
     inline_keyboard: [
       [
         {
-          text: '🔙 Kembali Ke Menu Utama',
-          callback_data: 'send_main_menu',
+          text: '📲 HTTP Custom',
+          callback_data: 'convert_hc',
           style: 'primary'
+        },
+        {
+          text: '🌐 NetMod',
+          callback_data: 'convert_nm',
+          style: 'primary'
+        }
+      ],
+      [
+        {
+          text: '📦 Clash',
+          callback_data: 'convert_clash',
+          style: 'primary'
+        },
+        {
+          text: '⚡ V2Ray',
+          callback_data: 'convert_yaml',
+          style: 'primary'
+        }
+      ],
+      [
+        {
+          text: '❌ Tutup',
+          callback_data: 'close_convert',
+          style: 'danger'
         }
       ]
     ]
@@ -10042,9 +10066,33 @@ await ctx.reply(msg, {
                 inline_keyboard: [
                     [
                         {
-                            text: "🔙 Kembali Ke Menu Utama",
-                            callback_data: "send_main_menu",
+                            text: "📲 HTTP Custom",
+                            callback_data: "convert_hc",
                             style: "primary"
+                        },
+                        {
+                            text: "🌐 NetMod",
+                            callback_data: "convert_nm",
+                            style: "primary"
+                        }
+                    ],
+                    [
+                        {
+                            text: "📦 Clash",
+                            callback_data: "convert_clash",
+                            style: "primary"
+                        },
+                        {
+                            text: "⚡ V2Ray",
+                            callback_data: "convert_yaml",
+                            style: "primary"
+                        }
+                    ],
+                    [
+                        {
+                            text: "❌ Tutup",
+                            callback_data: "close_convert",
+                            style: "danger"
                         }
                     ]
                 ]
