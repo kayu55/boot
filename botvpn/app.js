@@ -3970,7 +3970,7 @@ finalKeyboard.push([
 
 finalKeyboard.push([
   {
-    text: '📡 Cek Kuota XL/AXIS',
+    text: '📡 Ayo Cek Kuota XL/AXIS',
     callback_data: 'menu_cek_kuota',
     style: 'primary'
   }
@@ -7036,7 +7036,7 @@ async function processDepositSaweria(ctx, amount) {
 🏷️ *» Waktu:* ${timestamp}
 
 🏷️ *» Silahkan scan QR berikut untuk membayar melalui QRIS.*
-🏷️ *» Expired:* 5 menit dari sekarang`,
+🏷️ *» Expired:* 10 menit dari sekarang`,
       parse_mode: 'Markdown',
     });
 
@@ -7061,8 +7061,8 @@ setInterval(async () => {
 
       const depositAge = Date.now() - dep.created_at;
 
-      // ⏳ Jika sudah lebih dari 5 menit = expired
-      if (depositAge > 5 * 60 * 1000) {
+      // ⏳ Jika sudah lebih dari 10 menit = expired
+      if (depositAge > 10 * 60 * 1000) {
         try {
           if (dep.qrMessageId) {
             await bot.telegram.deleteMessage(dep.userId, dep.qrMessageId).catch(e =>
@@ -9037,8 +9037,8 @@ bot.action(/^(create|renew|trial)_username_(vmess|vless|trojan|shadowsocks|ssh)_
 
         const isUnlimited = result != null;
 
-        if (!isUnlimited && trialCount >= 2) {
-          return ctx.reply('⚠️ *Kamu sudah trial hari ini, Gass Order* 😖', { parse_mode: 'Markdown' });
+        if (!isUnlimited && trialCount >= 1) {
+          return ctx.reply('⚠️ *Kamu sudah trial hari ini sayank, Gass Order* 😖', { parse_mode: 'Markdown' });
         }
 
         await handleTrial(ctx, type, serverId);
@@ -9148,33 +9148,9 @@ await ctx.reply(result.message, {
     inline_keyboard: [
       [
         {
-          text: '📲 HTTP Custom',
-          callback_data: 'convert_hc',
+          text: '🔙 Kembali Ke Menu Utama',
+          callback_data: 'send_main_menu',
           style: 'primary'
-        },
-        {
-          text: '🌐 NetMod',
-          callback_data: 'convert_nm',
-          style: 'primary'
-        }
-      ],
-      [
-        {
-          text: '📦 Clash',
-          callback_data: 'convert_clash',
-          style: 'primary'
-        },
-        {
-          text: '⚡ V2Ray',
-          callback_data: 'convert_yaml',
-          style: 'primary'
-        }
-      ],
-      [
-        {
-          text: '❌ Tutup',
-          callback_data: 'close_convert',
-          style: 'danger'
         }
       ]
     ]
@@ -9324,9 +9300,9 @@ if (global.depositState && (
     const input = ctx.message.text.trim();
     const nominal = parseInt(input.replace(/[^\d]/g, ''), 10);
 
-    if (isNaN(nominal) || nominal < 100) {
+    if (isNaN(nominal) || nominal < 5000) {
         return ctx.reply(
-            '❌ *Nominal tidak valid. Minimal Rp100.*',
+            '❌ *Nominal tidak valid. Minimal Rp5000.*',
             { parse_mode: 'Markdown' }
         );
     }
@@ -10066,33 +10042,9 @@ await ctx.reply(msg, {
                 inline_keyboard: [
                     [
                         {
-                            text: "📲 HTTP Custom",
-                            callback_data: "convert_hc",
+                            text: "🔙 Kembali Ke Menu Utama",
+                            callback_data: "send_main_menu",
                             style: "primary"
-                        },
-                        {
-                            text: "🌐 NetMod",
-                            callback_data: "convert_nm",
-                            style: "primary"
-                        }
-                    ],
-                    [
-                        {
-                            text: "📦 Clash",
-                            callback_data: "convert_clash",
-                            style: "primary"
-                        },
-                        {
-                            text: "⚡ V2Ray",
-                            callback_data: "convert_yaml",
-                            style: "primary"
-                        }
-                    ],
-                    [
-                        {
-                            text: "❌ Tutup",
-                            callback_data: "close_convert",
-                            style: "danger"
                         }
                     ]
                 ]
@@ -11444,7 +11396,7 @@ const sent = await ctx.reply(
 ⚡ *ꜱɪʟᴀʜᴋᴀɴ ᴋᴇᴛɪᴋ ɴᴏᴍɪɴᴀʟ ᴛᴏᴘ-ᴜᴘ*  
 ʏᴀɴɢ ɪɴɢɪɴ ᴀɴᴅᴀ ʙᴀʏᴀʀᴋᴀɴ ᴍᴇʟᴀʟᴜɪ ᴍᴇᴛᴏᴅᴇ Qʀɪꜱ Oʀᴋᴜᴛ.  
 
-💰 ᴍɪɴɪᴍᴀʟ ᴛᴏᴘ-ᴜᴘ: *Rp 100*  
+💰 ᴍɪɴɪᴍᴀʟ ᴛᴏᴘ-ᴜᴘ: *Rp 5000*  
 🧾 ᴄᴏɴᴛᴏʜ: \`10000\`
 
 ━━━━━━━━━━━━━━━━━━━━━━━
@@ -11539,8 +11491,8 @@ bot.action('topup_shopeepay', async (ctx) => {
 
 ⚡ *Sɪʟᴀʜᴋᴀɴ Kᴇᴛɪᴋ Nᴏᴍɪɴᴀʟ Tᴏᴘ-ᴜᴘ*
 
-💰 *Minimal top-up:* Rp 100
-🧾 *Contoh:* \`10000\`
+💰 ᴍɪɴɪᴍᴀʟ ᴛᴏᴘ-ᴜᴘ: *Rp 5000*  
+🧾 ᴄᴏɴᴛᴏʜ: \`10000\`
 
 ━━━━━━━━━━━━━━━━━━━━━━━
 ⌛ Kᴇᴍᴜᴅɪᴀɴ ᴛᴜɴɢɢᴜ ᴘʀᴏsᴇs ᴏᴛᴏᴍᴀᴛɪs.
@@ -12494,7 +12446,7 @@ async function processDepositGopay(ctx, amount) {
       ``,
       `💵 ɴᴏᴍɪɴᴀʟ: *Rp ${finalAmount}*`,
       `🆔 ʀᴇꜰꜰ: \`${String(reff)}\``,
-      `⏳ ʙᴀᴛᴀꜱ ᴡᴀᴋᴛᴜ: *5 ᴍᴇɴɪᴛ*`,
+      `⏳ ʙᴀᴛᴀꜱ ᴡᴀᴋᴛᴜ: *10 ᴍᴇɴɪᴛ*`,
       `⚠️ ᴛʀᴀɴꜱꜰᴇʀ *ʜᴀʀᴜꜱ ꜱᴇꜱᴜᴀɪ ɴᴏᴍɪɴᴀʟ*`,
       ``,
       `✅ ᴘᴇᴍʙᴀʏᴀʀᴀɴ ᴏᴛᴏᴍᴀᴛɪꜱ`,
@@ -12677,7 +12629,7 @@ const payment = {
   fee,
   total_payment: finalAmount,
   order_id: uniqueCode,
-  expired_at: new Date(Date.now() + 5 * 60 * 1000).toISOString()
+  expired_at: new Date(Date.now() + 10 * 60 * 1000).toISOString()
 };
 
 const qrisImage = await generateQrisTemplate(payment);
@@ -13414,8 +13366,8 @@ async function checkQRISStatusGopay() {
 
       const depositAge = now - deposit.timestamp;
 
-      // EXPIRED 5 MENIT
-      if (depositAge > 5 * 60 * 1000) {
+      // EXPIRED 10 MENIT
+      if (depositAge > 10 * 60 * 1000) {
         logger.info(`⌛ EXPIRED GOPAY | ${uniqueCode}`);
 
         deposit.status = 'expired';
@@ -13425,7 +13377,7 @@ async function checkQRISStatusGopay() {
             deposit.userId,
             deposit.qrMessageId,
             null,
-            '❌ *QRIS GOPAY sudah expired (5 menit)*',
+            '❌ *QRIS GOPAY sudah expired (10 menit)*',
             { parse_mode: 'Markdown' }
           );
         } catch (e) {
@@ -13624,8 +13576,8 @@ async function checkQRISStatus() {
 
       const depositAge = Date.now() - deposit.timestamp;
 
-      // Expired 5 menit
-      if (depositAge > 5 * 60 * 1000) {
+      // Expired 10 menit
+      if (depositAge > 10 * 60 * 1000) {
         try {
           if (deposit.qrMessageId) {
             await bot.telegram.deleteMessage(
