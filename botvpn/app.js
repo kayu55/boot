@@ -9300,9 +9300,9 @@ if (global.depositState && (
     const input = ctx.message.text.trim();
     const nominal = parseInt(input.replace(/[^\d]/g, ''), 10);
 
-    if (isNaN(nominal) || nominal < 100) {
+    if (isNaN(nominal) || nominal < 5000) {
         return ctx.reply(
-            '❌ *Nominal tidak valid. Minimal Rp100.*',
+            '❌ *Nominal tidak valid. Minimal Rp5000.*',
             { parse_mode: 'Markdown' }
         );
     }
@@ -9597,7 +9597,7 @@ if (state && state.step === 'atur_bonus_input') {
 
     if (!status || isNaN(min) || isNaN(persen) || !durasiStr) {
         return ctx.reply(
-            '⚠️ Format salah.\n\nGunakan:\n`on|off <minimal_topup> <persen_bonus> <durasi>`\n\nContoh:\n`on 10000 25 7d`\n`on 100 10 12h`\n`off 0 0 0`',
+            '⚠️ Format salah.\n\nGunakan:\n`on|off <minimal_topup> <persen_bonus> <durasi>`\n\nContoh:\n`on 10000 25 7d`\n`on 5000 10 12h`\n`off 0 0 0`',
             { parse_mode: 'Markdown' }
         );
     }
@@ -10484,7 +10484,7 @@ bot.action("convert_hc", async (ctx) => {
                 result.outputPath
             );
 
-        }, 100);
+        }, 5000);
 
     } catch (error) {
 
@@ -11396,7 +11396,7 @@ const sent = await ctx.reply(
 ⚡ *ꜱɪʟᴀʜᴋᴀɴ ᴋᴇᴛɪᴋ ɴᴏᴍɪɴᴀʟ ᴛᴏᴘ-ᴜᴘ*  
 ʏᴀɴɢ ɪɴɢɪɴ ᴀɴᴅᴀ ʙᴀʏᴀʀᴋᴀɴ ᴍᴇʟᴀʟᴜɪ ᴍᴇᴛᴏᴅᴇ Qʀɪꜱ Oʀᴋᴜᴛ.  
 
-💰 ᴍɪɴɪᴍᴀʟ ᴛᴏᴘ-ᴜᴘ: *Rp 100*  
+💰 ᴍɪɴɪᴍᴀʟ ᴛᴏᴘ-ᴜᴘ: *Rp 5000*  
 🧾 ᴄᴏɴᴛᴏʜ: \`10000\`
 
 ━━━━━━━━━━━━━━━━━━━━━━━
@@ -11491,7 +11491,7 @@ bot.action('topup_shopeepay', async (ctx) => {
 
 ⚡ *Sɪʟᴀʜᴋᴀɴ Kᴇᴛɪᴋ Nᴏᴍɪɴᴀʟ Tᴏᴘ-ᴜᴘ*
 
-💰 ᴍɪɴɪᴍᴀʟ ᴛᴏᴘ-ᴜᴘ: *Rp 100*  
+💰 ᴍɪɴɪᴍᴀʟ ᴛᴏᴘ-ᴜᴘ: *Rp 5000*  
 🧾 ᴄᴏɴᴛᴏʜ: \`10000\`
 
 ━━━━━━━━━━━━━━━━━━━━━━━
@@ -11671,7 +11671,7 @@ on|off minimal bonus durasi
 
 Contoh:
 on 10000 25 7d
-on 15000 10 12h
+on 5000 10 12h
 off 0 0 0
 
 Keterangan:
@@ -14990,7 +14990,7 @@ setInterval(async () => {
 
   }
 
-}, 100);
+}, 5000);
 
 
 // ============================================================
