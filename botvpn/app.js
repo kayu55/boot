@@ -3905,11 +3905,10 @@ async function sendMainMenu(ctx) {
     else statusText = `👤 <b>ꜱᴛᴀᴛᴜꜱ:</b> <code>Member</code>`;
 
     const messageText = `
-<blockquote>✦ <b> ${NAMA_STORE} · VIP EDITION </b> ✦
-Selamat datang di layanan digital premium kami.
-VPN • DIGITAL STORE • FAST SERVICE</blockquote>
+<blockquote>ꜱᴇʟᴀᴍᴀᴛ ᴅᴀᴛᴀɴɢ ᴅɪ <b>${NAMA_STORE}</b> 💎
+ɴɪᴋᴍᴀᴛɪ ᴘᴇɴɢᴀʟᴀᴍᴀɴ ᴍᴇᴍʙᴇʟɪ ᴀᴋᴜɴ ᴠᴘɴ ᴛᴇʀᴄᴇᴘᴀᴛ, ᴀᴍᴀɴ, ᴅᴀɴ ᴀᴜᴛᴏᴍᴀᴛɪꜱ 🚀</blockquote>
 
-✧ <b>MEMBER DASHBOARD</b>
+🧭 <b>ɪɴꜰᴏʀᴍᴀꜱɪ ᴀᴋᴜɴ</b>
 ┏━━━━━━━━━━━━━━━━━━━━━┓
 ┃ 💰 <b>ꜱᴀʟᴅᴏ:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>
 ┃ ${statusText}
@@ -3917,7 +3916,7 @@ VPN • DIGITAL STORE • FAST SERVICE</blockquote>
 ┃ 🆔 <b>ɪᴅ ᴘᴇɴɢɢᴜɴᴀ:</b> <code>${userId}</code>
 ┗━━━━━━━━━━━━━━━━━━━━━┛
 
-✧ <b>SYSTEM & SERVER STATUS</b>
+🕒 <b>ᴡᴀᴋᴛᴜ & ꜱᴇʀᴠᴇʀ</b>
 ┏━━━━━━━━━━━━━━━━━━━━━┓
 ┃ 🧭 ᴡᴀᴋᴛᴜ: <code>${timeNow} WIB</code>
 ┃ 📅 ᴛᴀɴɢɢᴀʟ: <code>${currentDay}, ${currentDate}</code>
@@ -3925,13 +3924,13 @@ VPN • DIGITAL STORE • FAST SERVICE</blockquote>
 ┃ ⏱️ <b>ʙᴏᴛ ᴀᴋᴛɪꜰ:</b> <code>${uptimeFormatted}</code>
 ┗━━━━━━━━━━━━━━━━━━━━━┛
 
-✧ <b>VIP CUSTOMER SUPPORT</b>
+☎️ <b>ʜᴜʙᴜɴɢɪ ᴀᴅᴍɪɴ</b>
 <a href="https://t.me/${adminUsername}">╰📨 @${adminUsername}</a>
 
-━━━━━━━━━━━━━━━━━━━━━━
-<code>BLACK & GOLD · PREMIUM DIGITAL SERVICE</code>
-<code>POWERED BY ${NAMA_STORE}</code>
-━━━━━━━━━━━━━━━━━━━━━━
+📦━━━━━━━━━━━━━━━━━━━━━📦
+     <code>  💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ </code>
+     <code>  📢 ᵂᴬ 081450330727 </code>
+📦━━━━━━━━━━━━━━━━━━━━━📦
 `;
 
     const finalKeyboard = [];
@@ -3939,7 +3938,7 @@ VPN • DIGITAL STORE • FAST SERVICE</blockquote>
 if (bolehLihatTrial) {
   finalKeyboard.push([
     {
-      text: '♛ VPN PREMIUM',
+      text: '🌐 Menu VPN',
       callback_data: 'menu_vpn',
       style: 'success'
     }
@@ -3949,7 +3948,7 @@ if (bolehLihatTrial) {
 if (tombolSewaScriptAktif) {
   finalKeyboard.push([
     {
-      text: '✦ SEWA SCRIPT',
+      text: '🛒 Sewa Script',
       callback_data: 'service_sewascript',
       style: 'primary'
     }
@@ -3958,12 +3957,12 @@ if (tombolSewaScriptAktif) {
 
 finalKeyboard.push([
   {
-    text: '📜 RIWAYAT',
+    text: '📜 Riwayat Transaksi',
     callback_data: 'menu_riwayat_transaksi',
     style: 'primary'
   },
   {
-    text: '📊 STATISTIK',
+    text: '📊 Cek Statistik',
     callback_data: 'menu_statistik',
     style: 'primary'
   }
@@ -3971,20 +3970,15 @@ finalKeyboard.push([
 
 finalKeyboard.push([
   {
-    text: '📡 CEK KUOTA',
+    text: '📡 Ayo Cek Kuota XL/AXIS',
     callback_data: 'menu_cek_kuota',
-    style: 'primary'
-  },
-  {
-    text: '♛ PPOB STORE',
-    callback_data: 'home',
     style: 'primary'
   }
 ]);
 
 finalKeyboard.push([
   {
-    text: '◆ TOPUP SALDO VPN',
+    text: '💰 TopUp Saldo',
     callback_data: 'menu_topup',
     style: 'success'
   }
@@ -4056,33 +4050,33 @@ if (ctx.callbackQuery?.message?.message_id) {
     inline_keyboard: [
       [
         {
-          text: '✦ TRIAL AKUN',
+          text: '💠 Trial Akun',
           callback_data: 'menu_trial',
           style: 'success'
         }
       ],
       [
         {
-          text: '✦ CREATE AKUN',
+          text: '✏️ Buat Akun',
           callback_data: 'menu_create',
           style: 'primary'
         },
         {
-          text: '✦ RENEW AKUN',
+          text: '♻️ Renew Akun',
           callback_data: 'menu_renew',
           style: 'primary'
         }
       ],
       [
         {
-          text: '✦ AKUN SAYA',
+          text: '📡 Akun Saya',
           callback_data: 'menu_akun_saya',
           style: 'success'
         }
       ],
       [
         {
-          text: '‹ KEMBALI KE MENU UTAMA',
+          text: '🔙 Kembali ke Menu Utama',
           callback_data: 'send_main_menu',
           style: 'danger'
         }
@@ -4684,7 +4678,6 @@ bot.action('menu_trial', async (ctx) => {
 • VMESS
 • VLESS
 • TROJAN
-• SHADOWSOCKS
 `;
 
 const keyboard = [
@@ -4709,13 +4702,6 @@ const keyboard = [
     {
       text: '🔥 TROJAN Trial',
       callback_data: 'trial_trojan',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🌙 SHADOWSOCKS Trial',
-      callback_data: 'trial_shadowsocks',
       style: 'primary'
     }
   ],
@@ -4764,7 +4750,6 @@ bot.action('menu_create', async (ctx) => {
 • VMESS
 • VLESS
 • TROJAN
-• SHADOWSOCKS
 `;
 
 const keyboard = [
@@ -4789,13 +4774,6 @@ const keyboard = [
     {
       text: '🔥 TROJAN',
       callback_data: 'create_trojan',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🌙 SHADOWSOCKS',
-      callback_data: 'create_shadowsocks',
       style: 'primary'
     }
   ],
@@ -4844,7 +4822,6 @@ bot.action('menu_renew', async (ctx) => {
 • VMESS
 • VLESS
 • TROJAN
-• SHADOWSOCKS
 `;
 
 const keyboard = [
@@ -4869,13 +4846,6 @@ const keyboard = [
     {
       text: '🔥 TROJAN',
       callback_data: 'renew_trojan',
-      style: 'primary'
-    }
-  ],
-  [
-    {
-      text: '🌙 SHADOWSOCKS',
-      callback_data: 'renew_shadowsocks',
       style: 'primary'
     }
   ],
@@ -6967,9 +6937,10 @@ keyboard.push([
 ☎️ <b>ʜᴜʙᴜɴɢɪ ᴀᴅᴍɪɴ:</b>
 ╰<a href="https://t.me/${adminUsername}">@${adminUsername}</a>
 
-📦━━━━━━━━━━━━━━━━━━━━📦
-     <code>🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ ${namaStore} ɴᴇᴛᴡᴏʀᴋ</code>
-📦━━━━━━━━━━━━━━━━━━━━📦
+📦━━━━━━━━━━━━━━━━━━━━━📦
+     <code>  💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ </code>
+     <code>  📢 ᵂᴬ 081450330727 </code>
+📦━━━━━━━━━━━━━━━━━━━━━📦
 `;
 
     let sentMessage;
@@ -9202,33 +9173,9 @@ await ctx.reply(result.message, {
     inline_keyboard: [
       [
         {
-          text: '📲 HTTP Custom',
-          callback_data: 'convert_hc',
+          text: '🔙 Kembali Ke Menu Utama',
+          callback_data: 'send_main_menu',
           style: 'primary'
-        },
-        {
-          text: '🌐 NetMod',
-          callback_data: 'convert_nm',
-          style: 'primary'
-        }
-      ],
-      [
-        {
-          text: '📦 Clash',
-          callback_data: 'convert_clash',
-          style: 'primary'
-        },
-        {
-          text: '⚡ V2Ray',
-          callback_data: 'convert_yaml',
-          style: 'primary'
-        }
-      ],
-      [
-        {
-          text: '❌ Tutup',
-          callback_data: 'close_convert',
-          style: 'danger'
         }
       ]
     ]
@@ -9378,9 +9325,9 @@ if (global.depositState && (
     const input = ctx.message.text.trim();
     const nominal = parseInt(input.replace(/[^\d]/g, ''), 10);
 
-    if (isNaN(nominal) || nominal < 100) {
+    if (isNaN(nominal) || nominal < 5000) {
         return ctx.reply(
-            '❌ *Nominal tidak valid. Minimal Rp100.*',
+            '❌ *Nominal tidak valid. Minimal Rp5000.*',
             { parse_mode: 'Markdown' }
         );
     }
@@ -10120,33 +10067,9 @@ await ctx.reply(msg, {
                 inline_keyboard: [
                     [
                         {
-                            text: "📲 HTTP Custom",
-                            callback_data: "convert_hc",
+                            text: "🔙 Kembali Ke Menu Utama",
+                            callback_data: "send_main_menu",
                             style: "primary"
-                        },
-                        {
-                            text: "🌐 NetMod",
-                            callback_data: "convert_nm",
-                            style: "primary"
-                        }
-                    ],
-                    [
-                        {
-                            text: "📦 Clash",
-                            callback_data: "convert_clash",
-                            style: "primary"
-                        },
-                        {
-                            text: "⚡ V2Ray",
-                            callback_data: "convert_yaml",
-                            style: "primary"
-                        }
-                    ],
-                    [
-                        {
-                            text: "❌ Tutup",
-                            callback_data: "close_convert",
-                            style: "danger"
                         }
                     ]
                 ]
@@ -11498,7 +11421,7 @@ const sent = await ctx.reply(
 ⚡ *ꜱɪʟᴀʜᴋᴀɴ ᴋᴇᴛɪᴋ ɴᴏᴍɪɴᴀʟ ᴛᴏᴘ-ᴜᴘ*  
 ʏᴀɴɢ ɪɴɢɪɴ ᴀɴᴅᴀ ʙᴀʏᴀʀᴋᴀɴ ᴍᴇʟᴀʟᴜɪ ᴍᴇᴛᴏᴅᴇ Qʀɪꜱ Oʀᴋᴜᴛ.  
 
-💰 ᴍɪɴɪᴍᴀʟ ᴛᴏᴘ-ᴜᴘ: *Rp 100*  
+💰 ᴍɪɴɪᴍᴀʟ ᴛᴏᴘ-ᴜᴘ: *Rp 5000*  
 🧾 ᴄᴏɴᴛᴏʜ: \`10000\`
 
 ━━━━━━━━━━━━━━━━━━━━━━━
@@ -12556,7 +12479,7 @@ async function processDepositGopay(ctx, amount) {
       `🔗 [Buka QRIS](${safeQrUrl})`,
       ``,
       `┏━━━━━━━━━━━━━━━━━━━━━┓`,
-      `    🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ *ᴀɴꜱᴇɴᴅᴀɴᴛ ɴᴇᴛᴡᴏʀᴋ*`,
+      `          💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ`,
       `┗━━━━━━━━━━━━━━━━━━━━━┛`
     ].join('\n');
 
@@ -12731,7 +12654,7 @@ const payment = {
   fee,
   total_payment: finalAmount,
   order_id: uniqueCode,
-  expired_at: new Date(Date.now() + 5 * 60 * 1000).toISOString()
+  expired_at: new Date(Date.now() + 15 * 60 * 1000).toISOString()
 };
 
 const qrisImage = await generateQrisTemplate(payment);
@@ -12838,10 +12761,10 @@ async function processDepositShopeePay(ctx, amount) {
 
   if (
     !Number.isSafeInteger(nominal) ||
-    nominal < 100
+    nominal < 5000
   ) {
     return ctx.reply(
-      "❌ *Nominal tidak valid. Minimal Rp100.*",
+      "❌ *Nominal tidak valid. Minimal Rp5000.*",
       { parse_mode: "Markdown" }
     );
   }
@@ -13468,8 +13391,8 @@ async function checkQRISStatusGopay() {
 
       const depositAge = now - deposit.timestamp;
 
-      // EXPIRED 5 MENIT
-      if (depositAge > 5 * 60 * 1000) {
+      // EXPIRED 15 MENIT
+      if (depositAge > 15 * 60 * 1000) {
         logger.info(`⌛ EXPIRED GOPAY | ${uniqueCode}`);
 
         deposit.status = 'expired';
@@ -13479,7 +13402,7 @@ async function checkQRISStatusGopay() {
             deposit.userId,
             deposit.qrMessageId,
             null,
-            '❌ *QRIS GOPAY sudah expired (5 menit)*',
+            '❌ *QRIS GOPAY sudah expired (15 menit)*',
             { parse_mode: 'Markdown' }
           );
         } catch (e) {
