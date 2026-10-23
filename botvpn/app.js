@@ -3973,11 +3973,6 @@ finalKeyboard.push([
     text: '📡 CEK KUOTA',
     callback_data: 'menu_cek_kuota',
     style: 'primary'
-  },
-  {
-    text: '♛ PPOB STORE',
-    callback_data: 'home',
-    style: 'primary'
   }
 ]);
 
