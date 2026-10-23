@@ -26,7 +26,6 @@ const {
 
 const { Telegraf, session, Markup } = require('telegraf');
 
-const { registerPPOB } = require('./ppob');
 // ============================================================
 // 💳 QRIS MODULE
 // ============================================================
@@ -6943,9 +6942,10 @@ keyboard.push([
 ☎️ <b>ʜᴜʙᴜɴɢɪ ᴀᴅᴍɪɴ:</b>
 ╰<a href="https://t.me/${adminUsername}">@${adminUsername}</a>
 
-📦━━━━━━━━━━━━━━━━━━━━📦
-     <code>🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ ${namaStore} ɴᴇᴛᴡᴏʀᴋ</code>
-📦━━━━━━━━━━━━━━━━━━━━📦
+📦━━━━━━━━━━━━━━━━━━━━━📦
+     <code>  💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ </code>
+     <code>  📢 ᵂᴬ 081450330727 </code>
+📦━━━━━━━━━━━━━━━━━━━━━📦
 `;
 
     let sentMessage;
@@ -12484,7 +12484,7 @@ async function processDepositGopay(ctx, amount) {
       `🔗 [Buka QRIS](${safeQrUrl})`,
       ``,
       `┏━━━━━━━━━━━━━━━━━━━━━┓`,
-      `     💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ`,
+      `          💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ`,
       `┗━━━━━━━━━━━━━━━━━━━━━┛`
     ].join('\n');
 
