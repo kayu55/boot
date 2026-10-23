@@ -2026,11 +2026,11 @@ bot.action('menu_cek_kuota', async (ctx) => {
 📱 <b>Masukkan nomor XL/AXIS</b>
 
 Contoh:
-<code>081238577999</code>
+<code>081234567890</code>
 
 atau
 
-<code>6281238567899</code>
+<code>6281234567890</code>
 
 ━━━━━━━━━━━━━━━━━━━━━
 ⚡ <i>Nomor akan otomatis diproses.</i>
@@ -3905,10 +3905,11 @@ async function sendMainMenu(ctx) {
     else statusText = `👤 <b>ꜱᴛᴀᴛᴜꜱ:</b> <code>Member</code>`;
 
     const messageText = `
-<blockquote>ꜱᴇʟᴀᴍᴀᴛ ᴅᴀᴛᴀɴɢ ᴅɪ <b>${NAMA_STORE}</b> 💎
-ɴɪᴋᴍᴀᴛɪ ᴘᴇɴɢᴀʟᴀᴍᴀɴ ᴍᴇᴍʙᴇʟɪ ᴀᴋᴜɴ ᴠᴘɴ ᴛᴇʀᴄᴇᴘᴀᴛ, ᴀᴍᴀɴ, ᴅᴀɴ ᴀᴜᴛᴏᴍᴀᴛɪꜱ 🚀</blockquote>
+<blockquote>✦ <b> ${NAMA_STORE} · VIP EDITION </b> ✦
+Selamat datang di layanan digital premium kami.
+VPN • DIGITAL STORE • FAST SERVICE</blockquote>
 
-🧭 <b>ɪɴꜰᴏʀᴍᴀꜱɪ ᴀᴋᴜɴ</b>
+✧ <b>MEMBER DASHBOARD</b>
 ┏━━━━━━━━━━━━━━━━━━━━━┓
 ┃ 💰 <b>ꜱᴀʟᴅᴏ:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>
 ┃ ${statusText}
@@ -3916,7 +3917,7 @@ async function sendMainMenu(ctx) {
 ┃ 🆔 <b>ɪᴅ ᴘᴇɴɢɢᴜɴᴀ:</b> <code>${userId}</code>
 ┗━━━━━━━━━━━━━━━━━━━━━┛
 
-🕒 <b>ᴡᴀᴋᴛᴜ & ꜱᴇʀᴠᴇʀ</b>
+✧ <b>SYSTEM & SERVER STATUS</b>
 ┏━━━━━━━━━━━━━━━━━━━━━┓
 ┃ 🧭 ᴡᴀᴋᴛᴜ: <code>${timeNow} WIB</code>
 ┃ 📅 ᴛᴀɴɢɢᴀʟ: <code>${currentDay}, ${currentDate}</code>
@@ -3924,13 +3925,13 @@ async function sendMainMenu(ctx) {
 ┃ ⏱️ <b>ʙᴏᴛ ᴀᴋᴛɪꜰ:</b> <code>${uptimeFormatted}</code>
 ┗━━━━━━━━━━━━━━━━━━━━━┛
 
-☎️ <b>ʜᴜʙᴜɴɢɪ ᴀᴅᴍɪɴ</b>
+✧ <b>VIP CUSTOMER SUPPORT</b>
 <a href="https://t.me/${adminUsername}">╰📨 @${adminUsername}</a>
 
-📦━━━━━━━━━━━━━━━━━━━━━📦
-     <code>  💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ </code>
-     <code>  📢 ᵂᴬ 081450330727 </code>
-📦━━━━━━━━━━━━━━━━━━━━━📦
+━━━━━━━━━━━━━━━━━━━━━━
+<code>BLACK & GOLD · PREMIUM DIGITAL SERVICE</code>
+<code>POWERED BY ${NAMA_STORE}</code>
+━━━━━━━━━━━━━━━━━━━━━━
 `;
 
     const finalKeyboard = [];
@@ -3938,7 +3939,7 @@ async function sendMainMenu(ctx) {
 if (bolehLihatTrial) {
   finalKeyboard.push([
     {
-      text: '🌐 Menu VPN',
+      text: '♛ VPN PREMIUM',
       callback_data: 'menu_vpn',
       style: 'success'
     }
@@ -3957,12 +3958,12 @@ if (tombolSewaScriptAktif) {
 
 finalKeyboard.push([
   {
-    text: '📜 Riwayat Transaksi',
+    text: '📜 RIWAYAT',
     callback_data: 'menu_riwayat_transaksi',
     style: 'primary'
   },
   {
-    text: '📊 Cek Statistik',
+    text: '📊 STATISTIK',
     callback_data: 'menu_statistik',
     style: 'primary'
   }
@@ -3970,15 +3971,20 @@ finalKeyboard.push([
 
 finalKeyboard.push([
   {
-    text: '📡 Ayo Cek Kuota XL/AXIS',
+    text: '📡 CEK KUOTA',
     callback_data: 'menu_cek_kuota',
+    style: 'primary'
+  },
+  {
+    text: '♛ PPOB STORE',
+    callback_data: 'home',
     style: 'primary'
   }
 ]);
 
 finalKeyboard.push([
   {
-    text: '💰 TopUp Saldo',
+    text: '◆ TOPUP SALDO VPN',
     callback_data: 'menu_topup',
     style: 'success'
   }
@@ -4050,33 +4056,33 @@ if (ctx.callbackQuery?.message?.message_id) {
     inline_keyboard: [
       [
         {
-          text: '💠 Trial Akun',
+          text: '✦ TRIAL AKUN',
           callback_data: 'menu_trial',
           style: 'success'
         }
       ],
       [
         {
-          text: '✏️ Buat Akun',
+          text: '✦ CREATE AKUN',
           callback_data: 'menu_create',
           style: 'primary'
         },
         {
-          text: '♻️ Renew Akun',
+          text: '✦ RENEW AKUN',
           callback_data: 'menu_renew',
           style: 'primary'
         }
       ],
       [
         {
-          text: '📡 Akun Saya',
+          text: '✦ AKUN SAYA',
           callback_data: 'menu_akun_saya',
           style: 'success'
         }
       ],
       [
         {
-          text: '🔙 Kembali ke Menu Utama',
+          text: '‹ KEMBALI KE MENU UTAMA',
           callback_data: 'send_main_menu',
           style: 'danger'
         }
@@ -4103,33 +4109,33 @@ await ctx.reply(text, {
     inline_keyboard: [
       [
         {
-          text: '💠 Trial Akun',
+          text: '✦ TRIAL AKUN',
           callback_data: 'menu_trial',
           style: 'primary'
         }
       ],
       [
         {
-          text: '✏️ Buat Akun',
+          text: '✦ CREATE AKUN',
           callback_data: 'menu_create',
           style: 'primary'
         },
         {
-          text: '♻️ Renew Akun',
+          text: '✦ RENEW AKUN',
           callback_data: 'menu_renew',
           style: 'success'
         }
       ],
       [
         {
-          text: '📡 Akun Saya',
+          text: '✦ AKUN SAYA',
           callback_data: 'menu_akun_saya',
           style: 'success'
         }
       ],
       [
         {
-          text: '🔙 Kembali ke Menu Utama',
+          text: '‹ KEMBALI KE MENU UTAMA',
           callback_data: 'send_main_menu',
           style: 'danger'
         }
@@ -4678,6 +4684,7 @@ bot.action('menu_trial', async (ctx) => {
 • VMESS
 • VLESS
 • TROJAN
+• SHADOWSOCKS
 `;
 
 const keyboard = [
@@ -4702,6 +4709,13 @@ const keyboard = [
     {
       text: '🔥 TROJAN Trial',
       callback_data: 'trial_trojan',
+      style: 'primary'
+    }
+  ],
+  [
+    {
+      text: '🌙 SHADOWSOCKS Trial',
+      callback_data: 'trial_shadowsocks',
       style: 'primary'
     }
   ],
@@ -4750,6 +4764,7 @@ bot.action('menu_create', async (ctx) => {
 • VMESS
 • VLESS
 • TROJAN
+• SHADOWSOCKS
 `;
 
 const keyboard = [
@@ -4774,6 +4789,13 @@ const keyboard = [
     {
       text: '🔥 TROJAN',
       callback_data: 'create_trojan',
+      style: 'primary'
+    }
+  ],
+  [
+    {
+      text: '🌙 SHADOWSOCKS',
+      callback_data: 'create_shadowsocks',
       style: 'primary'
     }
   ],
@@ -4822,6 +4844,7 @@ bot.action('menu_renew', async (ctx) => {
 • VMESS
 • VLESS
 • TROJAN
+• SHADOWSOCKS
 `;
 
 const keyboard = [
@@ -4846,6 +4869,13 @@ const keyboard = [
     {
       text: '🔥 TROJAN',
       callback_data: 'renew_trojan',
+      style: 'primary'
+    }
+  ],
+  [
+    {
+      text: '🌙 SHADOWSOCKS',
+      callback_data: 'renew_shadowsocks',
       style: 'primary'
     }
   ],
@@ -5869,7 +5899,7 @@ bot.on('text', async (ctx, next) => {
   const kuotaState = cekKuotaState[userId];
 
   console.log(
-    '?? [KUOTA] State:',
+    '📡 [KUOTA] State:',
     kuotaState ? 'DITEMUKAN' : 'TIDAK ADA'
   );
 
@@ -6937,10 +6967,9 @@ keyboard.push([
 ☎️ <b>ʜᴜʙᴜɴɢɪ ᴀᴅᴍɪɴ:</b>
 ╰<a href="https://t.me/${adminUsername}">@${adminUsername}</a>
 
-📦━━━━━━━━━━━━━━━━━━━━━📦
-     <code>  💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ </code>
-     <code>  📢 ᵂᴬ 081450330727 </code>
-📦━━━━━━━━━━━━━━━━━━━━━📦
+📦━━━━━━━━━━━━━━━━━━━━📦
+     <code>🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ ${namaStore} ɴᴇᴛᴡᴏʀᴋ</code>
+📦━━━━━━━━━━━━━━━━━━━━📦
 `;
 
     let sentMessage;
@@ -9173,9 +9202,33 @@ await ctx.reply(result.message, {
     inline_keyboard: [
       [
         {
-          text: '🔙 Kembali Ke Menu Utama',
-          callback_data: 'send_main_menu',
+          text: '📲 HTTP Custom',
+          callback_data: 'convert_hc',
           style: 'primary'
+        },
+        {
+          text: '🌐 NetMod',
+          callback_data: 'convert_nm',
+          style: 'primary'
+        }
+      ],
+      [
+        {
+          text: '📦 Clash',
+          callback_data: 'convert_clash',
+          style: 'primary'
+        },
+        {
+          text: '⚡ V2Ray',
+          callback_data: 'convert_yaml',
+          style: 'primary'
+        }
+      ],
+      [
+        {
+          text: '❌ Tutup',
+          callback_data: 'close_convert',
+          style: 'danger'
         }
       ]
     ]
@@ -9325,9 +9378,9 @@ if (global.depositState && (
     const input = ctx.message.text.trim();
     const nominal = parseInt(input.replace(/[^\d]/g, ''), 10);
 
-    if (isNaN(nominal) || nominal < 5000) {
+    if (isNaN(nominal) || nominal < 100) {
         return ctx.reply(
-            '❌ *Nominal tidak valid. Minimal Rp5000.*',
+            '❌ *Nominal tidak valid. Minimal Rp100.*',
             { parse_mode: 'Markdown' }
         );
     }
@@ -10067,9 +10120,33 @@ await ctx.reply(msg, {
                 inline_keyboard: [
                     [
                         {
-                            text: "🔙 Kembali Ke Menu Utama",
-                            callback_data: "send_main_menu",
+                            text: "📲 HTTP Custom",
+                            callback_data: "convert_hc",
                             style: "primary"
+                        },
+                        {
+                            text: "🌐 NetMod",
+                            callback_data: "convert_nm",
+                            style: "primary"
+                        }
+                    ],
+                    [
+                        {
+                            text: "📦 Clash",
+                            callback_data: "convert_clash",
+                            style: "primary"
+                        },
+                        {
+                            text: "⚡ V2Ray",
+                            callback_data: "convert_yaml",
+                            style: "primary"
+                        }
+                    ],
+                    [
+                        {
+                            text: "❌ Tutup",
+                            callback_data: "close_convert",
+                            style: "danger"
                         }
                     ]
                 ]
@@ -10135,7 +10212,7 @@ delete userState[userId];
         }
         userState[userId].step = 'addserver_harga';
         userState[userId].batas_create_akun = batas_create_akun;
-        await ctx.reply('?? *Silahkan masukkan harga server:*', { parse_mode: 'Markdown' });
+        await ctx.reply('💰 *Silahkan masukkan harga server:*', { parse_mode: 'Markdown' });
         return;
     } else if (state && state.step === 'addserver_harga') {
         const harga = parseFloat(ctx.message.text.trim());
@@ -11421,7 +11498,7 @@ const sent = await ctx.reply(
 ⚡ *ꜱɪʟᴀʜᴋᴀɴ ᴋᴇᴛɪᴋ ɴᴏᴍɪɴᴀʟ ᴛᴏᴘ-ᴜᴘ*  
 ʏᴀɴɢ ɪɴɢɪɴ ᴀɴᴅᴀ ʙᴀʏᴀʀᴋᴀɴ ᴍᴇʟᴀʟᴜɪ ᴍᴇᴛᴏᴅᴇ Qʀɪꜱ Oʀᴋᴜᴛ.  
 
-💰 ᴍɪɴɪᴍᴀʟ ᴛᴏᴘ-ᴜᴘ: *Rp 5000*  
+💰 ᴍɪɴɪᴍᴀʟ ᴛᴏᴘ-ᴜᴘ: *Rp 100*  
 🧾 ᴄᴏɴᴛᴏʜ: \`10000\`
 
 ━━━━━━━━━━━━━━━━━━━━━━━
@@ -12471,7 +12548,7 @@ async function processDepositGopay(ctx, amount) {
       ``,
       `💵 ɴᴏᴍɪɴᴀʟ: *Rp ${finalAmount}*`,
       `🆔 ʀᴇꜰꜰ: \`${String(reff)}\``,
-      `⏳ ʙᴀᴛᴀꜱ ᴡᴀᴋᴛᴜ: *15 ᴍᴇɴɪᴛ*`,
+      `⏳ ʙᴀᴛᴀꜱ ᴡᴀᴋᴛᴜ: *5 ᴍᴇɴɪᴛ*`,
       `⚠️ ᴛʀᴀɴꜱꜰᴇʀ *ʜᴀʀᴜꜱ ꜱᴇꜱᴜᴀɪ ɴᴏᴍɪɴᴀʟ*`,
       ``,
       `✅ ᴘᴇᴍʙᴀʏᴀʀᴀɴ ᴏᴛᴏᴍᴀᴛɪꜱ`,
@@ -12479,7 +12556,7 @@ async function processDepositGopay(ctx, amount) {
       `🔗 [Buka QRIS](${safeQrUrl})`,
       ``,
       `┏━━━━━━━━━━━━━━━━━━━━━┓`,
-      `          💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ`,
+      `    🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ *ᴀɴꜱᴇɴᴅᴀɴᴛ ɴᴇᴛᴡᴏʀᴋ*`,
       `┗━━━━━━━━━━━━━━━━━━━━━┛`
     ].join('\n');
 
@@ -13391,8 +13468,8 @@ async function checkQRISStatusGopay() {
 
       const depositAge = now - deposit.timestamp;
 
-      // EXPIRED 15 MENIT
-      if (depositAge > 15 * 60 * 1000) {
+      // EXPIRED 5 MENIT
+      if (depositAge > 5 * 60 * 1000) {
         logger.info(`⌛ EXPIRED GOPAY | ${uniqueCode}`);
 
         deposit.status = 'expired';
@@ -13402,7 +13479,7 @@ async function checkQRISStatusGopay() {
             deposit.userId,
             deposit.qrMessageId,
             null,
-            '❌ *QRIS GOPAY sudah expired (15 menit)*',
+            '❌ *QRIS GOPAY sudah expired (5 menit)*',
             { parse_mode: 'Markdown' }
           );
         } catch (e) {
