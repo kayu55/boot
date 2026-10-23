@@ -63,8 +63,8 @@ setup_bot() {
     wget bsi.web.id/botvpn/app.js
     
     cd assets
-    wget https://raw.githubusercontent.com/kayu55/boot/main/botvpn/qris.png
-    wget https://raw.githubusercontent.com/kayu55/boot/main/botvpn/topup_success.png
+    wget bsi.web.id/botvpn/qris.png
+    wget bsi.web.id/botvpn/topup_success.png
     cd 
     cd /root/BotVPN2
     npm install sqlite3 express crypto telegraf axios dotenv canvas node-fetch form-data
@@ -81,7 +81,7 @@ server_app() {
     clear
 
     echo -e "${orange}─────────────────────────────────────────${neutral}"
-    echo -e "${green}- BOT SELLVPN TELEGRAM MOD LITE & XWAN${neutral}"
+    echo -e "${green}- BOT SELLVPN TELEGRAM MOD LITE ${neutral}"
     echo -e "${orange}─────────────────────────────────────────${neutral}"
 
     # =====================================================
