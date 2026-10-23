@@ -63,8 +63,8 @@ setup_bot() {
     wget bsi.web.id/botvpn/app.js
     
     cd assets
-    wget bsi.web.id/botvpn/qris.png
-    wget bsi.web.id/botvpn/topup_success.png
+    wget https://raw.githubusercontent.com/kayu55/boot/main/botvpn/qris.png
+    wget https://raw.githubusercontent.com/kayu55/boot/main/botvpn/topup_success.png
     cd 
     cd /root/BotVPN2
     npm install sqlite3 express crypto telegraf axios dotenv canvas node-fetch form-data
@@ -80,9 +80,9 @@ setup_bot() {
 server_app() {
     clear
 
-    echo -e "${orange}â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€${neutral}"
-    echo -e "${green}- BOT SELLVPN TELEGRAM MOD LITE & XWAN${neutral}"
-    echo -e "${orange}â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€${neutral}"
+    echo -e "${orange}─────────────────────────────────────────${neutral}"
+    echo -e "${green}- BOT SELLVPN TELEGRAM MOD ARYA BLITAR${neutral}"
+    echo -e "${orange}─────────────────────────────────────────${neutral}"
 
     # =====================================================
     # KONFIGURASI DASAR
@@ -218,7 +218,7 @@ server_app() {
     # =====================================================
 
     echo
-    echo -e "${purple}â”€â”€â”€â”€ KONFIGURASI PPOB DIGIFLAZZ â”€â”€â”€â”€${neutral}"
+    echo -e "${purple}──── KONFIGURASI PPOB DIGIFLAZZ ────${neutral}"
 
     read -rp "Masukkan DIGIFLAZZ USERNAME: " digiflazz_username
     while [ -z "$digiflazz_username" ]; do
@@ -303,7 +303,7 @@ EOF
     chmod 600 /root/BotVPN2/.vars.json
 
     echo
-    echo -e "${green}âœ“ .vars.json berhasil disinkronkan dengan konfigurasi PPOB.${neutral}"
+    echo -e "${green}✓ .vars.json berhasil disinkronkan dengan konfigurasi PPOB.${neutral}"
 
     # =====================================================
     # NODE
