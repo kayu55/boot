@@ -9062,8 +9062,8 @@ bot.action(/^(create|renew|trial)_username_(vmess|vless|trojan|shadowsocks|ssh)_
 
         const isUnlimited = result != null;
 
-        if (!isUnlimited && trialCount >= 2) {
-          return ctx.reply('⚠️ *Kamu sudah trial hari ini, Gass Order* 😖', { parse_mode: 'Markdown' });
+        if (!isUnlimited && trialCount >= 1) {
+          return ctx.reply('⚠️ *Kamu sudah trial hari ini sayank,, Gass Order* 😍', { parse_mode: 'Markdown' });
         }
 
         await handleTrial(ctx, type, serverId);
