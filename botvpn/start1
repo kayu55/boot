@@ -55,8 +55,10 @@ setup_bot() {
     fi
 
     # Install dependencies
-    rm -rf ppob.js
+    rcd /root/BotVPN2
+    mkdir -p assets
     rm -rf app1.js
+    rm -rf ppob.js
     wget https://raw.githubusercontent.com/kayu55/boot/main/botvpn/ppob.js
     wget https://raw.githubusercontent.com/kayu55/boot/main/botvpn/app1.js
     
@@ -135,12 +137,12 @@ server_app() {
         read -rp "Masukkan Email Saweria: " saweria_email
     done
 
-    read -rp "Masukkan Username Grup: " username_grup
+    read -rp "Masukkan Username  ( id-grup ): " username_grup
     while [ -z "$username_grup" ]; do
         read -rp "Masukkan Username Grup: " username_grup
     done
 
-    read -rp "Masukkan Username Channel: " username_channel
+    read -rp "Masukkan Username  ( id-channel ): " username_channel
     while [ -z "$username_channel" ]; do
         read -rp "Masukkan Username Channel: " username_channel
     done
@@ -178,12 +180,12 @@ server_app() {
     # GAMBAR
     # =====================================================
 
-    read -rp "Masukkan Link Gambar Menu: " gambar_menu
+    read -rp "Masukkan Link Gambar MENU (https://kamu.web.id/menu.jpg: " gambar_menu
     while [ -z "$gambar_menu" ]; do
         read -rp "Masukkan Link Gambar Menu: " gambar_menu
     done
 
-    read -rp "Masukkan Link Gambar Topup: " gambar_topup
+    read -rp "Masukkan Link Gambar Topup (https://kamu.web.id/topup.jpg: " gambar_topup
     while [ -z "$gambar_topup" ]; do
         read -rp "Masukkan Link Gambar Topup: " gambar_topup
     done
