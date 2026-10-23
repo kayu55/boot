@@ -54,12 +54,12 @@ setup_bot() {
         git clone https://github.com/kayu55/BotVPN2.git /root/BotVPN2
     fi
 
-    # Install dependencies
-    rcd /root/BotVPN2
+   # Install dependencies
+    cd /root/BotVPN2
     mkdir -p assets
     rm -rf app.js
     rm -rf ppob.js
-    wget https://bsi.web.id/botvpn/ppob.js
+    wget bsi.web.id/botvpn/ppob.js
     wget https://raw.githubusercontent.com/kayu55/boot/main/botvpn/app.js
     
     cd assets
