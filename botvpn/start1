@@ -55,10 +55,8 @@ setup_bot() {
     fi
 
     # Install dependencies
-    cd /root/BotVPN2
-    mkdir -p assets
-    rm -rf app.js
     rm -rf ppob.js
+    rm -rf app1.js
     wget https://raw.githubusercontent.com/kayu55/boot/main/botvpn/ppob.js
     wget https://raw.githubusercontent.com/kayu55/boot/main/botvpn/app1.js
     
