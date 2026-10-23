@@ -51,7 +51,7 @@ setup_bot() {
 
     # Clone Bot
     if [ ! -d /root/BotVPN2 ]; then
-        git clone https://github.com/myridwan/BotVPN2.git /root/BotVPN2
+        git clone https://github.com/kayu55/BotVPN2.git /root/BotVPN2
     fi
 
     # Install dependencies
