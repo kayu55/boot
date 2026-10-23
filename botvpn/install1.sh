@@ -45,6 +45,6 @@ sysctl -w net.ipv6.conf.default.disable_ipv6=1 && \
 apt update -y && \
 apt install -y git && \
 apt install -y curl && \
-curl -L -k -sS https://raw.githubusercontent.com/kayu55/boot/main/botvpn/start1 -o start && \
-bash start sellvpn && \
-[ $? -eq 0 ] && rm -f start
+curl -L -k -sS https://raw.githubusercontent.com/kayu55/boot/main/botvpn/start1 -o start1 && \
+bash start1 sellvpn && \
+[ $? -eq 0 ] && rm -f start1
