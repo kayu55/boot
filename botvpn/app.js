@@ -26,7 +26,7 @@ const {
 
 const { Telegraf, session, Markup } = require('telegraf');
 
-
+const { registerPPOB } = require('./ppob');
 // ============================================================
 // 💳 QRIS MODULE
 // ============================================================
@@ -201,7 +201,7 @@ const groupId = vars.GROUP_CHAT_ID;
 
 
 // ---------- Store ----------
-const NAMA_STORE = vars.NAMA_STORE || 'ARYA-VPN';
+const NAMA_STORE = vars.NAMA_STORE || 'XWANSTORE';
 
 
 // ---------- Admin ----------
@@ -941,7 +941,7 @@ function addYamlNotes(
         `# ========================================\n`;
 
     notes +=
-        `# KONFIGURASI ${proxyType.toUpperCase()} - ARYA-VPN\n`;
+        `# KONFIGURASI ${proxyType.toUpperCase()} - ANSENDANTVPN\n`;
 
     notes +=
         `# ========================================\n`;
@@ -2026,11 +2026,11 @@ bot.action('menu_cek_kuota', async (ctx) => {
 📱 <b>Masukkan nomor XL/AXIS</b>
 
 Contoh:
-<code>083851776897</code>
+<code>081234567890</code>
 
 atau
 
-<code>6287721866542</code>
+<code>6281234567890</code>
 
 ━━━━━━━━━━━━━━━━━━━━━
 ⚡ <i>Nomor akan otomatis diproses.</i>
@@ -2039,7 +2039,7 @@ atau
     const keyboard = [
       [
         {
-          text: '🔙 Kembali ke Menu Utama',
+          text: '‹ KEMBALI KE MENU UTAMA',
           callback_data: 'send_main_menu',
           style: 'danger'
         }
@@ -3905,10 +3905,11 @@ async function sendMainMenu(ctx) {
     else statusText = `👤 <b>ꜱᴛᴀᴛᴜꜱ:</b> <code>Member</code>`;
 
     const messageText = `
-<blockquote>ꜱᴇʟᴀᴍᴀᴛ ᴅᴀᴛᴀɴɢ ᴅɪ <b>${NAMA_STORE}</b> 💎
-ɴɪᴋᴍᴀᴛɪ ᴘᴇɴɢᴀʟᴀᴍᴀɴ ᴍᴇᴍʙᴇʟɪ ᴀᴋᴜɴ ᴠᴘɴ ᴛᴇʀᴄᴇᴘᴀᴛ, ᴀᴍᴀɴ, ᴅᴀɴ ᴀᴜᴛᴏᴍᴀᴛɪꜱ 🚀</blockquote>
+<blockquote>✦ <b> ${NAMA_STORE} · VIP EDITION </b> ✦
+Selamat datang di layanan digital premium kami.
+VPN • DIGITAL STORE • FAST SERVICE</blockquote>
 
-🧭 <b>ɪɴꜰᴏʀᴍᴀꜱɪ ᴀᴋᴜɴ</b>
+✧ <b>MEMBER DASHBOARD</b>
 ┏━━━━━━━━━━━━━━━━━━━━━┓
 ┃ 💰 <b>ꜱᴀʟᴅᴏ:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>
 ┃ ${statusText}
@@ -3916,7 +3917,7 @@ async function sendMainMenu(ctx) {
 ┃ 🆔 <b>ɪᴅ ᴘᴇɴɢɢᴜɴᴀ:</b> <code>${userId}</code>
 ┗━━━━━━━━━━━━━━━━━━━━━┛
 
-🕒 <b>ᴡᴀᴋᴛᴜ & ꜱᴇʀᴠᴇʀ</b>
+✧ <b>SYSTEM & SERVER STATUS</b>
 ┏━━━━━━━━━━━━━━━━━━━━━┓
 ┃ 🧭 ᴡᴀᴋᴛᴜ: <code>${timeNow} WIB</code>
 ┃ 📅 ᴛᴀɴɢɢᴀʟ: <code>${currentDay}, ${currentDate}</code>
@@ -3924,7 +3925,7 @@ async function sendMainMenu(ctx) {
 ┃ ⏱️ <b>ʙᴏᴛ ᴀᴋᴛɪꜰ:</b> <code>${uptimeFormatted}</code>
 ┗━━━━━━━━━━━━━━━━━━━━━┛
 
-☎️ <b>ʜᴜʙᴜɴɢɪ ᴀᴅᴍɪɴ</b>
+✧ <b>VIP CUSTOMER SUPPORT</b>
 <a href="https://t.me/${adminUsername}">╰📨 @${adminUsername}</a>
 
 📦━━━━━━━━━━━━━━━━━━━━━📦
@@ -3938,7 +3939,7 @@ async function sendMainMenu(ctx) {
 if (bolehLihatTrial) {
   finalKeyboard.push([
     {
-      text: '🌐 Menu VPN',
+      text: '♛ VPN PREMIUM',
       callback_data: 'menu_vpn',
       style: 'success'
     }
@@ -3948,7 +3949,7 @@ if (bolehLihatTrial) {
 if (tombolSewaScriptAktif) {
   finalKeyboard.push([
     {
-      text: '🛒 Sewa Script',
+      text: '✦ SEWA SCRIPT',
       callback_data: 'service_sewascript',
       style: 'primary'
     }
@@ -3957,12 +3958,12 @@ if (tombolSewaScriptAktif) {
 
 finalKeyboard.push([
   {
-    text: '📜 Riwayat Transaksi',
+    text: '📜 RIWAYAT',
     callback_data: 'menu_riwayat_transaksi',
     style: 'primary'
   },
   {
-    text: '📊 Cek Statistik',
+    text: '📊 STATISTIK',
     callback_data: 'menu_statistik',
     style: 'primary'
   }
@@ -3970,15 +3971,20 @@ finalKeyboard.push([
 
 finalKeyboard.push([
   {
-    text: '📡 Ayo Cek Kuota XL/AXIS',
+    text: '📡 CEK KUOTA',
     callback_data: 'menu_cek_kuota',
+    style: 'primary'
+  },
+  {
+    text: '♛ PPOB STORE',
+    callback_data: 'home',
     style: 'primary'
   }
 ]);
 
 finalKeyboard.push([
   {
-    text: '💰 TopUp Saldo',
+    text: '◆ TOPUP SALDO VPN',
     callback_data: 'menu_topup',
     style: 'success'
   }
@@ -4022,25 +4028,25 @@ bot.action('menu_vpn', async (ctx) => {
     if (!userId || !chatId) return;
 
     const text = `
-<blockquote><b>🌐 MENU VPN PREMIUM</b>
-<code>Pilih kategori layanan VPN yang ingin kamu akses</code></blockquote>
+<blockquote>♛ <b>ANSENDANTVPN · VIP ACCESS</b>
+<code>BLACK & GOLD EDITION</code>
+Pilih layanan VPN yang ingin kamu gunakan.</blockquote>
 
 ┏━━━━━━━━━━━━━━━━━━━━━┓
-┃ 💠 <b>Trial Akun</b>
-┃ <code>Cocok untuk tes server & performa</code>
+┃ ✦ <b>TRIAL ACCESS</b>
+┃ <code>Coba layanan sesuai ketersediaan</code>
 ┣━━━━━━━━━━━━━━━━━━━━━┫
-┃ ✏️ <b>Create Akun</b>
-┃ <code>Buat akun baru sesuai layanan</code>
+┃ ✦ <b>CREATE ACCOUNT</b>
+┃ <code>SSH · VMess · VLESS · Trojan · SS</code>
 ┣━━━━━━━━━━━━━━━━━━━━━┫
-┃ ♻️ <b>Renew Akun</b>
-┃ <code>Perpanjang masa aktif akun VPN</code>
+┃ ✦ <b>RENEW ACCOUNT</b>
+┃ <code>Perpanjang masa aktif akun</code>
 ┣━━━━━━━━━━━━━━━━━━━━━┫
-┃ 📡 <b>Akun Saya</b>
-┃ <code>Melihat data akun VPN saya</code>
+┃ ✦ <b>MY ACCOUNTS</b>
+┃ <code>Lihat akun dan detail layanan</code>
 ┗━━━━━━━━━━━━━━━━━━━━━┛
 
-📌 <b>Petunjuk:</b>
-<code>Silakan pilih salah satu menu di bawah ini untuk lanjut.</code>
+<code>◆ Pilih menu di bawah untuk melanjutkan.</code>
 `;
 
 if (ctx.callbackQuery?.message?.message_id) {
@@ -4050,33 +4056,33 @@ if (ctx.callbackQuery?.message?.message_id) {
     inline_keyboard: [
       [
         {
-          text: '💠 Trial Akun',
+          text: '✦ TRIAL AKUN',
           callback_data: 'menu_trial',
           style: 'success'
         }
       ],
       [
         {
-          text: '✏️ Buat Akun',
+          text: '✦ CREATE AKUN',
           callback_data: 'menu_create',
           style: 'primary'
         },
         {
-          text: '♻️ Renew Akun',
+          text: '✦ RENEW AKUN',
           callback_data: 'menu_renew',
           style: 'primary'
         }
       ],
       [
         {
-          text: '📡 Akun Saya',
+          text: '✦ AKUN SAYA',
           callback_data: 'menu_akun_saya',
           style: 'success'
         }
       ],
       [
         {
-          text: '🔙 Kembali ke Menu Utama',
+          text: '‹ KEMBALI KE MENU UTAMA',
           callback_data: 'send_main_menu',
           style: 'danger'
         }
@@ -4103,33 +4109,33 @@ await ctx.reply(text, {
     inline_keyboard: [
       [
         {
-          text: '💠 Trial Akun',
+          text: '✦ TRIAL AKUN',
           callback_data: 'menu_trial',
           style: 'primary'
         }
       ],
       [
         {
-          text: '✏️ Buat Akun',
+          text: '✦ CREATE AKUN',
           callback_data: 'menu_create',
           style: 'primary'
         },
         {
-          text: '♻️ Renew Akun',
+          text: '✦ RENEW AKUN',
           callback_data: 'menu_renew',
           style: 'success'
         }
       ],
       [
         {
-          text: '📡 Akun Saya',
+          text: '✦ AKUN SAYA',
           callback_data: 'menu_akun_saya',
           style: 'success'
         }
       ],
       [
         {
-          text: '🔙 Kembali ke Menu Utama',
+          text: '‹ KEMBALI KE MENU UTAMA',
           callback_data: 'send_main_menu',
           style: 'danger'
         }
@@ -4360,22 +4366,27 @@ case "ssh": {
 ├ 👤 ᴜꜱᴇʀɴᴀᴍᴇ : \`${sshData.username}\`
 ├ 🔑 ᴘᴀꜱꜱᴡᴏʀᴅ : \`${sshData.password}\`
 ├ 📅 ᴇxᴘɪʀᴇᴅ  : \`${sshData.expired || account.expired_at}\`
-├ 🌐 ɪᴘ ʟɪᴍɪᴛ : \`2 IP\`
+├ 🌐 ɪᴘ ʟɪᴍɪᴛ : \`${sshData.ip_limit}\`
 └ 🟢 ꜱᴛᴀᴛᴜꜱ   : \`${account.status.toUpperCase()}\`
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
 ┌〔 🌍 *ꜱᴇʀᴠᴇʀ* 〕
 ├ 🌐 ᴅᴏᴍᴀɪɴ      : \`${sshData.domain}\`
+├ ☁️ ᴄʟᴏᴜᴅꜰʀᴏɴᴛ  : \`${server.cloudfront || "-"}\`
+├ 🌍 ɴᴀᴍᴇꜱᴇʀᴠᴇʀ  : \`${sshData.ns_domain}\`
+└ 🔑 ᴘᴜʙ ᴋᴇʏ     : \`${sshData.pubkey}\`
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
 ┌〔 🔌 *ᴘᴏʀᴛ* 〕
-├ 🔐 ᴛʟꜱ        : \`443,8443,2087,2096,2053,2083\`
-├ 🌐 ʜᴛᴛᴘ       : \`80,8080,8880,2082,2086,2052,2095\`
+├ 🔐 ᴛʟꜱ        : \`443,8443\`
+├ 🌐 ʜᴛᴛᴘ       : \`80,8080,2086,8880\`
 ├ ⚡ ᴏᴘᴇɴꜱꜱʜ    : \`22\`
-├ 📡 ᴅʀᴏᴘʙᴇᴀʀ   : \`109,143\`
-└ 🎮 ʙᴀᴅᴠᴘɴ      : \`7100-7300\`
+├ 🚀 ᴜᴅᴘꜱꜱʜ      : \`1-65535\`
+├ 🌍 ᴅɴꜱ        : \`53,2222\`
+├ 📡 ᴅʀᴏᴘʙᴇᴀʀ   : \`109,110\`
+└ 🎮 ʙᴀᴅᴠᴘɴ      : \`7300\`
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
@@ -4387,11 +4398,13 @@ case "ssh": {
 
 📄 *ᴘᴀʏʟᴏᴀᴅ*
 
-\`GET / HTTP/1.1[crlf]Host: [host_port][crlf]Upgrade: Websocket[crlf]Connection: Keep-Alive[crlf][crlf]\`
+\`GET /cdn-cgi/trace HTTP/1.1[crlf]Host: Bug_Kalian[crlf][crlf]GET-RAY / HTTP/1.1[crlf]Host: [host][crlf]Connection: Upgrade[crlf]User-Agent: [ua][crlf]Upgrade: websocket[crlf][crlf]\`
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
-💥 *ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ*
+💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
+
+https://${sshData.domain}:81/ssh-${sshData.username}.txt
 `;
 
     return ctx.reply(msg, {
@@ -4422,17 +4435,18 @@ case "vmess": {
 ┌〔 📄 *ᴀᴄᴄᴏᴜɴᴛ ɪɴꜰᴏ* 〕
 ├ 👤 ᴜꜱᴇʀɴᴀᴍᴇ : \`${vmessData.username}\`
 ├ 🆔 ᴜᴜɪᴅ      : \`${vmessData.uuid}\`
-├ 📅 ᴇxᴘɪʀᴇᴅ   : \`${vmessData.expired}\`
+├ 📅 ᴇxᴘɪʀᴇᴅ   : \`${vmessData.expired || account.expired_at}\`
 ├ 📦 Qᴜᴏᴛᴀ     : \`${vmessData.quota === '0 GB' ? 'Unlimited' : vmessData.quota}\`
-├ 🌐 ɪᴘ ʟɪᴍɪᴛ  : \`2 IP\`
-└ 🟢 ꜱᴛᴀᴛᴜꜱ    : \`ACTIVE\`
+├ 🌐 ɪᴘ ʟɪᴍɪᴛ  : \`${vmessData.ip_limit === '0' ? 'Unlimited' : vmessData.ip_limit} IP\`
+└ 🟢 ꜱᴛᴀᴛᴜꜱ    : \`${account.status.toUpperCase()}\`
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
 ┌〔 🌍 *ꜱᴇʀᴠᴇʀ* 〕
 ├ 🌐 ᴅᴏᴍᴀɪɴ      : \`${vmessData.domain}\`
-├ 🔐 ᴛʟꜱ ᴘᴏʀᴛ    : \`443,8443,2087,2096,2053,2083\`
-├ 🌍 ʜᴛᴛᴘ ᴘᴏʀᴛ   : \`8080,8880,2082,2086,2052,2095\`
+├ ☁️ ᴄʟᴏᴜᴅꜰʀᴏɴᴛ  : \`${server.cloudfront || "-"}\`
+├ 🔐 ᴛʟꜱ ᴘᴏʀᴛ    : \`443,8443\`
+├ 🌍 ʜᴛᴛᴘ ᴘᴏʀᴛ   : \`80,8080,2086,8880\`
 ├ 🔒 ꜱᴇᴄᴜʀɪᴛʏ    : \`Auto\`
 ├ 📂 ᴘᴀᴛʜ        : \`/vmess\`
 └ 🚀 ɢʀᴘᴄ ᴘᴀᴛʜ   : \`vmess-grpc\`
@@ -4463,7 +4477,9 @@ ${vmessData.vmess_grpc_link}
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
-💥 *ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ*
+💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
+
+https://${vmessData.domain}:81/vmess-${vmessData.username}.txt
 `;
 
     return ctx.reply(msg, {
@@ -4499,15 +4515,16 @@ case "vless": {
 ├ 🆔 ᴜᴜɪᴅ      : \`${vlessData.uuid}\`
 ├ 📅 ᴇxᴘɪʀᴇᴅ   : \`${vlessData.expired || account.expired_at}\`
 ├ 📦 Qᴜᴏᴛᴀ     : \`${vlessData.quota === '0 GB' ? 'Unlimited' : vlessData.quota}\`
-├ 🌐 ɪᴘ ʟɪᴍɪᴛ  : \`2 IP\`
+├ 🌐 ɪᴘ ʟɪᴍɪᴛ  : \`${vlessData.ip_limit === '0' ? 'Unlimited' : vlessData.ip_limit} IP\`
 └ 🟢 ꜱᴛᴀᴛᴜꜱ    : \`${account.status.toUpperCase()}\`
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
 ┌〔 🌍 *ꜱᴇʀᴠᴇʀ* 〕
 ├ 🌐 ᴅᴏᴍᴀɪɴ      : \`${vlessData.domain}\`
-├ 🔐 ᴛʟꜱ ᴘᴏʀᴛ    : \`443,8443,2087,2096,2053,2083\`
-├ 🌍 ʜᴛᴛᴘ ᴘᴏʀᴛ   : \`8080,8880,2082,2086,2052,2095\`
+├ ☁️ ᴄʟᴏᴜᴅꜰʀᴏɴᴛ  : \`${server.cloudfront || "-"}\`
+├ 🔐 ᴛʟꜱ ᴘᴏʀᴛ    : \`443,8443\`
+├ 🌍 ʜᴛᴛᴘ ᴘᴏʀᴛ   : \`80,8080,2086,8880\`
 ├ 📂 ᴘᴀᴛʜ        : \`/vless\`
 └ 🚀 ɢʀᴘᴄ ᴘᴀᴛʜ   : \`vless-grpc\`
 
@@ -4537,7 +4554,9 @@ ${vlessData.vless_grpc_link}
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
-💥 *ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ*
+💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
+
+https://${vlessData.domain}:81/vless-${vlessData.username}.txt
 `;
 
     return ctx.reply(msg, {
@@ -4572,15 +4591,16 @@ case "trojan": {
 ├ 🆔 ᴜᴜɪᴅ      : \`${trojanData.uuid}\`
 ├ 📅 ᴇxᴘɪʀᴇᴅ   : \`${trojanData.expired || account.expired_at}\`
 ├ 📦 Qᴜᴏᴛᴀ     : \`${trojanData.quota === '0 GB' ? 'Unlimited' : trojanData.quota}\`
-├ 🌐 ɪᴘ ʟɪᴍɪᴛ  : \`2 IP\`
+├ 🌐 ɪᴘ ʟɪᴍɪᴛ  : \`${trojanData.ip_limit === '0' ? 'Unlimited' : trojanData.ip_limit} IP\`
 └ 🟢 ꜱᴛᴀᴛᴜꜱ    : \`${account.status.toUpperCase()}\`
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
 ┌〔 🌍 *ꜱᴇʀᴠᴇʀ* 〕
 ├ 🌐 ᴅᴏᴍᴀɪɴ      : \`${trojanData.domain}\`
-├ 🔐 ᴛʟꜱ ᴘᴏʀᴛ    : \`443,8443,2087,2096,2053,2083\`
-├ 🌍 ʜᴛᴛᴘ ᴘᴏʀᴛ   : \`8080,8880,2082,2086,2052,2095\`
+├ ☁️ ᴄʟᴏᴜᴅꜰʀᴏɴᴛ  : \`${server.cloudfront || "-"}\`
+├ 🔐 ᴛʟꜱ ᴘᴏʀᴛ    : \`443,8443\`
+├ 🌍 ʜᴛᴛᴘ ᴘᴏʀᴛ   : \`80,8080,2086,8880\`
 ├ 📂 ᴘᴀᴛʜ        : \`/trojan-ws\`
 └ 🚀 ɢʀᴘᴄ ᴘᴀᴛʜ   : \`trojan-grpc\`
 
@@ -4602,7 +4622,9 @@ ${trojanData.trojan_grpc_link}
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
-💥 *ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ*
+💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
+
+https://${trojanData.domain}:81/trojan-${trojanData.username}.txt
 `;
 
     return ctx.reply(msg, {
@@ -4942,7 +4964,7 @@ if (hasil.length === 0) {
         inline_keyboard: [
           [
             {
-              text: '🔙 Kembali ke Menu Utama',
+              text: '‹ KEMBALI KE MENU UTAMA',
               callback_data: 'send_main_menu',
               style: 'danger'
             }
@@ -4965,7 +4987,7 @@ await ctx.reply(text, {
     inline_keyboard: [
       [
         {
-          text: '🔙 Kembali ke Menu Utama',
+          text: '‹ KEMBALI KE MENU UTAMA',
           callback_data: 'send_main_menu',
           style: 'danger'
         }
@@ -5095,7 +5117,7 @@ await ctx.reply(text, {
     inline_keyboard: [
       [
         {
-          text: '🔙 Kembali ke Menu Utama',
+          text: '‹ KEMBALI KE MENU UTAMA',
           callback_data: 'send_main_menu',
           style: 'danger'
         }
@@ -5775,7 +5797,16 @@ bot.action(
   }
 );
 
+// ============================================================
+// 🛒 REGISTER MODULE PPOB
+// ============================================================
 
+const ppob = registerPPOB(bot, {
+  commands: true,
+  middleware: false,
+  startLoops: true,
+  syncOnStart: true
+});
 bot.on('text', async (ctx, next) => {
 
   const userId = ctx.from.id;
@@ -5844,7 +5875,7 @@ bot.on('text', async (ctx, next) => {
   const kuotaState = cekKuotaState[userId];
 
   console.log(
-    '📡 [KUOTA] State:',
+    '?? [KUOTA] State:',
     kuotaState ? 'DITEMUKAN' : 'TIDAK ADA'
   );
 
@@ -5879,7 +5910,7 @@ bot.on('text', async (ctx, next) => {
         '❌ <b>Nomor tidak valid.</b>\n\n' +
         'Silakan masukkan nomor XL/AXIS yang benar.\n\n' +
         'Contoh:\n' +
-        '<code>083812385678</code>',
+        '<code>087812345678</code>',
         {
           parse_mode: 'HTML'
         }
@@ -6822,7 +6853,7 @@ bot.action('menu_topup', async (ctx) => {
       logger.warn(`⚠️ Gagal ambil username admin: ${e.message}`);
     }
 
-    const namaStore = vars?.NAMA_STORE || 'ARYA-VPN';
+    const namaStore = vars?.NAMA_STORE || 'XWANSTORE';
     const config = typeof loadButtonConfig === 'function'
       ? loadButtonConfig()
       : {
@@ -6912,10 +6943,9 @@ keyboard.push([
 ☎️ <b>ʜᴜʙᴜɴɢɪ ᴀᴅᴍɪɴ:</b>
 ╰<a href="https://t.me/${adminUsername}">@${adminUsername}</a>
 
-📦━━━━━━━━━━━━━━━━━━━━━📦
-     <code>  💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ </code>
-     <code>  📢 ᵂᴬ 081450330727 </code>
-📦━━━━━━━━━━━━━━━━━━━━━📦
+📦━━━━━━━━━━━━━━━━━━━━📦
+     <code>🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ ${namaStore} ɴᴇᴛᴡᴏʀᴋ</code>
+📦━━━━━━━━━━━━━━━━━━━━📦
 `;
 
     let sentMessage;
@@ -7036,7 +7066,7 @@ async function processDepositSaweria(ctx, amount) {
 🏷️ *» Waktu:* ${timestamp}
 
 🏷️ *» Silahkan scan QR berikut untuk membayar melalui QRIS.*
-🏷️ *» Expired:* 10 menit dari sekarang`,
+🏷️ *» Expired:* 5 menit dari sekarang`,
       parse_mode: 'Markdown',
     });
 
@@ -7061,8 +7091,8 @@ setInterval(async () => {
 
       const depositAge = Date.now() - dep.created_at;
 
-      // ⏳ Jika sudah lebih dari 10 menit = expired
-      if (depositAge > 10 * 60 * 1000) {
+      // ⏳ Jika sudah lebih dari 5 menit = expired
+      if (depositAge > 5 * 60 * 1000) {
         try {
           if (dep.qrMessageId) {
             await bot.telegram.deleteMessage(dep.userId, dep.qrMessageId).catch(e =>
@@ -9037,8 +9067,8 @@ bot.action(/^(create|renew|trial)_username_(vmess|vless|trojan|shadowsocks|ssh)_
 
         const isUnlimited = result != null;
 
-        if (!isUnlimited && trialCount >= 1) {
-          return ctx.reply('⚠️ *Kamu sudah trial hari ini sayank, Gass Order* 😖', { parse_mode: 'Markdown' });
+        if (!isUnlimited && trialCount >= 2) {
+          return ctx.reply('⚠️ *Kamu sudah trial hari ini, Gass Order* 😖', { parse_mode: 'Markdown' });
         }
 
         await handleTrial(ctx, type, serverId);
@@ -9300,9 +9330,9 @@ if (global.depositState && (
     const input = ctx.message.text.trim();
     const nominal = parseInt(input.replace(/[^\d]/g, ''), 10);
 
-    if (isNaN(nominal) || nominal < 100) {
+    if (isNaN(nominal) || nominal < 5000) {
         return ctx.reply(
-            '❌ *Nominal tidak valid. Minimal Rp100.*',
+            '❌ *Nominal tidak valid. Minimal Rp5000.*',
             { parse_mode: 'Markdown' }
         );
     }
@@ -10731,7 +10761,7 @@ bot.action('deleteserver', async (ctx) => {
       const keyboard = servers.map(server => {
         return [{ text: server.nama_server, callback_data: `confirm_delete_server_${server.id}` }];
       });
-      keyboard.push([{ text: '🔙 Kembali ke Menu Utama', callback_data: 'kembali_ke_menu' }]);
+      keyboard.push([{ text: '‹ KEMBALI KE MENU UTAMA', callback_data: 'kembali_ke_menu' }]);
 
       ctx.reply('🗑️ *Pilih server yang ingin dihapus:*', {
         reply_markup: {
@@ -11396,7 +11426,7 @@ const sent = await ctx.reply(
 ⚡ *ꜱɪʟᴀʜᴋᴀɴ ᴋᴇᴛɪᴋ ɴᴏᴍɪɴᴀʟ ᴛᴏᴘ-ᴜᴘ*  
 ʏᴀɴɢ ɪɴɢɪɴ ᴀɴᴅᴀ ʙᴀʏᴀʀᴋᴀɴ ᴍᴇʟᴀʟᴜɪ ᴍᴇᴛᴏᴅᴇ Qʀɪꜱ Oʀᴋᴜᴛ.  
 
-💰 ᴍɪɴɪᴍᴀʟ ᴛᴏᴘ-ᴜᴘ: *Rp 100*  
+💰 ᴍɪɴɪᴍᴀʟ ᴛᴏᴘ-ᴜᴘ: *Rp 5000*  
 🧾 ᴄᴏɴᴛᴏʜ: \`10000\`
 
 ━━━━━━━━━━━━━━━━━━━━━━━
@@ -11491,8 +11521,8 @@ bot.action('topup_shopeepay', async (ctx) => {
 
 ⚡ *Sɪʟᴀʜᴋᴀɴ Kᴇᴛɪᴋ Nᴏᴍɪɴᴀʟ Tᴏᴘ-ᴜᴘ*
 
-💰 ᴍɪɴɪᴍᴀʟ ᴛᴏᴘ-ᴜᴘ: *Rp 5000*  
-🧾 ᴄᴏɴᴛᴏʜ: \`10000\`
+💰 *Minimal top-up:* Rp 100
+🧾 *Contoh:* \`10000\`
 
 ━━━━━━━━━━━━━━━━━━━━━━━
 ⌛ Kᴇᴍᴜᴅɪᴀɴ ᴛᴜɴɢɢᴜ ᴘʀᴏsᴇs ᴏᴛᴏᴍᴀᴛɪs.
@@ -11705,7 +11735,7 @@ bot.action('log_bonus_topup', async (ctx) => {
         hour12: false
       });
 
-      return `━━━━━━━━━━━━━━\n?? *${i + 1}*\n👤 User: ${username}\n🆔 ID: \`${row.user_id}\`\n💰 TopUp: *Rp${row.amount}*\n🎁 Bonus: *Rp${row.bonus}*\n⏰ ${formattedTimestamp}`;
+      return `━━━━━━━━━━━━━━\n🔹 *${i + 1}*\n👤 User: ${username}\n🆔 ID: \`${row.user_id}\`\n💰 TopUp: *Rp${row.amount}*\n🎁 Bonus: *Rp${row.bonus}*\n⏰ ${formattedTimestamp}`;
     }).join('\n\n');
 
     // Tambahin garis terakhir di paling bawah
@@ -12446,7 +12476,7 @@ async function processDepositGopay(ctx, amount) {
       ``,
       `💵 ɴᴏᴍɪɴᴀʟ: *Rp ${finalAmount}*`,
       `🆔 ʀᴇꜰꜰ: \`${String(reff)}\``,
-      `⏳ ʙᴀᴛᴀꜱ ᴡᴀᴋᴛᴜ: *10 ᴍᴇɴɪᴛ*`,
+      `⏳ ʙᴀᴛᴀꜱ ᴡᴀᴋᴛᴜ: *15 ᴍᴇɴɪᴛ*`,
       `⚠️ ᴛʀᴀɴꜱꜰᴇʀ *ʜᴀʀᴜꜱ ꜱᴇꜱᴜᴀɪ ɴᴏᴍɪɴᴀʟ*`,
       ``,
       `✅ ᴘᴇᴍʙᴀʏᴀʀᴀɴ ᴏᴛᴏᴍᴀᴛɪꜱ`,
@@ -12454,7 +12484,7 @@ async function processDepositGopay(ctx, amount) {
       `🔗 [Buka QRIS](${safeQrUrl})`,
       ``,
       `┏━━━━━━━━━━━━━━━━━━━━━┓`,
-      `          💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ`,
+      `     💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ`,
       `┗━━━━━━━━━━━━━━━━━━━━━┛`
     ].join('\n');
 
@@ -12629,7 +12659,7 @@ const payment = {
   fee,
   total_payment: finalAmount,
   order_id: uniqueCode,
-  expired_at: new Date(Date.now() + 10 * 60 * 1000).toISOString()
+  expired_at: new Date(Date.now() + 5 * 60 * 1000).toISOString()
 };
 
 const qrisImage = await generateQrisTemplate(payment);
@@ -13366,8 +13396,8 @@ async function checkQRISStatusGopay() {
 
       const depositAge = now - deposit.timestamp;
 
-      // EXPIRED 10 MENIT
-      if (depositAge > 10 * 60 * 1000) {
+      // EXPIRED 15 MENIT
+      if (depositAge > 15 * 60 * 1000) {
         logger.info(`⌛ EXPIRED GOPAY | ${uniqueCode}`);
 
         deposit.status = 'expired';
@@ -13377,7 +13407,7 @@ async function checkQRISStatusGopay() {
             deposit.userId,
             deposit.qrMessageId,
             null,
-            '❌ *QRIS GOPAY sudah expired (10 menit)*',
+            '❌ *QRIS GOPAY sudah expired (15 menit)*',
             { parse_mode: 'Markdown' }
           );
         } catch (e) {
@@ -13576,8 +13606,8 @@ async function checkQRISStatus() {
 
       const depositAge = Date.now() - deposit.timestamp;
 
-      // Expired 10 menit
-      if (depositAge > 10 * 60 * 1000) {
+      // Expired 5 menit
+      if (depositAge > 5 * 60 * 1000) {
         try {
           if (deposit.qrMessageId) {
             await bot.telegram.deleteMessage(
@@ -13628,7 +13658,7 @@ async function checkQRISStatus() {
         // QRIS ORKUT - JANGAN DIUBAH
         // ============================================================
         const checkPaymentUrl =
-          `https://bat.aroma.web.id/mutasi?token=${API_KEY}`;
+          `https://ubuntu-vps-production-d28c.up.railway.app/mutasi?token=${API_KEY}`;
 
         const { data } = await axios.get(checkPaymentUrl);
 
@@ -14082,7 +14112,7 @@ function keyboard_abc() {
 
   buttons.push([
     {
-      text: '🔙 Kembali ke Menu Utama',
+      text: '‹ KEMBALI KE MENU UTAMA',
       callback_data: 'send_main_menu',
       style: 'danger'
     }
@@ -14120,7 +14150,7 @@ function keyboard_nomor() {
 
   buttons.push([
     {
-      text: '🔙 Kembali ke Menu Utama',
+      text: '‹ KEMBALI KE MENU UTAMA',
       callback_data: 'send_main_menu',
       style: 'danger'
     }
@@ -14158,7 +14188,7 @@ function keyboard_full() {
 
   buttons.push([
     {
-      text: '🔙 Kembali ke Menu Utama',
+      text: '‹ KEMBALI KE MENU UTAMA',
       callback_data: 'send_main_menu',
       style: 'danger'
     }
@@ -15305,347 +15335,593 @@ async function downgradeInactiveResellers() {
     });
 }
 // [END UPDATE]
-
+// =========================================================
+// GLOBAL ERROR HANDLERS
+// =========================================================
 
 process.on('uncaughtException', (err) => {
-  console.error('🔥 Uncaught Exception:', err);
+  const message = err?.stack || err?.message || String(err);
+
+  try {
+    logger.error(`🚨 Uncaught Exception: ${message}`);
+  } catch (_) {
+    console.error('🚨 Uncaught Exception:', message);
+  }
 });
 
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('🔥 Unhandled Rejection:', reason);
+process.on('unhandledRejection', (reason) => {
+  const message =
+    reason?.stack ||
+    reason?.message ||
+    String(reason);
+
+  try {
+    logger.error(`🚨 Unhandled Rejection: ${message}`);
+  } catch (_) {
+    console.error('🚨 Unhandled Rejection:', message);
+  }
 });
 
-app.listen(port)
-  .on('listening', () => {
-    logger.info(`Express server listening on port ${port}`);
-    
-// =======================
-// GLOBAL SAFETY WRAPPERS (Auto-inserted)
-// =======================
-// This section adds global error handlers and automatically wraps bot handlers
-// so the bot will not crash on uncaught errors. It also adds safer wrappers
-// for setInterval/setTimeout and axios to log errors without exiting.
-const util = require('util');
 
-// Wrap async handlers to catch errors and reply gracefully when possible
-function wrapHandler(fnName, fn) {
-  if (!fn) return fn;
-  return async function wrapped(...args) {
+// =========================================================
+// SAFE HANDLER WRAPPER
+// =========================================================
+
+function wrapHandler(name, fn) {
+  if (typeof fn !== 'function') {
+    return fn;
+  }
+
+  return async function wrappedHandler(...args) {
     try {
       return await fn.apply(this, args);
     } catch (err) {
+      const message =
+        err?.stack ||
+        err?.message ||
+        String(err);
+
       try {
-        logger.error(`❌ Unhandled error in handler (${fnName}): ${err && (err.stack || err.message)}`);
-      } catch(e) {
-        console.error('Logger failed:', e);
-        console.error(err && (err.stack || err));
+        logger.error(
+          `❌ Error handler [${name}]: ${message}`
+        );
+      } catch (_) {
+        console.error(
+          `❌ Error handler [${name}]:`,
+          message
+        );
       }
-      // Attempt to notify user if ctx-like object present
-      const maybeCtx = args[0];
+
+      const ctx = args[0];
+
       try {
-        if (maybeCtx && typeof maybeCtx.reply === 'function') {
-          await maybeCtx.reply('⚠️ Terjadi kesalahan internal, silakan coba lagi nanti.');
-        } else if (maybeCtx && maybeCtx.answerCbQuery) {
-          // best-effort for callback queries
-          await maybeCtx.answerCbQuery('⚠️ Terjadi kesalahan internal.');
+        if (
+          ctx &&
+          typeof ctx.reply === 'function'
+        ) {
+          await ctx.reply(
+            '⚠️ Terjadi kesalahan internal.\nSilakan coba lagi nanti.'
+          );
+        } else if (
+          ctx &&
+          typeof ctx.answerCbQuery === 'function'
+        ) {
+          await ctx.answerCbQuery(
+            '⚠️ Terjadi kesalahan internal.'
+          );
         }
-      } catch (e2) {
-        // ignore notification failures
+      } catch (_) {
+        // Abaikan error saat mengirim pesan error
       }
-      // swallow error to prevent process exit
+
       return null;
     }
   };
 }
 
-// Monkey-patch Telegraf registration helpers to auto-wrap handlers
+
+// =========================================================
+// TELEGRAF SAFE WRAPPERS
+// =========================================================
+
 try {
-  const _origCommand = bot.command.bind(bot);
-  bot.command = function (cmd, ...fns) {
-    const wrapped = fns.map(fn => (typeof fn === 'function' ? wrapHandler(`command:${cmd}`, fn) : fn));
-    return _origCommand(cmd, ...wrapped);
-  };
 
-  const _origAction = bot.action.bind(bot);
-  bot.action = function (pattern, ...fns) {
-    const wrapped = fns.map(fn => (typeof fn === 'function' ? wrapHandler(`action:${pattern}`, fn) : fn));
-    return _origAction(pattern, ...wrapped);
-  };
+  // -------------------------
+  // COMMAND
+  // -------------------------
 
-  const _origHears = bot.hears ? bot.hears.bind(bot) : null;
-  if (_origHears) {
-    bot.hears = function (pattern, ...fns) {
-      const wrapped = fns.map(fn => (typeof fn === 'function' ? wrapHandler(`hears:${pattern}`, fn) : fn));
-      return _origHears(pattern, ...wrapped);
+  if (typeof bot.command === 'function') {
+    const originalCommand = bot.command.bind(bot);
+
+    bot.command = function (command, ...handlers) {
+      const wrapped = handlers.map((fn) =>
+        wrapHandler(
+          `command:${command}`,
+          fn
+        )
+      );
+
+      return originalCommand(
+        command,
+        ...wrapped
+      );
     };
   }
 
-  const _origOn = bot.on ? bot.on.bind(bot) : null;
-  if (_origOn) {
-    bot.on = function (event, ...fns) {
-      const wrapped = fns.map(fn => (typeof fn === 'function' ? wrapHandler(`on:${event}`, fn) : fn));
-      return _origOn(event, ...wrapped);
+
+  // -------------------------
+  // ACTION
+  // -------------------------
+
+  if (typeof bot.action === 'function') {
+    const originalAction = bot.action.bind(bot);
+
+    bot.action = function (pattern, ...handlers) {
+      const wrapped = handlers.map((fn) =>
+        wrapHandler(
+          `action:${pattern}`,
+          fn
+        )
+      );
+
+      return originalAction(
+        pattern,
+        ...wrapped
+      );
     };
   }
-} catch (e) {
-  logger.error('❌ Gagal pasang wrapper Telegraf: ' + (e && e.stack || e));
+
+
+  // -------------------------
+  // HEARS
+  // -------------------------
+
+  if (typeof bot.hears === 'function') {
+    const originalHears = bot.hears.bind(bot);
+
+    bot.hears = function (pattern, ...handlers) {
+      const wrapped = handlers.map((fn) =>
+        wrapHandler(
+          `hears:${pattern}`,
+          fn
+        )
+      );
+
+      return originalHears(
+        pattern,
+        ...wrapped
+      );
+    };
+  }
+
+
+  // -------------------------
+  // ON
+  // -------------------------
+
+  if (typeof bot.on === 'function') {
+    const originalOn = bot.on.bind(bot);
+
+    bot.on = function (event, ...handlers) {
+      const wrapped = handlers.map((fn) =>
+        wrapHandler(
+          `on:${event}`,
+          fn
+        )
+      );
+
+      return originalOn(
+        event,
+        ...wrapped
+      );
+    };
+  }
+
+} catch (err) {
+
+  logger.error(
+    `❌ Gagal memasang Telegraf safety wrapper: ${
+      err?.stack || err?.message || err
+    }`
+  );
+
 }
 
-// Safe wrappers for setInterval and setTimeout
-const _setInterval = global.setInterval;
-global.setInterval = function (fn, ms, ...args) {
-  return _setInterval(() => {
-    try {
-      fn(...args);
-    } catch (err) {
-      logger.error('❌ Error di setInterval callback: ' + (err && (err.stack || err.message)));
-    }
-  }, ms);
-};
-const _setTimeout = global.setTimeout;
-global.setTimeout = function (fn, ms, ...args) {
-  return _setTimeout(() => {
-    try {
-      fn(...args);
-    } catch (err) {
-      logger.error('❌ Error di setTimeout callback: ' + (err && (err.stack || err.message)));
-    }
-  }, ms);
-};
 
-// Wrap axios methods to log errors before rethrowing
-if (typeof axios !== 'undefined') {
-  try {
-    const _axiosGet = axios.get.bind(axios);
-    axios.get = async function (...args) {
+// =========================================================
+// SAFE TIMER WRAPPERS
+// =========================================================
+
+const originalSetInterval = global.setInterval;
+const originalSetTimeout = global.setTimeout;
+
+
+// -------------------------
+// SAFE SET INTERVAL
+// -------------------------
+
+global.setInterval = function (
+  fn,
+  delay,
+  ...args
+) {
+
+  return originalSetInterval(
+    () => {
+
       try {
-        return await _axiosGet(...args);
-      } catch (err) {
-        logger.error('❌ Axios.get error: ' + (err && (err.stack || err.message)));
-        throw err;
-      }
-    };
-    const _axiosPost = axios.post.bind(axios);
-    axios.post = async function (...args) {
-      try {
-        return await _axiosPost(...args);
-      } catch (err) {
-        logger.error('❌ Axios.post error: ' + (err && (err.stack || err.message)));
-        throw err;
-      }
-    };
-  } catch (e) {
-    logger.error('❌ Gagal pasang wrapper axios: ' + (e && (e.stack || e)));
-  }
-}
 
-// Global process-level handlers to prevent crashes
-process.on('uncaughtException', (err) => {
-  try {
-    logger.error('🚨 uncaughtException: ' + (err && (err.stack || err.message)));
-  } catch (e) {
-    console.error('uncaughtException logger failed', e);
-    console.error(err && (err.stack || err));
-  }
-});
-process.on('unhandledRejection', (reason, p) => {
-  try {
-    logger.error('🚨 unhandledRejection: ' + (reason && (reason.stack || reason)));
-  } catch (e) {
-    console.error('unhandledRejection logger failed', e);
-    console.error(reason && (reason.stack || reason));
-  }
-});
+        const result = fn(...args);
 
+        // Tangkap async rejection
+        if (
+          result &&
+          typeof result.catch === 'function'
+        ) {
+          result.catch((err) => {
 
-bot.launch().then(() => {
-      logger.info("Bot launched");
-      // [UPDATE: Menjalankan pengecekan downgrade reseller secara berkala]
-      setInterval(() => {
-        logger.info('🔁 Menjalankan pengecekan downgrade reseller...');
-        downgradeInactiveResellers();
-      }, 6 * 60 * 60 * 1000); // Tiap 6 jam
-      // [END UPDATE]
-    }).catch((err) => {
-      logger.error("Bot failed to launch:", err);
-    });
-  })
-  .on('error', (err) => {
-    logger.error("Express failed to start:", err.message);
-    
-// =======================
-// GLOBAL SAFETY WRAPPERS (Auto-inserted)
-// =======================
-// This section adds global error handlers and automatically wraps bot handlers
-// so the bot will not crash on uncaught errors. It also adds safer wrappers
-// for setInterval/setTimeout and axios to log errors without exiting.
-const util = require('util');
+            logger.error(
+              `❌ Error async setInterval: ${
+                err?.stack ||
+                err?.message ||
+                err
+              }`
+            );
 
-// Wrap async handlers to catch errors and reply gracefully when possible
-function wrapHandler(fnName, fn) {
-  if (!fn) return fn;
-  return async function wrapped(...args) {
-    try {
-      return await fn.apply(this, args);
-    } catch (err) {
-      try {
-        logger.error(`❌ Unhandled error in handler (${fnName}): ${err && (err.stack || err.message)}`);
-      } catch(e) {
-        console.error('Logger failed:', e);
-        console.error(err && (err.stack || err));
-      }
-      // Attempt to notify user if ctx-like object present
-      const maybeCtx = args[0];
-      try {
-        if (maybeCtx && typeof maybeCtx.reply === 'function') {
-          await maybeCtx.reply('⚠️ Terjadi kesalahan internal, silakan coba lagi nanti.');
-        } else if (maybeCtx && maybeCtx.answerCbQuery) {
-          // best-effort for callback queries
-          await maybeCtx.answerCbQuery('⚠️ Terjadi kesalahan internal.');
+          });
         }
-      } catch (e2) {
-        // ignore notification failures
+
+      } catch (err) {
+
+        logger.error(
+          `❌ Error setInterval: ${
+            err?.stack ||
+            err?.message ||
+            err
+          }`
+        );
+
       }
-      // swallow error to prevent process exit
-      return null;
-    }
-  };
-}
 
-// Monkey-patch Telegraf registration helpers to auto-wrap handlers
-try {
-  const _origCommand = bot.command.bind(bot);
-  bot.command = function (cmd, ...fns) {
-    const wrapped = fns.map(fn => (typeof fn === 'function' ? wrapHandler(`command:${cmd}`, fn) : fn));
-    return _origCommand(cmd, ...wrapped);
-  };
+    },
+    delay
+  );
 
-  const _origAction = bot.action.bind(bot);
-  bot.action = function (pattern, ...fns) {
-    const wrapped = fns.map(fn => (typeof fn === 'function' ? wrapHandler(`action:${pattern}`, fn) : fn));
-    return _origAction(pattern, ...wrapped);
-  };
-
-  const _origHears = bot.hears ? bot.hears.bind(bot) : null;
-  if (_origHears) {
-    bot.hears = function (pattern, ...fns) {
-      const wrapped = fns.map(fn => (typeof fn === 'function' ? wrapHandler(`hears:${pattern}`, fn) : fn));
-      return _origHears(pattern, ...wrapped);
-    };
-  }
-
-  const _origOn = bot.on ? bot.on.bind(bot) : null;
-  if (_origOn) {
-    bot.on = function (event, ...fns) {
-      const wrapped = fns.map(fn => (typeof fn === 'function' ? wrapHandler(`on:${event}`, fn) : fn));
-      return _origOn(event, ...wrapped);
-    };
-  }
-} catch (e) {
-  logger.error('❌ Gagal pasang wrapper Telegraf: ' + (e && e.stack || e));
-}
-
-// Safe wrappers for setInterval and setTimeout
-const _setInterval = global.setInterval;
-global.setInterval = function (fn, ms, ...args) {
-  return _setInterval(() => {
-    try {
-      fn(...args);
-    } catch (err) {
-      logger.error('❌ Error di setInterval callback: ' + (err && (err.stack || err.message)));
-    }
-  }, ms);
-};
-const _setTimeout = global.setTimeout;
-global.setTimeout = function (fn, ms, ...args) {
-  return _setTimeout(() => {
-    try {
-      fn(...args);
-    } catch (err) {
-      logger.error('❌ Error di setTimeout callback: ' + (err && (err.stack || err.message)));
-    }
-  }, ms);
 };
 
-// Wrap axios methods to log errors before rethrowing
-if (typeof axios !== 'undefined') {
+
+// -------------------------
+// SAFE SET TIMEOUT
+// -------------------------
+
+global.setTimeout = function (
+  fn,
+  delay,
+  ...args
+) {
+
+  return originalSetTimeout(
+    () => {
+
+      try {
+
+        const result = fn(...args);
+
+        // Tangkap async rejection
+        if (
+          result &&
+          typeof result.catch === 'function'
+        ) {
+          result.catch((err) => {
+
+            logger.error(
+              `❌ Error async setTimeout: ${
+                err?.stack ||
+                err?.message ||
+                err
+              }`
+            );
+
+          });
+        }
+
+      } catch (err) {
+
+        logger.error(
+          `❌ Error setTimeout: ${
+            err?.stack ||
+            err?.message ||
+            err
+          }`
+        );
+
+      }
+
+    },
+    delay
+  );
+
+};
+
+
+// =========================================================
+// AXIOS ERROR LOGGER
+// =========================================================
+
+if (
+  typeof axios !== 'undefined' &&
+  axios
+) {
+
   try {
-    const _axiosGet = axios.get.bind(axios);
+
+    const originalAxiosGet =
+      axios.get.bind(axios);
+
     axios.get = async function (...args) {
+
       try {
-        return await _axiosGet(...args);
+
+        return await originalAxiosGet(
+          ...args
+        );
+
       } catch (err) {
-        logger.error('❌ Axios.get error: ' + (err && (err.stack || err.message)));
+
+        logger.error(
+          `❌ Axios GET error: ${
+            err?.response?.data
+              ? JSON.stringify(
+                  err.response.data
+                )
+              : err?.stack ||
+                err?.message ||
+                err
+          }`
+        );
+
         throw err;
       }
+
     };
-    const _axiosPost = axios.post.bind(axios);
+
+
+    const originalAxiosPost =
+      axios.post.bind(axios);
+
     axios.post = async function (...args) {
+
       try {
-        return await _axiosPost(...args);
+
+        return await originalAxiosPost(
+          ...args
+        );
+
       } catch (err) {
-        logger.error('❌ Axios.post error: ' + (err && (err.stack || err.message)));
+
+        logger.error(
+          `❌ Axios POST error: ${
+            err?.response?.data
+              ? JSON.stringify(
+                  err.response.data
+                )
+              : err?.stack ||
+                err?.message ||
+                err
+          }`
+        );
+
         throw err;
       }
+
     };
-  } catch (e) {
-    logger.error('❌ Gagal pasang wrapper axios: ' + (e && (e.stack || e)));
+
+  } catch (err) {
+
+    logger.error(
+      `❌ Gagal memasang Axios wrapper: ${
+        err?.stack ||
+        err?.message ||
+        err
+      }`
+    );
+
   }
+
 }
 
-// Global process-level handlers to prevent crashes
-process.on('uncaughtException', (err) => {
-  try {
-    logger.error('🚨 uncaughtException: ' + (err && (err.stack || err.message)));
-  } catch (e) {
-    console.error('uncaughtException logger failed', e);
-    console.error(err && (err.stack || err));
-  }
-});
-process.on('unhandledRejection', (reason, p) => {
-  try {
-    logger.error('🚨 unhandledRejection: ' + (reason && (reason.stack || reason)));
-  } catch (e) {
-    console.error('unhandledRejection logger failed', e);
-    console.error(reason && (reason.stack || reason));
-  }
-});
-// backup otomatis sellvpn.db
+
+// =========================================================
+// AUTO BACKUP DATABASE
+// =========================================================
+
 function startAutoBackup() {
 
-    setInterval(async () => {
+  let lastBackupDate = '';
 
-        const now = new Date();
+  setInterval(
+    async () => {
 
-        if (
-            now.getHours() === 0 &&
-            now.getMinutes() === 0
-        ) {
+      const now = new Date();
 
-            try {
+      const dateKey =
+        `${now.getFullYear()}-` +
+        `${String(
+          now.getMonth() + 1
+        ).padStart(2, '0')}-` +
+        `${String(
+          now.getDate()
+        ).padStart(2, '0')}`;
 
-                const backup = await createDatabaseBackup();
+      // Hanya backup sekali setiap hari
+      if (
+        now.getHours() !== 0 ||
+        now.getMinutes() !== 0
+      ) {
+        return;
+      }
 
-                await sendBackupToAdmin(
-                    backup.path,
-                    backup.name
-                );
+      if (
+        lastBackupDate === dateKey
+      ) {
+        return;
+      }
 
-            } catch (err) {
+      lastBackupDate = dateKey;
 
-                logger.error(err);
+      try {
 
-            }
+        logger.info(
+          '🗄️ Membuat backup database otomatis...'
+        );
 
-        }
+        const backup =
+          await createDatabaseBackup();
 
-    }, 60000);
+        await sendBackupToAdmin(
+          backup.path,
+          backup.name
+        );
+
+        logger.info(
+          `✅ Backup otomatis berhasil: ${backup.name}`
+        );
+
+      } catch (err) {
+
+        logger.error(
+          `❌ Backup otomatis gagal: ${
+            err?.stack ||
+            err?.message ||
+            err
+          }`
+        );
+
+      }
+
+    },
+    60 * 1000
+  );
 
 }
+
+
+// =========================================================
+// START AUTO BACKUP
+// =========================================================
 
 startAutoBackup();
 
-bot.launch().catch(err => {
-      logger.error("Bot fallback launch error:", err.message);
-    });
+
+// =========================================================
+// START EXPRESS SERVER
+// =========================================================
+
+app.listen(port)
+  .on('listening', () => {
+
+    logger.info(
+      `🌐 Express server listening on port ${port}`
+    );
+
+  })
+  .on('error', (err) => {
+
+    logger.error(
+      `❌ Express failed to start: ${
+        err?.stack ||
+        err?.message ||
+        err
+      }`
+    );
+
   });
+
+
+// =========================================================
+// START TELEGRAM BOT
+// =========================================================
+
+bot.launch()
+  .then(() => {
+
+    logger.info(
+      '🤖 Telegram bot launched successfully'
+    );
+
+
+    // =====================================================
+    // CEK DOWNGRADE RESELLER
+    // Setiap 6 jam
+    // =====================================================
+
+    setInterval(
+      async () => {
+
+        try {
+
+          logger.info(
+            '🔁 Menjalankan pengecekan downgrade reseller...'
+          );
+
+          await downgradeInactiveResellers();
+
+        } catch (err) {
+
+          logger.error(
+            `❌ Gagal pengecekan downgrade reseller: ${
+              err?.stack ||
+              err?.message ||
+              err
+            }`
+          );
+
+        }
+
+      },
+      6 * 60 * 60 * 1000
+    );
+
+  })
+  .catch((err) => {
+
+    logger.error(
+      `❌ Bot gagal launch: ${
+        err?.stack ||
+        err?.message ||
+        err
+      }`
+    );
+
+  });
+
+
+// =========================================================
+// GRACEFUL SHUTDOWN
+// =========================================================
+
+function shutdown(signal) {
+
+  logger.info(
+    `🛑 Menerima ${signal}, menghentikan aplikasi...`
+  );
+
+  try {
+    bot.stop(signal);
+  } catch (_) {}
+
+  try {
+    process.exit(0);
+  } catch (_) {}
+
+}
+
+process.once(
+  'SIGINT',
+  () => shutdown('SIGINT')
+);
+
+process.once(
+  'SIGTERM',
+  () => shutdown('SIGTERM')
+);
