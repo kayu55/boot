@@ -3973,11 +3973,6 @@ finalKeyboard.push([
     text: '📡 Ayo Cek Kuota XL/AXIS',
     callback_data: 'menu_cek_kuota',
     style: 'primary'
-  },
-  {
-    text: '♛ PPOB STORE',
-    callback_data: 'home',
-    style: 'primary'
   }
 ]);
 
@@ -10140,7 +10135,7 @@ delete userState[userId];
         }
         userState[userId].step = 'addserver_harga';
         userState[userId].batas_create_akun = batas_create_akun;
-        await ctx.reply('💰 *Silahkan masukkan harga server:*', { parse_mode: 'Markdown' });
+        await ctx.reply('?? *Silahkan masukkan harga server:*', { parse_mode: 'Markdown' });
         return;
     } else if (state && state.step === 'addserver_harga') {
         const harga = parseFloat(ctx.message.text.trim());
