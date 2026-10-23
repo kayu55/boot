@@ -3928,10 +3928,10 @@ VPN • DIGITAL STORE • FAST SERVICE</blockquote>
 ✧ <b>VIP CUSTOMER SUPPORT</b>
 <a href="https://t.me/${adminUsername}">╰📨 @${adminUsername}</a>
 
-📦━━━━━━━━━━━━━━━━━━━━━📦
-     <code>  💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ </code>
-     <code>  📢 ᵂᴬ 081450330727 </code>
-📦━━━━━━━━━━━━━━━━━━━━━📦
+━━━━━━━━━━━━━━━━━━━━━━
+<code>BLACK & GOLD · PREMIUM DIGITAL SERVICE</code>
+<code>POWERED BY ${NAMA_STORE}</code>
+━━━━━━━━━━━━━━━━━━━━━━
 `;
 
     const finalKeyboard = [];
@@ -4684,6 +4684,7 @@ bot.action('menu_trial', async (ctx) => {
 • VMESS
 • VLESS
 • TROJAN
+• SHADOWSOCKS
 `;
 
 const keyboard = [
@@ -4708,6 +4709,13 @@ const keyboard = [
     {
       text: '🔥 TROJAN Trial',
       callback_data: 'trial_trojan',
+      style: 'primary'
+    }
+  ],
+  [
+    {
+      text: '🌙 SHADOWSOCKS Trial',
+      callback_data: 'trial_shadowsocks',
       style: 'primary'
     }
   ],
@@ -4756,6 +4764,7 @@ bot.action('menu_create', async (ctx) => {
 • VMESS
 • VLESS
 • TROJAN
+• SHADOWSOCKS
 `;
 
 const keyboard = [
@@ -4780,6 +4789,13 @@ const keyboard = [
     {
       text: '🔥 TROJAN',
       callback_data: 'create_trojan',
+      style: 'primary'
+    }
+  ],
+  [
+    {
+      text: '🌙 SHADOWSOCKS',
+      callback_data: 'create_shadowsocks',
       style: 'primary'
     }
   ],
@@ -4828,6 +4844,7 @@ bot.action('menu_renew', async (ctx) => {
 • VMESS
 • VLESS
 • TROJAN
+• SHADOWSOCKS
 `;
 
 const keyboard = [
@@ -4852,6 +4869,13 @@ const keyboard = [
     {
       text: '🔥 TROJAN',
       callback_data: 'renew_trojan',
+      style: 'primary'
+    }
+  ],
+  [
+    {
+      text: '🌙 SHADOWSOCKS',
+      callback_data: 'renew_shadowsocks',
       style: 'primary'
     }
   ],
@@ -5875,7 +5899,7 @@ bot.on('text', async (ctx, next) => {
   const kuotaState = cekKuotaState[userId];
 
   console.log(
-    '?? [KUOTA] State:',
+    '📡 [KUOTA] State:',
     kuotaState ? 'DITEMUKAN' : 'TIDAK ADA'
   );
 
@@ -9178,9 +9202,33 @@ await ctx.reply(result.message, {
     inline_keyboard: [
       [
         {
-          text: '🔙 Kembali Ke Menu Utama',
-          callback_data: 'send_main_menu',
+          text: '📲 HTTP Custom',
+          callback_data: 'convert_hc',
           style: 'primary'
+        },
+        {
+          text: '🌐 NetMod',
+          callback_data: 'convert_nm',
+          style: 'primary'
+        }
+      ],
+      [
+        {
+          text: '📦 Clash',
+          callback_data: 'convert_clash',
+          style: 'primary'
+        },
+        {
+          text: '⚡ V2Ray',
+          callback_data: 'convert_yaml',
+          style: 'primary'
+        }
+      ],
+      [
+        {
+          text: '❌ Tutup',
+          callback_data: 'close_convert',
+          style: 'danger'
         }
       ]
     ]
@@ -9330,9 +9378,9 @@ if (global.depositState && (
     const input = ctx.message.text.trim();
     const nominal = parseInt(input.replace(/[^\d]/g, ''), 10);
 
-    if (isNaN(nominal) || nominal < 5000) {
+    if (isNaN(nominal) || nominal < 100) {
         return ctx.reply(
-            '❌ *Nominal tidak valid. Minimal Rp5000.*',
+            '❌ *Nominal tidak valid. Minimal Rp100.*',
             { parse_mode: 'Markdown' }
         );
     }
@@ -10072,9 +10120,33 @@ await ctx.reply(msg, {
                 inline_keyboard: [
                     [
                         {
-                            text: "🔙 Kembali Ke Menu Utama",
-                            callback_data: "send_main_menu",
+                            text: "📲 HTTP Custom",
+                            callback_data: "convert_hc",
                             style: "primary"
+                        },
+                        {
+                            text: "🌐 NetMod",
+                            callback_data: "convert_nm",
+                            style: "primary"
+                        }
+                    ],
+                    [
+                        {
+                            text: "📦 Clash",
+                            callback_data: "convert_clash",
+                            style: "primary"
+                        },
+                        {
+                            text: "⚡ V2Ray",
+                            callback_data: "convert_yaml",
+                            style: "primary"
+                        }
+                    ],
+                    [
+                        {
+                            text: "❌ Tutup",
+                            callback_data: "close_convert",
+                            style: "danger"
                         }
                     ]
                 ]
@@ -11426,7 +11498,7 @@ const sent = await ctx.reply(
 ⚡ *ꜱɪʟᴀʜᴋᴀɴ ᴋᴇᴛɪᴋ ɴᴏᴍɪɴᴀʟ ᴛᴏᴘ-ᴜᴘ*  
 ʏᴀɴɢ ɪɴɢɪɴ ᴀɴᴅᴀ ʙᴀʏᴀʀᴋᴀɴ ᴍᴇʟᴀʟᴜɪ ᴍᴇᴛᴏᴅᴇ Qʀɪꜱ Oʀᴋᴜᴛ.  
 
-💰 ᴍɪɴɪᴍᴀʟ ᴛᴏᴘ-ᴜᴘ: *Rp 5000*  
+💰 ᴍɪɴɪᴍᴀʟ ᴛᴏᴘ-ᴜᴘ: *Rp 100*  
 🧾 ᴄᴏɴᴛᴏʜ: \`10000\`
 
 ━━━━━━━━━━━━━━━━━━━━━━━
@@ -12476,7 +12548,7 @@ async function processDepositGopay(ctx, amount) {
       ``,
       `💵 ɴᴏᴍɪɴᴀʟ: *Rp ${finalAmount}*`,
       `🆔 ʀᴇꜰꜰ: \`${String(reff)}\``,
-      `⏳ ʙᴀᴛᴀꜱ ᴡᴀᴋᴛᴜ: *15 ᴍᴇɴɪᴛ*`,
+      `⏳ ʙᴀᴛᴀꜱ ᴡᴀᴋᴛᴜ: *5 ᴍᴇɴɪᴛ*`,
       `⚠️ ᴛʀᴀɴꜱꜰᴇʀ *ʜᴀʀᴜꜱ ꜱᴇꜱᴜᴀɪ ɴᴏᴍɪɴᴀʟ*`,
       ``,
       `✅ ᴘᴇᴍʙᴀʏᴀʀᴀɴ ᴏᴛᴏᴍᴀᴛɪꜱ`,
@@ -12484,7 +12556,7 @@ async function processDepositGopay(ctx, amount) {
       `🔗 [Buka QRIS](${safeQrUrl})`,
       ``,
       `┏━━━━━━━━━━━━━━━━━━━━━┓`,
-      `     💥 ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ`,
+      `    🌐 ᴅɪᴋᴇʟᴏʟᴀ ᴏʟᴇʜ *ᴀɴꜱᴇɴᴅᴀɴᴛ ɴᴇᴛᴡᴏʀᴋ*`,
       `┗━━━━━━━━━━━━━━━━━━━━━┛`
     ].join('\n');
 
@@ -13396,8 +13468,8 @@ async function checkQRISStatusGopay() {
 
       const depositAge = now - deposit.timestamp;
 
-      // EXPIRED 15 MENIT
-      if (depositAge > 15 * 60 * 1000) {
+      // EXPIRED 5 MENIT
+      if (depositAge > 5 * 60 * 1000) {
         logger.info(`⌛ EXPIRED GOPAY | ${uniqueCode}`);
 
         deposit.status = 'expired';
@@ -13407,7 +13479,7 @@ async function checkQRISStatusGopay() {
             deposit.userId,
             deposit.qrMessageId,
             null,
-            '❌ *QRIS GOPAY sudah expired (15 menit)*',
+            '❌ *QRIS GOPAY sudah expired (5 menit)*',
             { parse_mode: 'Markdown' }
           );
         } catch (e) {
