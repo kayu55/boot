@@ -60,7 +60,7 @@ setup_bot() {
     rm -rf app.js
     rm -rf ppob.js
     wget https://raw.githubusercontent.com/kayu55/boot/main/botvpn/ppob.js
-    wget https://raw.githubusercontent.com/kayu55/boot/main/botvpn/app.js
+    wget https://raw.githubusercontent.com/kayu55/boot/main/botvpn/app1.js
     
     cd assets
     wget https://raw.githubusercontent.com/kayu55/boot/main/botvpn/qris.png
@@ -325,7 +325,7 @@ EOF
     cat >/usr/bin/sellvpn <<EOF
 #!/bin/bash
 cd /root/BotVPN2 || exit 1
-$NODE_PATH app.js
+$NODE_PATH app1.js
 EOF
 
     chmod +x /usr/bin/sellvpn
@@ -340,7 +340,7 @@ Description=App Bot sellvpn Service
 After=network.target
 
 [Service]
-ExecStart=$NODE_PATH /root/BotVPN2/app.js
+ExecStart=$NODE_PATH /root/BotVPN2/app1.js
 WorkingDirectory=/root/BotVPN2
 Restart=always
 RestartSec=3
