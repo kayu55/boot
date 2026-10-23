@@ -51,16 +51,16 @@ setup_bot() {
 
     # Clone Bot
     if [ ! -d /root/BotVPN2 ]; then
-        git clone https://github.com/kayu55/BotVPN2.git /root/BotVPN2
+        git clone https://github.com/myridwan/BotVPN2.git /root/BotVPN2
     fi
 
-   # Install dependencies
+    # Install dependencies
     cd /root/BotVPN2
     mkdir -p assets
     rm -rf app.js
     rm -rf ppob.js
     wget bsi.web.id/botvpn/ppob.js
-    wget https://raw.githubusercontent.com/kayu55/boot/main/botvpn/app.js
+    wget bsi.web.id/botvpn/app.js
     
     cd assets
     wget https://raw.githubusercontent.com/kayu55/boot/main/botvpn/qris.png
@@ -137,12 +137,12 @@ server_app() {
         read -rp "Masukkan Email Saweria: " saweria_email
     done
 
-    read -rp "Masukkan Username  ( id-grup ): " username_grup
+    read -rp "Masukkan Username Grup: " username_grup
     while [ -z "$username_grup" ]; do
         read -rp "Masukkan Username Grup: " username_grup
     done
 
-    read -rp "Masukkan Username  ( id-channel ): " username_channel
+    read -rp "Masukkan Username Channel: " username_channel
     while [ -z "$username_channel" ]; do
         read -rp "Masukkan Username Channel: " username_channel
     done
@@ -180,12 +180,12 @@ server_app() {
     # GAMBAR
     # =====================================================
 
-    read -rp "Masukkan Link Gambar MENU (https://kamu.web.id/menu.jpg: " gambar_menu
+    read -rp "Masukkan Link Gambar Menu: " gambar_menu
     while [ -z "$gambar_menu" ]; do
         read -rp "Masukkan Link Gambar Menu: " gambar_menu
     done
 
-    read -rp "Masukkan Link Gambar Topup (https://kamu.web.id/topup.jpg: " gambar_topup
+    read -rp "Masukkan Link Gambar Topup: " gambar_topup
     while [ -z "$gambar_topup" ]; do
         read -rp "Masukkan Link Gambar Topup: " gambar_topup
     done
@@ -218,7 +218,7 @@ server_app() {
     # =====================================================
 
     echo
-    echo -e "${purple} KONFIGURASI PPOB DIGIFLAZZ ${neutral}"
+    echo -e "${purple} KONFIGURASI PPOB DIGIFLAZZ â”€â”€â”€â”€${neutral}"
 
     read -rp "Masukkan DIGIFLAZZ USERNAME: " digiflazz_username
     while [ -z "$digiflazz_username" ]; do
@@ -303,7 +303,7 @@ EOF
     chmod 600 /root/BotVPN2/.vars.json
 
     echo
-    echo -e "${green}install .vars.json berhasil disinkronkan dengan konfigurasi PPOB.${neutral}"
+    echo -e "${green}âœ“ .vars.json berhasil disinkronkan dengan konfigurasi PPOB.${neutral}"
 
     # =====================================================
     # NODE
