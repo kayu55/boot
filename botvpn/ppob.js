@@ -47,10 +47,10 @@ function registerPPOB(bot, options = {}) {
 
   const roleLabel = r =>
     ({
-      bronze: 'ðŸ¥‰ BRONZE',
-      silver: 'ðŸ¥ˆ SILVER',
-      gold: 'ðŸ¥‡ GOLD'
-    }[r] || 'ðŸ¥‰ BRONZE');
+      bronze: '🥉 BRONZE',
+      silver: '🥈 SILVER',
+      gold: '🥇 GOLD'
+    }[r] || '🥉 BRONZE');
 
   const idgen = () =>
     `RZ${Date.now().toString(36).toUpperCase()}${Math.random()
@@ -67,7 +67,7 @@ function registerPPOB(bot, options = {}) {
     const c = String(callbackData || '').toLowerCase();
 
     if (
-      /âŒ|BATAL|CANCEL|HAPUS|DELETE|KURANGI|REMOVE|TOLAK|RESET|MIN SALDO|KELUAR/.test(t) ||
+      /❌|BATAL|CANCEL|HAPUS|DELETE|KURANGI|REMOVE|TOLAK|RESET|MIN SALDO|KELUAR/.test(t) ||
       /^(cancel|cancelbuy|adm:minsaldo|delete|remove)(:|$)/.test(c)
     ) {
       return 'danger';
@@ -140,41 +140,41 @@ function registerPPOB(bot, options = {}) {
   const rows = [
     [
       {
-        text: 'ðŸ›’ PPOB',
+        text: '🛒 PPOB',
         callback_data: 'ppob',
         style: 'primary'
       },
       {
-        text: 'ðŸ’° SALDO',
+        text: '💰 SALDO',
         callback_data: 'saldo',
         style: 'success'
       },
       {
-        text: 'âž• DEPOSIT',
+        text: '➕ DEPOSIT',
         callback_data: 'deposit',
         style: 'primary'
       }
     ],
     [
       {
-        text: 'ðŸ“œ RIWAYAT',
+        text: '📜 RIWAYAT',
         callback_data: 'history',
         style: 'primary'
       },
       {
-        text: 'ðŸŽ–ï¸ ROLE',
+        text: '🎖️ ROLE',
         callback_data: 'role',
         style: 'primary'
       },
       {
-        text: 'ðŸ‘¤ PROFIL',
+        text: '👤 PROFIL',
         callback_data: 'profile',
         style: 'primary'
       }
     ],
     [
       {
-        text: 'ðŸ  MENU VPN',
+        text: '🏠 MENU VPN',
         callback_data: 'send_main_menu',
         style: 'danger'
       }
@@ -184,7 +184,7 @@ function registerPPOB(bot, options = {}) {
   if (ctx && admin(ctx)) {
     rows.splice(3, 0, [
       {
-        text: 'ðŸ› ï¸ ADMIN',
+        text: '🛠️ ADMIN',
         callback_data: 'admin',
         style: 'danger'
       }
@@ -199,14 +199,14 @@ function nav(...buttons) {
     ...buttons,
     [
       {
-        text: 'ðŸ  MENU PPOB',
+        text: '🏠 MENU PPOB',
         callback_data: 'ppobmenu',
         style: 'primary'
       }
     ],
     [
       {
-        text: 'ðŸ” MENU VPN',
+        text: '🔐 MENU VPN',
         callback_data: 'send_main_menu',
         style: 'danger'
       }
@@ -329,7 +329,7 @@ function nav(...buttons) {
 
   function specText(p) {
     const s = digi.destinationSpec(p.category, p.brand);
-    return `${esc(s.label)} â€” contoh: <code>${esc(s.placeholder)}</code>`;
+    return `${esc(s.label)} — contoh: <code>${esc(s.placeholder)}</code>`;
   }
 
   function price(p, type, role) {
@@ -339,20 +339,20 @@ function nav(...buttons) {
   function homeText() {
   const storeName = config.botName || 'ANSENDANTVPN';
 
-  return `<b>ðŸ”¥ ${storeName}</b>
+  return `<b>🔥 ${storeName}</b>
 
-<b>PPOB â€¢ DIGITAL â€¢ 24 JAM</b>
+<b>PPOB • DIGITAL • 24 JAM</b>
 
 Solusi pembelian otomatis
-â€¢ Cepat
-â€¢ Aman
-â€¢ Tanpa menunggu admin
+• Cepat
+• Aman
+• Tanpa menunggu admin
 
-ðŸ“¶ Kuota  â€¢  ðŸ“± Pulsa  â€¢  ðŸŽ® Game
-âš¡ PLN  â€¢  ðŸ’³ E-Money  â€¢  ðŸŽŸï¸ Voucher
+📶 Kuota  •  📱 Pulsa  •  🎮 Game
+⚡ PLN  •  💳 E-Money  •  🎟️ Voucher
 
-ðŸ’³ Deposit QRIS otomatis
-ðŸŽ–ï¸ Harga menyesuaikan role member
+💳 Deposit QRIS otomatis
+🎖️ Harga menyesuaikan role member
 
 Silakan pilih menu:`;
 }
@@ -439,10 +439,10 @@ Silakan pilih menu:`;
     }
 
     const m = await ctx.reply(
-      `ðŸ”Ž <b>CARI PRODUK</b>\n\nKetik nama produk, operator, atau kata kunci.\nContoh: <code>xl 10gb</code> atau <code>telkomsel</code>\n\nKetik /batal untuk membatalkan.`,
+      `🔎 <b>CARI PRODUK</b>\n\nKetik nama produk, operator, atau kata kunci.\nContoh: <code>xl 10gb</code> atau <code>telkomsel</code>\n\nKetik /batal untuk membatalkan.`,
       {
         parse_mode: 'HTML',
-        ...Markup.inlineKeyboard([[btn('ðŸ  Menu', 'home')]])
+        ...Markup.inlineKeyboard([[btn('🏠 Menu', 'home')]])
       }
     );
 
@@ -462,20 +462,20 @@ Silakan pilih menu:`;
     if (!items.length) {
       return tempReply(
         ctx,
-        `âŒ Produk untuk <b>${esc(q)}</b> tidak ditemukan.\n\nCoba kata kunci yang lebih singkat, misalnya <code>xl</code>, <code>10gb</code>, atau <code>mobile legend</code>.`,
+        `❌ Produk untuk <b>${esc(q)}</b> tidak ditemukan.\n\nCoba kata kunci yang lebih singkat, misalnya <code>xl</code>, <code>10gb</code>, atau <code>mobile legend</code>.`,
         { parse_mode: 'HTML' },
         9000
       );
     }
 
-    let text = `<b>ðŸ”Ž HASIL PENCARIAN</b>\n` + `<i>${esc(q)}</i>\n\n`;
+    let text = `<b>🔎 HASIL PENCARIAN</b>\n` + `<i>${esc(q)}</i>\n\n`;
     const rows = [];
 
     items.forEach((p, i) => {
       text +=
         `<blockquote><b>${i + 1}. ${esc(p.product_name)}</b>\n` +
-        `ðŸ·ï¸ ${esc(p.brand || prettyCategory(p.category))}\n` +
-        `ðŸ’° <b>${rp(price(p, type, u.role))}</b></blockquote>\n`;
+        `🏷️ ${esc(p.brand || prettyCategory(p.category))}\n` +
+        `💰 <b>${rp(price(p, type, u.role))}</b></blockquote>\n`;
 
       rows.push(
         productButton(String(i + 1), `prod:${type}:${encodeURIComponent(p.buyer_sku_code)}`, p.category)
@@ -487,7 +487,7 @@ Silakan pilih menu:`;
       kb.push(rows.slice(i, i + 5));
     }
 
-    kb.push([btn('ðŸ”Ž Cari Lagi', `search:${type}`), btn('ðŸ›’ PPOB', 'ppob')]);
+    kb.push([btn('🔎 Cari Lagi', `search:${type}`), btn('🛒 PPOB', 'ppob')]);
 
     return ctx.reply(text, {
       parse_mode: 'HTML',
@@ -514,16 +514,16 @@ Silakan pilih menu:`;
       .slice(0, 8);
 
     if (!items.length) {
-      return tempReply(ctx, 'âŒ Produk belum tersedia.');
+      return tempReply(ctx, '❌ Produk belum tersedia.');
     }
 
-    let text = '<b>ðŸ”¥ PRODUK POPULER</b>\n\n';
+    let text = '<b>🔥 PRODUK POPULER</b>\n\n';
     const rows = [];
 
     items.forEach((p, i) => {
       text +=
         `<blockquote><b>${i + 1}. ${esc(p.product_name)}</b>\n` +
-        `ðŸ’° <b>${rp(price(p, type, u.role))}</b></blockquote>\n`;
+        `💰 <b>${rp(price(p, type, u.role))}</b></blockquote>\n`;
 
       rows.push(
         productButton(String(i + 1), `prod:${type}:${encodeURIComponent(p.buyer_sku_code)}`, p.category)
@@ -535,7 +535,7 @@ Silakan pilih menu:`;
       kb.push(rows.slice(i, i + 4));
     }
 
-    kb.push([btn('ðŸ›’ PPOB', 'ppob'), btn('ðŸ  Menu', 'home')]);
+    kb.push([btn('🛒 PPOB', 'ppob'), btn('🏠 Menu', 'home')]);
 
     return safeEdit(ctx, text, Markup.inlineKeyboard(kb));
   }
@@ -546,8 +546,8 @@ Silakan pilih menu:`;
     if (!rows.length) {
       return safeEdit(
         ctx,
-        `âŒ Produk ${type === 'prepaid' ? 'prabayar' : 'pascabayar'} belum tersedia.\n\nAdmin: lakukan /syncproduk`,
-        nav([btn('ðŸ”„ Sync', 'sync')])
+        `❌ Produk ${type === 'prepaid' ? 'prabayar' : 'pascabayar'} belum tersedia.\n\nAdmin: lakukan /syncproduk`,
+        nav([btn('🔄 Sync', 'sync')])
       );
     }
 
@@ -567,20 +567,20 @@ Silakan pilih menu:`;
       );
     }
 
-    b.push([btn('ðŸ”Ž CARI PRODUK', `search:${type}`), btn('ðŸ”¥ POPULER', `popular:${type}`)]);
-    b.push([btn('ðŸ”µ Prabayar', 'type:prepaid'), btn('ðŸŸ£ Pascabayar', 'type:pasca')]);
-    b.push([btn('ðŸ  Menu Utama', 'home')]);
+    b.push([btn('🔎 CARI PRODUK', `search:${type}`), btn('🔥 POPULER', `popular:${type}`)]);
+    b.push([btn('🔵 Prabayar', 'type:prepaid'), btn('🟣 Pascabayar', 'type:pasca')]);
+    b.push([btn('🏠 Menu Utama', 'home')]);
 
 const storeName = config.botName || 'RIPZZ STORE';
 
 const text =
-  `<b>ðŸ›’ PPOB ${esc(storeName)}</b>\n\n` +
-  `<i>Belanja kebutuhan digital otomatis â€” cepat, aman & 24 jam.</i>\n\n` +
-  `ðŸ‘¤ Role: <b>${roleLabel(u.role)}</b>\n` +
-  `ðŸ’° Saldo: <b>${rp(u.balance)}</b>\n` +
-  `ðŸ“Š Total transaksi: <b>${totalTx}</b>\n\n` +
-  `âš¡ Harga mengikuti role kamu.\n` +
-  `ðŸ’³ Bayar dengan saldo atau QRIS otomatis.\n\n` +
+  `<b>🛒 PPOB ${esc(storeName)}</b>\n\n` +
+  `<i>Belanja kebutuhan digital otomatis — cepat, aman & 24 jam.</i>\n\n` +
+  `👤 Role: <b>${roleLabel(u.role)}</b>\n` +
+  `💰 Saldo: <b>${rp(u.balance)}</b>\n` +
+  `📊 Total transaksi: <b>${totalTx}</b>\n\n` +
+  `⚡ Harga mengikuti role kamu.\n` +
+  `💳 Bayar dengan saldo atau QRIS otomatis.\n\n` +
   `<b>Pilih kategori layanan:</b>`;
 
 return safeEdit(
@@ -592,7 +592,7 @@ return safeEdit(
   async function showBrands(ctx, type, cat) {
     const rows = digi.brands(type, cat);
     if (!rows.length) {
-      return safeEdit(ctx, 'âŒ Brand tidak ditemukan.', nav([btn('â¬…ï¸ï¸ Kategori', 'ppob')]));
+      return safeEdit(ctx, '❌ Brand tidak ditemukan.', nav([btn('⬅️️ Kategori', 'ppob')]));
     }
 
     const b = [];
@@ -608,12 +608,12 @@ return safeEdit(
       );
     }
 
-    b.push([btn('ðŸ”Ž Cari Produk', `search:${type}`)]);
-    b.push([btn('â¬…ï¸ Kategori', `type:${type}`), btn('ðŸ  Menu', 'home')]);
+    b.push([btn('🔎 Cari Produk', `search:${type}`)]);
+    b.push([btn('⬅️ Kategori', `type:${type}`), btn('🏠 Menu', 'home')]);
 
     return safeEdit(
       ctx,
-      `<b>ðŸ·ï¸ ${esc(ppobLayout.LABELS[cat] || cat)}</b>\n\nPilih provider:`,
+      `<b>🏷️ ${esc(ppobLayout.LABELS[cat] || cat)}</b>\n\nPilih provider:`,
       Markup.inlineKeyboard(b)
     );
   }
@@ -627,14 +627,14 @@ return safeEdit(
     if (!items.length) {
       return safeEdit(
         ctx,
-        'âŒ Produk tidak ditemukan.',
-        nav([btn('â¬…ï¸ Brand', `cat:${type}:${encodeURIComponent(cat)}`)])
+        '❌ Produk tidak ditemukan.',
+        nav([btn('⬅️ Brand', `cat:${type}:${encodeURIComponent(cat)}`)])
       );
     }
 
     const u = user(ctx);
     let text =
-      `<b>ðŸ“¦ ${esc(cat)} â€” ${esc(brand)}</b>\n` +
+      `<b>📦 ${esc(cat)} — ${esc(brand)}</b>\n` +
       `<i>Halaman ${page + 1}/${Math.max(1, Math.ceil(all.length / size))}</i>\n\n`;
 
     const b = [];
@@ -644,7 +644,7 @@ return safeEdit(
       const pr = price(p, type, u.role);
 
       text +=
-        `<blockquote><b>${no}. âœ“ ${esc(p.product_name)}</b>\n` +
+        `<blockquote><b>${no}. ✓ ${esc(p.product_name)}</b>\n` +
         `Harga : <b>${rp(pr)}</b></blockquote>\n`;
 
       b.push(
@@ -659,16 +659,16 @@ return safeEdit(
 
     const navb = [];
     if (page > 0) {
-      navb.push(btn('â¬…ï¸ Prev', `page:${type}:${encodeURIComponent(cat)}:${encodeURIComponent(brand)}:${page - 1}`));
+      navb.push(btn('⬅️ Prev', `page:${type}:${encodeURIComponent(cat)}:${encodeURIComponent(brand)}:${page - 1}`));
     }
     if (start + size < all.length) {
-      navb.push(btn('Next âž¡ï¸', `page:${type}:${encodeURIComponent(cat)}:${encodeURIComponent(brand)}:${page + 1}`));
+      navb.push(btn('Next ➡️', `page:${type}:${encodeURIComponent(cat)}:${encodeURIComponent(brand)}:${page + 1}`));
     }
     if (navb.length) {
       buttons.push(navb);
     }
 
-    buttons.push([btn('â¬…ï¸ Brand', `cat:${type}:${encodeURIComponent(cat)}`), btn('ðŸ  Menu', 'home')]);
+    buttons.push([btn('⬅️ Brand', `cat:${type}:${encodeURIComponent(cat)}`), btn('🏠 Menu', 'home')]);
 
     return safeEdit(ctx, text, Markup.inlineKeyboard(buttons));
   }
@@ -696,7 +696,7 @@ return safeEdit(
   async function showProduct(ctx, type, sku) {
     const p = digi.find(sku, type);
     if (!p) {
-      return safeEdit(ctx, 'âŒ Produk tidak ditemukan.', nav());
+      return safeEdit(ctx, '❌ Produk tidak ditemukan.', nav());
     }
 
     const u = user(ctx);
@@ -705,18 +705,18 @@ return safeEdit(
 const storeName = config.botName || 'RIPZZ STORE';
 
 const text =
-  `<b>ðŸ›ï¸ DETAIL PRODUK</b>\n\n` +
+  `<b>🛍️ DETAIL PRODUK</b>\n\n` +
   `<b>${esc(p.product_name)}</b>\n\n` +
-  `ðŸ·ï¸ Kategori: <b>${esc(prettyCategory(p.category))}</b>\n` +
-  `ðŸª Provider: <b>${esc(storeName)}</b>\n` +
-  `ðŸ’° Harga: <b>${rp(pr)}</b>\n` +
-  `ðŸ“Š Status: ${p.buyer_product_status ? 'ðŸŸ¢ Tersedia' : 'ðŸ”´ Tidak tersedia'}\n\n` +
+  `🏷️ Kategori: <b>${esc(prettyCategory(p.category))}</b>\n` +
+  `🏪 Provider: <b>${esc(storeName)}</b>\n` +
+  `💰 Harga: <b>${rp(pr)}</b>\n` +
+  `📊 Status: ${p.buyer_product_status ? '🟢 Tersedia' : '🔴 Tidak tersedia'}\n\n` +
   `${specText(p)}\n\n` +
   `Tekan <b>BELI SEKARANG</b> untuk melanjutkan.`;
 
     const kb = Markup.inlineKeyboard([
-      [btn('ðŸ›’ BELI SEKARANG', `buy:${type}:${encodeURIComponent(sku)}`)],
-      [btn('â¬…ï¸ Produk', `backprod:${type}:${encodeURIComponent(p.category)}:${encodeURIComponent(p.brand)}:0`), btn('ðŸ  Menu', 'home')]
+      [btn('🛒 BELI SEKARANG', `buy:${type}:${encodeURIComponent(sku)}`)],
+      [btn('⬅️ Produk', `backprod:${type}:${encodeURIComponent(p.category)}:${encodeURIComponent(p.brand)}:0`), btn('🏠 Menu', 'home')]
     ]);
 
     if (ctx.callbackQuery?.message?.message_id) {
@@ -765,18 +765,18 @@ const text =
     db.updateTx(tx.id, tx);
 
     const cap =
-      `<b>ðŸ’³ PEMBAYARAN QRIS</b>\n\n` +
+      `<b>💳 PEMBAYARAN QRIS</b>\n\n` +
       `Order: <code>${tx.id}</code>\n` +
       `${tx.productName ? `Produk: <b>${esc(tx.productName)}</b>\n` : ''}` +
       `${tx.customerNo ? `Tujuan: <code>${esc(tx.customerNo)}</code>\n` : ''}` +
       `Nominal: <b>${rp(tx.amount)}</b>\n` +
       `Total QRIS: <b>${rp(q.totalAmount || q.amount || tx.amount)}</b>\n` +
       `Kode unik: <b>${rp(q.uniqueCode || 0)}</b>\n\n` +
-      `â³ Berlaku ${config.qrisExpireMinutes} menit. QR otomatis dihapus setelah lunas atau kedaluwarsa.`;
+      `⏳ Berlaku ${config.qrisExpireMinutes} menit. QR otomatis dihapus setelah lunas atau kedaluwarsa.`;
 
     const kb = Markup.inlineKeyboard([
-      [btn('ðŸ”„ Cek Pembayaran', `paycheck:${tx.id}`)],
-      [btn('âŒ Batalkan', `cancel:${tx.id}`)]
+      [btn('🔄 Cek Pembayaran', `paycheck:${tx.id}`)],
+      [btn('❌ Batalkan', `cancel:${tx.id}`)]
     ]);
 
     let m = null;
@@ -816,7 +816,7 @@ const text =
   async function startBuy(ctx, type, sku) {
     const p = digi.find(sku, type);
     if (!p || !digi.active(p)) {
-      return tempReply(ctx, 'âŒ Produk tidak aktif.');
+      return tempReply(ctx, '❌ Produk tidak aktif.');
     }
 
     const u = user(ctx);
@@ -828,8 +828,8 @@ const text =
 
     const s = digi.destinationSpec(p.category, p.brand);
     const prompt = await ctx.reply(
-      `ðŸ›’ <b>${esc(p.product_name)}</b>\n\n` +
-        `ðŸ’° Harga: <b>${rp(pr)}</b>\n\n` +
+      `🛒 <b>${esc(p.product_name)}</b>\n\n` +
+        `💰 Harga: <b>${rp(pr)}</b>\n\n` +
         `Kirim <b>${esc(s.label)}</b>.\n` +
         `Contoh: <code>${esc(s.placeholder)}</code>\n\n` +
         `Ketik /batal untuk membatalkan.`,
@@ -849,7 +849,7 @@ const text =
   async function showBuyConfirm(ctx, s, customerNo) {
     const p = digi.find(s.sku, s.type);
     if (!p || !digi.active(p)) {
-      return tempReply(ctx, 'âŒ Produk sudah tidak tersedia.');
+      return tempReply(ctx, '❌ Produk sudah tidak tersedia.');
     }
 
     const u = user(ctx);
@@ -863,18 +863,18 @@ const text =
     });
 
     return ctx.reply(
-      `<b>âš ï¸ KONFIRMASI PEMBELIAN</b>\n\n` +
-        `ðŸ“¦ Produk: <b>${esc(p.product_name)}</b>\n` +
-        `ðŸ“± Tujuan: <code>${esc(customerNo)}</code>\n` +
-        `ðŸ’° Harga: <b>${rp(pr)}</b>\n` +
-        `ðŸ’³ Saldo: <b>${rp(u.balance)}</b>\n\n` +
+      `<b>⚠️ KONFIRMASI PEMBELIAN</b>\n\n` +
+        `📦 Produk: <b>${esc(p.product_name)}</b>\n` +
+        `📱 Tujuan: <code>${esc(customerNo)}</code>\n` +
+        `💰 Harga: <b>${rp(pr)}</b>\n` +
+        `💳 Saldo: <b>${rp(u.balance)}</b>\n\n` +
         `Pastikan produk dan tujuan sudah benar sebelum melanjutkan.`,
       {
         parse_mode: 'HTML',
         ...Markup.inlineKeyboard([
           [
-            btn('âœ… KONFIRMASI', `confirmbuy:${s.type}:${encodeURIComponent(s.sku)}`),
-            btn('âŒ BATAL', 'cancelbuy')
+            btn('✅ KONFIRMASI', `confirmbuy:${s.type}:${encodeURIComponent(s.sku)}`),
+            btn('❌ BATAL', 'cancelbuy')
           ]
         ])
       }
@@ -882,8 +882,8 @@ const text =
   }
 
   async function startLoading(chatId, text, txId) {
-    const frames = ['â³', 'âŒ›', 'â³', 'âŒ›'];
-    const m = await bot.telegram.sendMessage(chatId, `â³ <b>${esc(text)}</b>`, { parse_mode: 'HTML' });
+    const frames = ['⏳', '⌛', '⏳', '⌛'];
+    const m = await bot.telegram.sendMessage(chatId, `⏳ <b>${esc(text)}</b>`, { parse_mode: 'HTML' });
     let i = 0;
 
     const state = {
@@ -927,7 +927,7 @@ const text =
   async function submitOrder(ctx, s, val) {
     const p = digi.find(s.sku, s.type);
     if (!p || !digi.active(p)) {
-      return tempReply(ctx, 'âŒ Produk sudah tidak aktif.');
+      return tempReply(ctx, '❌ Produk sudah tidak aktif.');
     }
 
     const u = user(ctx);
@@ -952,7 +952,7 @@ const text =
 
     if (Number(u.balance) >= pr) {
       if (!db.deductBalance(u.id, pr)) {
-        return tempReply(ctx, 'âŒ Saldo berubah dan tidak mencukupi.');
+        return tempReply(ctx, '❌ Saldo berubah dan tidak mencukupi.');
       }
 
       db.updateTx(tx.id, {
@@ -971,7 +971,7 @@ const text =
         status: 'ERROR',
         error: e.message
       });
-      return tempReply(ctx, 'âŒ Gagal membuat pembayaran: ' + esc(e.message), { parse_mode: 'HTML' });
+      return tempReply(ctx, '❌ Gagal membuat pembayaran: ' + esc(e.message), { parse_mode: 'HTML' });
     }
   }
 
@@ -1022,7 +1022,7 @@ const text =
       });
       await tempSend(
         tx.chatId,
-        'âš ï¸ Pesanan diterima, tetapi supplier belum dapat diproses. Hubungi admin dengan Order ID: ' + tx.id
+        '⚠️ Pesanan diterima, tetapi supplier belum dapat diproses. Hubungi admin dengan Order ID: ' + tx.id
       );
     } finally {
       locks.delete(lock);
@@ -1040,17 +1040,17 @@ const text =
     const storeName = config.botName || 'ANSENDANTVPN';
 
 const text =
-  `<b>ðŸŽ‰ PEMBELIAN BERHASIL</b>\n\n` +
-  `<b>ðŸ§¾ Detail Pesanan</b>\n` +
-  `â”œ Order : <code>${esc(tx.id)}</code>\n` +
-  `â”œ Produk : <b>${esc(tx.productName)}</b>\n` +
-  `â”œ Tujuan : <code>${esc(tx.customerNo)}</code>\n` +
-  `â”œ Harga : <b>${rp(tx.amount)}</b>\n` +
-  `â”” Status : <b>BERHASIL âœ…</b>\n\n` +
-  `<b>ðŸ” Serial Number</b>\n` +
+  `<b>🎉 PEMBELIAN BERHASIL</b>\n\n` +
+  `<b>🧾 Detail Pesanan</b>\n` +
+  `├ Order : <code>${esc(tx.id)}</code>\n` +
+  `├ Produk : <b>${esc(tx.productName)}</b>\n` +
+  `├ Tujuan : <code>${esc(tx.customerNo)}</code>\n` +
+  `├ Harga : <b>${rp(tx.amount)}</b>\n` +
+  `└ Status : <b>BERHASIL ✅</b>\n\n` +
+  `<b>🔐 Serial Number</b>\n` +
   `<code>${esc(r.sn || '-')}</code>` +
-  `${r.message ? `\n\nðŸ’¬ ${esc(r.message)}` : ''}\n\n` +
-  `Terima kasih telah berbelanja di <b>${esc(storeName)}</b> ðŸ’œ`;
+  `${r.message ? `\n\n💬 ${esc(r.message)}` : ''}\n\n` +
+  `Terima kasih telah berbelanja di <b>${esc(storeName)}</b> 💜`;
 
 await sendPersistent(
   tx.chatId,
@@ -1059,17 +1059,17 @@ await sendPersistent(
 );
 
 await notify(
-  `<b>â•­â”â”â” ðŸ§¾ ${esc(storeName)} â”â”â”â•®</b>
-<b>â”ƒ âœ… TRANSAKSI BERHASIL</b>
-<b>â•°â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â•¯</b>
+  `<b>╭━━━ 🧾 ${esc(storeName)} ━━━╮</b>
+<b>┃ ✅ TRANSAKSI BERHASIL</b>
+<b>╰━━━━━━━━━━━━━━━━━━━━╯</b>
 
-<b>ðŸ“¦ Produk</b> : ${esc(tx.productName)}
-<b>ðŸ“± Tujuan</b> : <code>${esc(tx.customerNo)}</code>
-<b>ðŸ’° Nominal</b> : <b>${rp(tx.amount)}</b>
-<b>ðŸ‘¤ User</b> : ${esc(tx.userName)}
-<b>ðŸ†” Order ID</b> : <code>${esc(tx.id)}</code>
-<b>ðŸ“Œ Status</b> : <b>SUCCESS</b>
-<b>ðŸ” SN</b> : <code>${esc(r.sn || '-')}</code>
+<b>📦 Produk</b> : ${esc(tx.productName)}
+<b>📱 Tujuan</b> : <code>${esc(tx.customerNo)}</code>
+<b>💰 Nominal</b> : <b>${rp(tx.amount)}</b>
+<b>👤 User</b> : ${esc(tx.userName)}
+<b>🆔 Order ID</b> : <code>${esc(tx.id)}</code>
+<b>📌 Status</b> : <b>SUCCESS</b>
+<b>🔐 SN</b> : <code>${esc(r.sn || '-')}</code>
 
 <i>Terima kasih telah menggunakan layanan ${esc(storeName)}.</i>`
 );
@@ -1104,7 +1104,7 @@ await notify(
 
     await sendPersistent(
       t.chatId,
-      `<b>âš ï¸ TRANSAKSI GAGAL</b>\n\n` +
+      `<b>⚠️ TRANSAKSI GAGAL</b>\n\n` +
         `Order: <code>${t.id}</code>\n` +
         `Produk: <b>${esc(t.productName)}</b>\n` +
         `Pesan: ${esc(msg || '-')}\n\n` +
@@ -1117,16 +1117,16 @@ await notify(
     ).catch(() => {});
 
 await notify(
-  `<b>â•­â”â”â” ðŸ§¾ ${esc(storeName)} â”â”â”â•®</b>
-<b>â”ƒ âŒ TRANSAKSI GAGAL</b>
-<b>â•°â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â•¯</b>
+  `<b>╭━━━ 🧾 ${esc(storeName)} ━━━╮</b>
+<b>┃ ❌ TRANSAKSI GAGAL</b>
+<b>╰━━━━━━━━━━━━━━━━━━━━╯</b>
 
-<b>ðŸ“¦ Produk</b> : ${esc(t.productName)}
-<b>ðŸ“± Tujuan</b> : <code>${esc(t.customerNo || '-')}</code>
-<b>ðŸ’° Nominal</b> : <b>${rp(t.amount)}</b>
-<b>ðŸ‘¤ User</b> : ${esc(t.userName)}
-<b>ðŸ†” Order ID</b> : <code>${esc(t.id)}</code>
-<b>ðŸ“Œ Status</b> : <b>GAGAL âŒ</b>
+<b>📦 Produk</b> : ${esc(t.productName)}
+<b>📱 Tujuan</b> : <code>${esc(t.customerNo || '-')}</code>
+<b>💰 Nominal</b> : <b>${rp(t.amount)}</b>
+<b>👤 User</b> : ${esc(t.userName)}
+<b>🆔 Order ID</b> : <code>${esc(t.id)}</code>
+<b>📌 Status</b> : <b>GAGAL ❌</b>
 
 <i>Silakan hubungi admin jika diperlukan.</i>`
 );
@@ -1159,7 +1159,7 @@ await notify(
 
           await sendPersistent(
             tx.chatId,
-            `<b>âœ… DEPOSIT BERHASIL</b>\n\n` +
+            `<b>✅ DEPOSIT BERHASIL</b>\n\n` +
               `Nominal: <b>${rp(tx.amount)}</b>\n` +
               `Saldo sekarang: <b>${rp(bal)}</b>`,
             { parse_mode: 'HTML' },
@@ -1167,15 +1167,15 @@ await notify(
           );
 
 await notify(
-  `<b>â•­â”â”â” ðŸ’³ ${esc(storeName)} â”â”â”â•®</b>
-<b>â”ƒ ðŸ’° DEPOSIT BERHASIL</b>
-<b>â•°â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â•¯</b>
+  `<b>╭━━━ 💳 ${esc(storeName)} ━━━╮</b>
+<b>┃ 💰 DEPOSIT BERHASIL</b>
+<b>╰━━━━━━━━━━━━━━━━━━━━╯</b>
 
-<b>ðŸ’µ Nominal</b> : <b>${rp(tx.amount)}</b>
-<b>ðŸ‘¤ User</b> : ${esc(tx.userName)}
-<b>ðŸ†” Order ID</b> : <code>${esc(tx.id)}</code>
-<b>ðŸ“Œ Status</b> : <b>SUCCESS âœ…</b>
-<b>ðŸ’° Saldo Baru</b> : <b>${rp(bal)}</b>`
+<b>💵 Nominal</b> : <b>${rp(tx.amount)}</b>
+<b>👤 User</b> : ${esc(tx.userName)}
+<b>🆔 Order ID</b> : <code>${esc(tx.id)}</code>
+<b>📌 Status</b> : <b>SUCCESS ✅</b>
+<b>💰 Saldo Baru</b> : <b>${rp(bal)}</b>`
 );
 
           return true;
@@ -1188,7 +1188,7 @@ await notify(
 
           await sendPersistent(
             tx.chatId,
-            `<b>ðŸŽ–ï¸ï¸ UPGRADE ROLE BERHASIL</b>\n\n` +
+            `<b>🎖️️ UPGRADE ROLE BERHASIL</b>\n\n` +
               `Role lama: ${roleLabel(u.role)}\n` +
               `Role baru: ${roleLabel(tx.targetRole)}\n` +
               `Biaya: <b>${rp(tx.amount)}</b>`,
@@ -1215,7 +1215,7 @@ await notify(
       if (tx.expiresAt && Date.now() > tx.expiresAt) {
         await removeQr(tx);
         db.updateTx(tx.id, { status: 'EXPIRED' });
-        await tempSend(tx.chatId, `â° Pembayaran QRIS <code>${tx.id}</code> telah kedaluwarsa.`, {
+        await tempSend(tx.chatId, `⏰ Pembayaran QRIS <code>${tx.id}</code> telah kedaluwarsa.`, {
           parse_mode: 'HTML'
         });
         continue;
@@ -1239,7 +1239,7 @@ await notify(
           });
           await sendPersistent(
             tx.chatId,
-            `<b>âš ï¸ TRANSAKSI BELUM SELESAI</b>\n\n` +
+            `<b>⚠️ TRANSAKSI BELUM SELESAI</b>\n\n` +
               `Order: <code>${tx.id}</code>\n` +
               `Supplier belum memberikan hasil dalam batas waktu pengecekan. Hubungi admin jika saldo belum kembali.`,
             { parse_mode: 'HTML' },
@@ -1284,18 +1284,18 @@ await notify(
 
   function adminMenuMarkup() {
     return Markup.inlineKeyboard([
-      [btn('ðŸ—„ Backup', 'adm:backup'), btn('â™»ï¸ Restore', 'adm:restore')],
-      [btn('ðŸ“£ Broadcast', 'adm:broadcast'), btn('ðŸ’° +Saldo', 'adm:addsaldox')],
-      [btn('ðŸ’¸ -Saldo', 'adm:minsaldo'), btn('ðŸ‘¥ User', 'adm:users')],
-      [btn('ðŸ“Š Statistik', 'adm:stats'), btn('ðŸ“‹ Log', 'adm:log')],
-      [btn('ðŸ”„ Sync Produk', 'adm:sync'), btn('ðŸ’³ Saldo Supplier', 'adm:digisaldo')],
-      [btn('â¬…ï¸ Menu Utama', 'home')]
+      [btn('🗄 Backup', 'adm:backup'), btn('♻️ Restore', 'adm:restore')],
+      [btn('📣 Broadcast', 'adm:broadcast'), btn('💰 +Saldo', 'adm:addsaldox')],
+      [btn('💸 -Saldo', 'adm:minsaldo'), btn('👥 User', 'adm:users')],
+      [btn('📊 Statistik', 'adm:stats'), btn('📋 Log', 'adm:log')],
+      [btn('🔄 Sync Produk', 'adm:sync'), btn('💳 Saldo Supplier', 'adm:digisaldo')],
+      [btn('⬅️ Menu Utama', 'home')]
     ]);
   }
 
   function adminGuard(ctx) {
     if (!admin(ctx)) {
-      tempReply(ctx, 'âŒ Menu ini khusus admin.');
+      tempReply(ctx, '❌ Menu ini khusus admin.');
       return false;
     }
     return true;
@@ -1326,7 +1326,7 @@ await notify(
     if (!doc) return false;
 
     if (!/\.tar\.gz$|\.tgz$/i.test(doc.file_name || '')) {
-      await tempReply(ctx, 'âŒ File restore harus .tar.gz atau .tgz.');
+      await tempReply(ctx, '❌ File restore harus .tar.gz atau .tgz.');
       return true;
     }
 
@@ -1361,7 +1361,7 @@ await notify(
 
       await tempReply(
         ctx,
-        'âœ… <b>RESTORE BERHASIL</b>\nData users, transaksi, produk, dan settings telah dipulihkan.',
+        '✅ <b>RESTORE BERHASIL</b>\nData users, transaksi, produk, dan settings telah dipulihkan.',
         { parse_mode: 'HTML' }
       );
 
@@ -1370,7 +1370,7 @@ await notify(
       try {
         fs.unlinkSync(tmp);
       } catch {}
-      await tempReply(ctx, 'âŒ Restore gagal: ' + esc(e.message), { parse_mode: 'HTML' });
+      await tempReply(ctx, '❌ Restore gagal: ' + esc(e.message), { parse_mode: 'HTML' });
       return true;
     }
   }
@@ -1379,12 +1379,12 @@ await notify(
     const storeName = config.botName || 'RIPZZ STORE';
 
 const text =
-  `<b>ðŸ› ï¸ PANEL ADMIN ${esc(storeName)}</b>\n\n` +
+  `<b>🛠️ PANEL ADMIN ${esc(storeName)}</b>\n\n` +
   `<i>Kelola seluruh sistem toko dari satu tempat.</i>\n\n` +
-  `ðŸ” <b>Akses Administrator</b>\n` +
-  `âš™ï¸ Kelola pengguna, transaksi & layanan\n` +
-  `ðŸ“Š Pantau aktivitas sistem\n` +
-  `ðŸ’³ Kelola pembayaran & saldo\n\n` +
+  `🔐 <b>Akses Administrator</b>\n` +
+  `⚙️ Kelola pengguna, transaksi & layanan\n` +
+  `📊 Pantau aktivitas sistem\n` +
+  `💳 Kelola pembayaran & saldo\n\n` +
   `<b>Silakan pilih fungsi administrasi:</b>`;
     return edit ? safeEdit(ctx, text, adminMenuMarkup()) : ctx.reply(text, { parse_mode: 'HTML', ...adminMenuMarkup() });
   }
@@ -1394,17 +1394,17 @@ const text =
     const arr = Object.values(us);
 
     if (!arr.length) {
-      return tempReply(ctx, 'ðŸ‘¥ Belum ada user.');
+      return tempReply(ctx, '👥 Belum ada user.');
     }
 
     arr.sort((a, b) => Number(b.updatedAt || 0) - Number(a.updatedAt || 0));
 
-    let text = `<b>ðŸ‘¥ DATA USER</b>\n` + `Total: <b>${arr.length}</b>\n\n`;
+    let text = `<b>👥 DATA USER</b>\n` + `Total: <b>${arr.length}</b>\n\n`;
 
     arr.slice(0, 30).forEach((u, i) => {
       text +=
         `${i + 1}. <code>${esc(u.id)}</code> ${esc(u.name || 'User')}\n` +
-        `   ${roleLabel(u.role)} â€¢ ${rp(u.balance)}\n\n`;
+        `   ${roleLabel(u.role)} • ${rp(u.balance)}\n\n`;
     });
 
     if (arr.length > 30) {
@@ -1413,7 +1413,7 @@ const text =
 
     return ctx.reply(text, {
       parse_mode: 'HTML',
-      ...Markup.inlineKeyboard([[btn('â¬…ï¸ Admin', 'admin')]])
+      ...Markup.inlineKeyboard([[btn('⬅️ Admin', 'admin')]])
     });
   }
 
@@ -1428,15 +1428,15 @@ const text =
       .reduce((n, x) => n + Number(x.amount || 0), 0);
 
     return ctx.reply(
-      `<b>ðŸ“Š STATISTIK</b>\n\n` +
-        `ðŸ‘¥ User: <b>${us.length}</b>\n` +
-        `ðŸ“¦ Transaksi: <b>${tx.length}</b>\n` +
-        `âœ… Sukses: <b>${success.length}</b>\n` +
-        `â³ Pending: <b>${pending.length}</b>\n` +
-        `ðŸ’° Omzet PPOB: <b>${rp(omzet)}</b>`,
+      `<b>📊 STATISTIK</b>\n\n` +
+        `👥 User: <b>${us.length}</b>\n` +
+        `📦 Transaksi: <b>${tx.length}</b>\n` +
+        `✅ Sukses: <b>${success.length}</b>\n` +
+        `⏳ Pending: <b>${pending.length}</b>\n` +
+        `💰 Omzet PPOB: <b>${rp(omzet)}</b>`,
       {
         parse_mode: 'HTML',
-        ...Markup.inlineKeyboard([[btn('â¬…ï¸ Admin', 'admin')]])
+        ...Markup.inlineKeyboard([[btn('⬅️ Admin', 'admin')]])
       }
     );
   }
@@ -1444,19 +1444,19 @@ const text =
   async function adminLog(ctx) {
     const tx = db.txs().slice(0, 20);
     if (!tx.length) {
-      return tempReply(ctx, 'ðŸ“‹ Log transaksi kosong.');
+      return tempReply(ctx, '📋 Log transaksi kosong.');
     }
 
-    let text = '<b>ðŸ“‹ LOG TRANSAKSI</b>\n\n';
+    let text = '<b>📋 LOG TRANSAKSI</b>\n\n';
     tx.forEach(x => {
       text +=
-        `<code>${esc(x.id)}</code> â€¢ ${esc(x.productName || x.purpose || '-')}\n` +
-        `${rp(x.amount)} â€¢ <b>${esc(x.status || '-')}</b>\n\n`;
+        `<code>${esc(x.id)}</code> • ${esc(x.productName || x.purpose || '-')}\n` +
+        `${rp(x.amount)} • <b>${esc(x.status || '-')}</b>\n\n`;
     });
 
     return ctx.reply(text, {
       parse_mode: 'HTML',
-      ...Markup.inlineKeyboard([[btn('â¬…ï¸ Admin', 'admin')]])
+      ...Markup.inlineKeyboard([[btn('⬅️ Admin', 'admin')]])
     });
   }
 
@@ -1487,21 +1487,21 @@ const text =
   async function roleMenu(ctx) {
     const u = user(ctx);
     let text =
-      `<b>ðŸŽ–ï¸ ROLE PPOB</b>\n\n` +
+      `<b>🎖️ ROLE PPOB</b>\n\n` +
       `Role: ${roleLabel(u.role)}\n\n` +
-      `ðŸ¥‰ Bronze: +${config.roles.margin.bronze}%\n` +
-      `ðŸ¥ˆ Silver: +${config.roles.margin.silver}%\n` +
-      `ðŸ¥‡ Gold: +${config.roles.margin.gold}%`;
+      `🥉 Bronze: +${config.roles.margin.bronze}%\n` +
+      `🥈 Silver: +${config.roles.margin.silver}%\n` +
+      `🥇 Gold: +${config.roles.margin.gold}%`;
 
     const b = [];
     if (u.role === 'bronze' && config.roles.price.silver > 0) {
-      b.push([btn(`ðŸ¥ˆ Silver Â· ${rp(config.roles.price.silver)}`, 'buyrole:silver')]);
+      b.push([btn(`🥈 Silver · ${rp(config.roles.price.silver)}`, 'buyrole:silver')]);
     }
     if (['bronze', 'silver'].includes(u.role) && config.roles.price.gold > 0) {
-      b.push([btn(`ðŸ¥‡ Gold Â· ${rp(config.roles.price.gold)}`, 'buyrole:gold')]);
+      b.push([btn(`🥇 Gold · ${rp(config.roles.price.gold)}`, 'buyrole:gold')]);
     }
 
-    b.push([btn('ðŸ  Menu', 'home')]);
+    b.push([btn('🏠 Menu', 'home')]);
     return safeEdit(ctx, text, Markup.inlineKeyboard(b));
   }
 
@@ -1554,15 +1554,15 @@ const text =
     const url = requiredChannelUrl();
     const rows = [];
     if (url) {
-      rows.push([Markup.button.url('ðŸ“¢ GABUNG CHANNEL', url)]);
+      rows.push([Markup.button.url('📢 GABUNG CHANNEL', url)]);
     }
-    rows.push([btn('ðŸ”„ SAYA SUDAH GABUNG', 'checkjoin')]);
+    rows.push([btn('🔄 SAYA SUDAH GABUNG', 'checkjoin')]);
 
 const m = await ctx.reply(
-  `<b>ðŸ”’ AKSES TERBATAS</b>\n\n` +
+  `<b>🔒 AKSES TERBATAS</b>\n\n` +
   `Sebelum menggunakan <b>${esc(storeName)}</b>, ` +
   `silakan bergabung terlebih dahulu ke channel resmi kami.\n\n` +
-  `Setelah bergabung, tekan <b>ðŸ”„ SAYA SUDAH GABUNG</b>.\n\n` +
+  `Setelah bergabung, tekan <b>🔄 SAYA SUDAH GABUNG</b>.\n\n` +
   `<i>Jika kamu sudah pernah diverifikasi, pesan ini tidak akan muncul lagi.</i>`,
   {
     parse_mode: 'HTML',
@@ -1641,17 +1641,17 @@ const m = await ctx.reply(
       await deleteMessage(ctx.chat.id, s.promptMessageId);
     }
     sessions.delete(String(ctx.from.id));
-    return tempReply(ctx, 'âœ… Proses dibatalkan.');
+    return tempReply(ctx, '✅ Proses dibatalkan.');
   });
   handleCommand('saldo', async ctx => {
     await deleteCtxMessage(ctx);
     const u = user(ctx);
     return ctx.reply(
-      `<b>ðŸ’° SALDO</b>\n` + `Saldo: <b>${rp(u.balance)}</b>\n` + `Role: ${roleLabel(u.role)}`,
+      `<b>💰 SALDO</b>\n` + `Saldo: <b>${rp(u.balance)}</b>\n` + `Role: ${roleLabel(u.role)}`,
       {
         parse_mode: 'HTML',
         ...Markup.inlineKeyboard([
-          [btn('âž• Deposit', 'deposit'), btn('ðŸ›’ PPOB', 'ppob')]
+          [btn('➕ Deposit', 'deposit'), btn('🛒 PPOB', 'ppob')]
         ])
       }
     );
@@ -1660,7 +1660,7 @@ const m = await ctx.reply(
     await deleteCtxMessage(ctx);
     const u = user(ctx);
     return ctx.reply(
-      `<b>ðŸ‘¤ PROFIL</b>\n` + `Role: ${roleLabel(u.role)}\n` + `Saldo: <b>${rp(u.balance)}</b>`,
+      `<b>👤 PROFIL</b>\n` + `Role: ${roleLabel(u.role)}\n` + `Saldo: <b>${rp(u.balance)}</b>`,
       { parse_mode: 'HTML', ...nav() }
     );
   });
@@ -1669,13 +1669,13 @@ const m = await ctx.reply(
     const storeName = config.botName || 'RIPZZ STORE';
 
 return ctx.reply(
-  `<b>ðŸ›’ PPOB ${esc(storeName)}</b>\n\n` +
+  `<b>🛒 PPOB ${esc(storeName)}</b>\n\n` +
   `<i>Pilih kategori layanan yang ingin kamu beli:</i>`,
   {
       parse_mode: 'HTML',
       ...Markup.inlineKeyboard([
-        [btn('ðŸ”µ Prabayar', 'type:prepaid'), btn('ðŸŸ£ Pascabayar', 'type:pasca')],
-        [btn('ðŸ  Menu', 'home')]
+        [btn('🔵 Prabayar', 'type:prepaid'), btn('🟣 Pascabayar', 'type:pasca')],
+        [btn('🏠 Menu', 'home')]
       ])
     });
   });
@@ -1699,7 +1699,7 @@ return ctx.reply(
       await createQR(ctx, tx);
     } catch (e) {
       db.updateTx(tx.id, { status: 'ERROR', error: e.message });
-      return tempReply(ctx, 'âŒ ' + esc(e.message), { parse_mode: 'HTML' });
+      return tempReply(ctx, '❌ ' + esc(e.message), { parse_mode: 'HTML' });
     }
   });
 
@@ -1717,49 +1717,49 @@ return ctx.reply(
     if (!items.length) {
       return safeEdit(
         ctx,
-        'ðŸ“œ <b>RIWAYAT TRANSAKSI</b>\n\nBelum ada transaksi.',
-        Markup.inlineKeyboard([[btn('ðŸ  Menu', 'home')]])
+        '📜 <b>RIWAYAT TRANSAKSI</b>\n\nBelum ada transaksi.',
+        Markup.inlineKeyboard([[btn('🏠 Menu', 'home')]])
       );
     }
 
     let text =
-      `<b>ðŸ“œ RIWAYAT TRANSAKSI</b>\n` +
-      `<i>Halaman ${page + 1}/${totalPages} â€¢ ${all.length} transaksi</i>\n\n`;
+      `<b>📜 RIWAYAT TRANSAKSI</b>\n` +
+      `<i>Halaman ${page + 1}/${totalPages} • ${all.length} transaksi</i>\n\n`;
 
     const rows = [];
     items.forEach((x, i) => {
       const no = page * size + i + 1;
       const status = String(x.status || '-').toUpperCase();
       const statusIcon = /^(SUCCESS|SUKSES)$/.test(status)
-        ? 'âœ…'
+        ? '✅'
         : /^(FAILED|GAGAL|REFUNDED)$/.test(status)
-        ? 'âŒ'
+        ? '❌'
         : /^(EXPIRED|TIMEOUT)$/.test(status)
-        ? 'â°'
-        : 'â³';
+        ? '⏰'
+        : '⏳';
 
       text +=
         `<blockquote><b>${no}. ${esc(x.productName || x.purpose || 'Transaksi')}</b>\n` +
-        `${statusIcon} ${esc(status)} â€¢ <b>${rp(x.amount)}</b>\n` +
+        `${statusIcon} ${esc(status)} • <b>${rp(x.amount)}</b>\n` +
         `Order: <code>${esc(x.id)}</code></blockquote>\n`;
 
       if (x.purpose === 'ppob' && x.type && x.sku && x.customerNo) {
-        rows.push([btn(`ðŸ”„ Beli Lagi ${no}`, `repeat:${encodeURIComponent(x.id)}`)]);
+        rows.push([btn(`🔄 Beli Lagi ${no}`, `repeat:${encodeURIComponent(x.id)}`)]);
       }
     });
 
     const navRow = [];
     if (page > 0) {
-      navRow.push(btn('â¬…ï¸ Sebelumnya', `history:${page - 1}`));
+      navRow.push(btn('⬅️ Sebelumnya', `history:${page - 1}`));
     }
     if (page < totalPages - 1) {
-      navRow.push(btn('Berikutnya âž¡ï¸', `history:${page + 1}`));
+      navRow.push(btn('Berikutnya ➡️', `history:${page + 1}`));
     }
     if (navRow.length) {
       rows.push(navRow);
     }
 
-    rows.push([btn('ðŸ›’ PPOB', 'ppob'), btn('ðŸ  Menu', 'home')]);
+    rows.push([btn('🛒 PPOB', 'ppob'), btn('🏠 Menu', 'home')]);
     return safeEdit(ctx, text, Markup.inlineKeyboard(rows));
   }
 
@@ -1767,13 +1767,13 @@ return ctx.reply(
     await deleteCtxMessage(ctx);
     const id = String(ctx.message.text).split(/\s+/)[1];
     const t = db.getTx(id);
-    if (!t) return tempReply(ctx, 'âŒ Transaksi tidak ditemukan.');
+    if (!t) return tempReply(ctx, '❌ Transaksi tidak ditemukan.');
     if (t.userId !== String(ctx.from.id) && !admin(ctx)) {
-      return tempReply(ctx, 'âŒ Tidak punya akses.');
+      return tempReply(ctx, '❌ Tidak punya akses.');
     }
 
     return ctx.reply(
-      `<b>ðŸ”Ž STATUS</b>\n\n` +
+      `<b>🔎 STATUS</b>\n\n` +
         `Order: <code>${t.id}</code>\n` +
         `Produk: ${esc(t.productName)}\n` +
         `Status: <b>${esc(t.status)}</b>\n` +
@@ -1797,9 +1797,9 @@ return await ctx.replyWithDocument(
   { source: f },
   {
     caption:
-      `ðŸ—„ï¸ <b>BACKUP DATA ${esc(storeName)}</b>\n\n` +
+      `🗄️ <b>BACKUP DATA ${esc(storeName)}</b>\n\n` +
       `<i>File backup database berhasil dibuat.</i>\n` +
-      `ðŸ” Simpan file ini di tempat yang aman.`,
+      `🔐 Simpan file ini di tempat yang aman.`,
     parse_mode: 'HTML' });
     } finally {
       try {
@@ -1811,13 +1811,13 @@ return await ctx.replyWithDocument(
     await deleteCtxMessage(ctx);
     if (!adminGuard(ctx)) return;
     sessions.set(String(ctx.from.id), { type: 'admin_restore' });
-    return ctx.reply('â™»ï¸ <b>RESTORE DATA</b>\n\nUpload file <code>.tar.gz</code>.', { parse_mode: 'HTML' });
+    return ctx.reply('♻️ <b>RESTORE DATA</b>\n\nUpload file <code>.tar.gz</code>.', { parse_mode: 'HTML' });
   });
   handleCommand('broadcast', async ctx => {
     await deleteCtxMessage(ctx);
     if (!adminGuard(ctx)) return;
     sessions.set(String(ctx.from.id), { type: 'admin_broadcast' });
-    return ctx.reply('ðŸ“£ <b>BROADCAST</b>\n\nKirim teks broadcast.', { parse_mode: 'HTML' });
+    return ctx.reply('📣 <b>BROADCAST</b>\n\nKirim teks broadcast.', { parse_mode: 'HTML' });
   });
   handleCommand('listuser', async ctx => {
     await deleteCtxMessage(ctx);
@@ -1836,56 +1836,56 @@ return await ctx.replyWithDocument(
   });
   handleCommand('syncproduk', async ctx => {
     await deleteCtxMessage(ctx);
-    if (!admin(ctx)) return tempReply(ctx, 'âŒ Khusus admin.');
-    await tempReply(ctx, 'â³ Sinkronisasi produk...', {}, 5000);
+    if (!admin(ctx)) return tempReply(ctx, '❌ Khusus admin.');
+    await tempReply(ctx, '⏳ Sinkronisasi produk...', {}, 5000);
     try {
       const p = await digi.sync();
-      return tempReply(ctx, `âœ… Sync selesai.\nPrabayar: ${p.list_prepaid.length}\nPascabayar: ${p.list_pasca.length}`);
+      return tempReply(ctx, `✅ Sync selesai.\nPrabayar: ${p.list_prepaid.length}\nPascabayar: ${p.list_pasca.length}`);
     } catch (e) {
-      return tempReply(ctx, 'âŒ ' + esc(e.message), { parse_mode: 'HTML' });
+      return tempReply(ctx, '❌ ' + esc(e.message), { parse_mode: 'HTML' });
     }
   });
   handleCommand('digisaldo', async ctx => {
     await deleteCtxMessage(ctx);
-    if (!admin(ctx)) return tempReply(ctx, 'âŒ Khusus admin.');
+    if (!admin(ctx)) return tempReply(ctx, '❌ Khusus admin.');
     try {
       const x = await digi.balance();
-      return tempReply(ctx, `ðŸ’³ Saldo supplier: <b>${rp(x?.deposit)}</b>`, { parse_mode: 'HTML' });
+      return tempReply(ctx, `💳 Saldo supplier: <b>${rp(x?.deposit)}</b>`, { parse_mode: 'HTML' });
     } catch (e) {
-      return tempReply(ctx, 'âŒ ' + esc(e.message), { parse_mode: 'HTML' });
+      return tempReply(ctx, '❌ ' + esc(e.message), { parse_mode: 'HTML' });
     }
   });
   handleCommand('addsaldox', async ctx => {
     await deleteCtxMessage(ctx);
-    if (!admin(ctx)) return tempReply(ctx, 'âŒ Khusus admin.');
+    if (!admin(ctx)) return tempReply(ctx, '❌ Khusus admin.');
     const a = String(ctx.message.text).split(/\s+/);
     const n = Number(a[2]);
     if (!a[1] || !n) return tempReply(ctx, '/addsaldox USER_ID NOMINAL');
     const b = db.addBalance(a[1], n);
-    return tempReply(ctx, `âœ… Saldo user ditambah ${rp(n)}.\nSaldo: ${rp(b)}`);
+    return tempReply(ctx, `✅ Saldo user ditambah ${rp(n)}.\nSaldo: ${rp(b)}`);
   });
   handleCommand('minsaldo', async ctx => {
     await deleteCtxMessage(ctx);
-    if (!admin(ctx)) return tempReply(ctx, 'âŒ Khusus admin.');
+    if (!admin(ctx)) return tempReply(ctx, '❌ Khusus admin.');
     const a = String(ctx.message.text).split(/\s+/);
     const n = Number(a[2]);
     if (!a[1] || !n) return tempReply(ctx, '/minsaldo USER_ID NOMINAL');
-    return tempReply(ctx, db.deductBalance(a[1], n) ? `âœ… Saldo user dikurangi ${rp(n)}.` : 'âŒ Saldo tidak cukup.');
+    return tempReply(ctx, db.deductBalance(a[1], n) ? `✅ Saldo user dikurangi ${rp(n)}.` : '❌ Saldo tidak cukup.');
   });
   handleCommand('setrole', async ctx => {
     await deleteCtxMessage(ctx);
-    if (!admin(ctx)) return tempReply(ctx, 'âŒ Khusus admin.');
+    if (!admin(ctx)) return tempReply(ctx, '❌ Khusus admin.');
     const a = String(ctx.message.text).split(/\s+/);
     const r = String(a[2] || '').toLowerCase();
     if (!a[1] || !['bronze', 'silver', 'gold'].includes(r)) {
       return tempReply(ctx, '/setrole USER_ID bronze|silver|gold');
     }
     db.setUser(a[1], { role: r });
-    return tempReply(ctx, `âœ… Role user diubah â†’ ${roleLabel(r)}`);
+    return tempReply(ctx, `✅ Role user diubah → ${roleLabel(r)}`);
   });
   handleCommand('setmargin', async ctx => {
     await deleteCtxMessage(ctx);
-    if (!admin(ctx)) return tempReply(ctx, 'âŒ Khusus admin.');
+    if (!admin(ctx)) return tempReply(ctx, '❌ Khusus admin.');
     const a = String(ctx.message.text).split(/\s+/);
     const r = String(a[1] || '').toLowerCase();
     const m = Number(a[2]);
@@ -1893,7 +1893,7 @@ return await ctx.replyWithDocument(
       return tempReply(ctx, '/setmargin bronze 6');
     }
     process.env['MARGIN_' + r.toUpperCase()] = String(m);
-    return tempReply(ctx, `âœ… Margin ${r} diubah menjadi ${m}% untuk runtime.`);
+    return tempReply(ctx, `✅ Margin ${r} diubah menjadi ${m}% untuk runtime.`);
   });
 
   bot.action('checkjoin', async c => {
@@ -1905,7 +1905,7 @@ return await ctx.replyWithDocument(
     });
 
     if (ok) {
-      await c.answerCbQuery('âœ“ Keanggotaan terverifikasi.');
+      await c.answerCbQuery('✓ Keanggotaan terverifikasi.');
       if (c.callbackQuery?.message?.message_id) {
         await deleteMessage(c.chat?.id, c.callbackQuery.message.message_id);
       }
@@ -1928,17 +1928,17 @@ return await ctx.replyWithDocument(
     const u = user(c);
     return safeEdit(
       c,
-      `<b>ðŸ’° SALDO</b>\n\n` + `Saldo: <b>${rp(u.balance)}</b>\n` + `Role: ${roleLabel(u.role)}`,
+      `<b>💰 SALDO</b>\n\n` + `Saldo: <b>${rp(u.balance)}</b>\n` + `Role: ${roleLabel(u.role)}`,
       Markup.inlineKeyboard([
-        [btn('âž• Deposit', 'deposit')],
-        [btn('ðŸ›’ PPOB', 'ppob'), btn('ðŸ  Menu', 'home')]
+        [btn('➕ Deposit', 'deposit')],
+        [btn('🛒 PPOB', 'ppob'), btn('🏠 Menu', 'home')]
       ])
     );
   });
   bot.action('profile', async c => {
     await c.answerCbQuery();
     const u = user(c);
-    return safeEdit(c, `<b>ðŸ‘¤ PROFIL</b>\n\n` + `Role: ${roleLabel(u.role)}\n` + `Saldo: <b>${rp(u.balance)}</b>`, nav());
+    return safeEdit(c, `<b>👤 PROFIL</b>\n\n` + `Role: ${roleLabel(u.role)}\n` + `Saldo: <b>${rp(u.balance)}</b>`, nav());
   });
   bot.action('history', async c => {
     await c.answerCbQuery();
@@ -1956,18 +1956,18 @@ return await ctx.replyWithDocument(
     await c.answerCbQuery();
     return safeEdit(
       c,
-      '<b>ðŸ’³ DEPOSIT SALDO</b>\n\nMasukkan nominal dengan perintah <code>/depo 10000</code>.\nQRIS akan otomatis dihapus setelah lunas atau kedaluwarsa.',
+      '<b>💳 DEPOSIT SALDO</b>\n\nMasukkan nominal dengan perintah <code>/depo 10000</code>.\nQRIS akan otomatis dihapus setelah lunas atau kedaluwarsa.',
       nav()
     );
   });
   bot.action('sync', async c => {
     await c.answerCbQuery();
-    if (!admin(c)) return tempReply(c, 'âŒ Khusus admin.');
+    if (!admin(c)) return tempReply(c, '❌ Khusus admin.');
     try {
       const p = await digi.sync();
-      return tempReply(c, `âœ… Sync selesai. Prabayar ${p.list_prepaid.length}, Pascabayar ${p.list_pasca.length}`);
+      return tempReply(c, `✅ Sync selesai. Prabayar ${p.list_prepaid.length}, Pascabayar ${p.list_pasca.length}`);
     } catch (e) {
-      return tempReply(c, 'âŒ ' + esc(e.message), { parse_mode: 'HTML' });
+      return tempReply(c, '❌ ' + esc(e.message), { parse_mode: 'HTML' });
     }
   });
 
@@ -1987,9 +1987,9 @@ return await c.replyWithDocument(
   { source: f },
   {
     caption:
-      `ðŸ—„ï¸ <b>BACKUP DATA ${esc(storeName)}</b>\n\n` +
+      `🗄️ <b>BACKUP DATA ${esc(storeName)}</b>\n\n` +
       `<i>File backup database berhasil dibuat.</i>\n` +
-      `ðŸ” Simpan file ini di tempat yang aman.`,
+      `🔐 Simpan file ini di tempat yang aman.`,
     parse_mode: 'HTML' });
     } finally {
       try {
@@ -2001,25 +2001,25 @@ return await c.replyWithDocument(
     await c.answerCbQuery();
     if (!adminGuard(c)) return;
     sessions.set(String(c.from.id), { type: 'admin_restore' });
-    return c.reply('â™»ï¸ <b>RESTORE DATA</b>\n\nUpload file backup <code>.tar.gz</code>.', { parse_mode: 'HTML' });
+    return c.reply('♻️ <b>RESTORE DATA</b>\n\nUpload file backup <code>.tar.gz</code>.', { parse_mode: 'HTML' });
   });
   bot.action('adm:broadcast', async c => {
     await c.answerCbQuery();
     if (!adminGuard(c)) return;
     sessions.set(String(c.from.id), { type: 'admin_broadcast' });
-    return c.reply('ðŸ“£ <b>BROADCAST</b>\n\nKirim teks broadcast.', { parse_mode: 'HTML' });
+    return c.reply('📣 <b>BROADCAST</b>\n\nKirim teks broadcast.', { parse_mode: 'HTML' });
   });
   bot.action('adm:addsaldox', async c => {
     await c.answerCbQuery();
     if (!adminGuard(c)) return;
     sessions.set(String(c.from.id), { type: 'admin_addsaldox' });
-    return c.reply('ðŸ’° <b>TAMBAH SALDO</b>\n\nKirim: <code>USER_ID NOMINAL</code>', { parse_mode: 'HTML' });
+    return c.reply('💰 <b>TAMBAH SALDO</b>\n\nKirim: <code>USER_ID NOMINAL</code>', { parse_mode: 'HTML' });
   });
   bot.action('adm:minsaldo', async c => {
     await c.answerCbQuery();
     if (!adminGuard(c)) return;
     sessions.set(String(c.from.id), { type: 'admin_minsaldo' });
-    return c.reply('ðŸ’¸ <b>KURANGI SALDO</b>\n\nKirim: <code>USER_ID NOMINAL</code>', { parse_mode: 'HTML' });
+    return c.reply('💸 <b>KURANGI SALDO</b>\n\nKirim: <code>USER_ID NOMINAL</code>', { parse_mode: 'HTML' });
   });
   bot.action('adm:users', async c => {
     await c.answerCbQuery();
@@ -2041,9 +2041,9 @@ return await c.replyWithDocument(
     if (!adminGuard(c)) return;
     try {
       const p = await digi.sync();
-      return tempReply(c, `âœ… Sync selesai.\nPrabayar: ${p.list_prepaid.length}\nPascabayar: ${p.list_pasca.length}`);
+      return tempReply(c, `✅ Sync selesai.\nPrabayar: ${p.list_prepaid.length}\nPascabayar: ${p.list_pasca.length}`);
     } catch (e) {
-      return tempReply(c, 'âŒ ' + esc(e.message), { parse_mode: 'HTML' });
+      return tempReply(c, '❌ ' + esc(e.message), { parse_mode: 'HTML' });
     }
   });
   bot.action('adm:digisaldo', async c => {
@@ -2051,9 +2051,9 @@ return await c.replyWithDocument(
     if (!adminGuard(c)) return;
     try {
       const x = await digi.balance();
-      return tempReply(c, `ðŸ’³ Saldo supplier: <b>${rp(x?.deposit)}</b>`, { parse_mode: 'HTML' });
+      return tempReply(c, `💳 Saldo supplier: <b>${rp(x?.deposit)}</b>`, { parse_mode: 'HTML' });
     } catch (e) {
-      return tempReply(c, 'âŒ ' + esc(e.message), { parse_mode: 'HTML' });
+      return tempReply(c, '❌ ' + esc(e.message), { parse_mode: 'HTML' });
     }
   });
 
@@ -2096,13 +2096,13 @@ return await c.replyWithDocument(
   bot.action('cancelbuy', async c => {
     await c.answerCbQuery();
     sessions.delete(String(c.from.id));
-    return safeEdit(c, 'âŒ <b>PEMBELIAN DIBATALKAN</b>\n\nTidak ada saldo yang dipotong.', nav());
+    return safeEdit(c, '❌ <b>PEMBELIAN DIBATALKAN</b>\n\nTidak ada saldo yang dipotong.', nav());
   });
   bot.action(/^confirmbuy:(prepaid|pasca):(.+)$/, async c => {
     await c.answerCbQuery();
     const s = sessions.get(String(c.from.id));
     if (!s || s.step !== 'confirm' || s.type !== c.match[1] || s.sku !== decodeURIComponent(c.match[2])) {
-      return tempReply(c, 'âŒ Sesi pembelian sudah berakhir.');
+      return tempReply(c, '❌ Sesi pembelian sudah berakhir.');
     }
     sessions.delete(String(c.from.id));
     return submitOrder(c, s, s.customerNo);
@@ -2111,7 +2111,7 @@ return await c.replyWithDocument(
     await c.answerCbQuery();
     const tx = db.getTx(decodeURIComponent(c.match[1]));
     if (!tx || String(tx.userId) !== String(c.from.id) || tx.purpose !== 'ppob' || !tx.type || !tx.sku || !tx.customerNo) {
-      return tempReply(c, 'âŒ Transaksi tidak bisa diulang.');
+      return tempReply(c, '❌ Transaksi tidak bisa diulang.');
     }
     const s = { type: tx.type, sku: tx.sku, customerNo: tx.customerNo };
     if (c.callbackQuery?.message?.message_id) {
@@ -2125,9 +2125,9 @@ return await c.replyWithDocument(
     const u = user(c);
     const amount = config.roles.price[target];
 
-    if (!amount) return tempReply(c, 'â„¹ï¸ Upgrade role belum diberi harga.');
+    if (!amount) return tempReply(c, 'ℹ️ Upgrade role belum diberi harga.');
     if ((target === 'silver' && u.role !== 'bronze') || (target === 'gold' && u.role === 'gold')) {
-      return tempReply(c, 'âŒ Role kamu sudah sama/lebih tinggi.');
+      return tempReply(c, '❌ Role kamu sudah sama/lebih tinggi.');
     }
 
     const tx = makeTx(c, {
@@ -2143,7 +2143,7 @@ return await c.replyWithDocument(
       return createQR(c, tx);
     } catch (e) {
       db.updateTx(tx.id, { status: 'ERROR', error: e.message });
-      return tempReply(c, 'âŒ ' + esc(e.message), { parse_mode: 'HTML' });
+      return tempReply(c, '❌ ' + esc(e.message), { parse_mode: 'HTML' });
     }
   });
   bot.action(/^paycheck:(.+)$/, async c => {
@@ -2160,11 +2160,11 @@ return await c.replyWithDocument(
   bot.action(/^cancel:(.+)$/, async c => {
     await c.answerCbQuery();
     const t = db.getTx(c.match[1]);
-    if (!t || t.userId !== String(c.from.id)) return tempReply(c, 'âŒ Transaksi tidak ditemukan.');
-    if (t.status !== 'WAITING_PAYMENT') return tempReply(c, 'âŒ Transaksi sudah diproses.');
+    if (!t || t.userId !== String(c.from.id)) return tempReply(c, '❌ Transaksi tidak ditemukan.');
+    if (t.status !== 'WAITING_PAYMENT') return tempReply(c, '❌ Transaksi sudah diproses.');
     await removeQr(t);
     db.updateTx(t.id, { status: 'CANCELLED' });
-    return tempReply(c, 'âœ… Pembayaran dibatalkan.');
+    return tempReply(c, '✅ Pembayaran dibatalkan.');
   });
 
   bot.on('document', async (ctx, next) => {
@@ -2196,11 +2196,11 @@ return await c.replyWithDocument(
       if (!admin(ctx)) return;
       sessions.delete(String(ctx.from.id));
       await deleteCtxMessage(ctx);
-      await tempReply(ctx, 'â³ Broadcast sedang dikirim...', {}, 4000);
+      await tempReply(ctx, '⏳ Broadcast sedang dikirim...', {}, 4000);
       const r = await broadcast(ctx, raw);
       return tempReply(
         ctx,
-        `<b>âœ… BROADCAST SELESAI</b>\n` + `Total: ${r.total}\n` + `Berhasil: ${r.ok}\n` + `Gagal: ${r.fail}`,
+        `<b>✅ BROADCAST SELESAI</b>\n` + `Total: ${r.total}\n` + `Berhasil: ${r.ok}\n` + `Gagal: ${r.fail}`,
         { parse_mode: 'HTML' }
       );
     }
@@ -2212,7 +2212,7 @@ return await c.replyWithDocument(
       const nom = Number(a[1]);
 
       if (!uid || !Number.isFinite(nom) || nom <= 0) {
-        return tempReply(ctx, 'âŒ Format: <code>123456789 10000</code>', { parse_mode: 'HTML' });
+        return tempReply(ctx, '❌ Format: <code>123456789 10000</code>', { parse_mode: 'HTML' });
       }
 
       sessions.delete(String(ctx.from.id));
@@ -2221,7 +2221,7 @@ return await c.replyWithDocument(
       if (s.type === 'admin_addsaldox') {
         return tempReply(
           ctx,
-          `âœ… Saldo <code>${esc(uid)}</code> ditambah <b>${rp(db.addBalance(uid, nom))}</b>.`,
+          `✅ Saldo <code>${esc(uid)}</code> ditambah <b>${rp(db.addBalance(uid, nom))}</b>.`,
           { parse_mode: 'HTML' }
         );
       }
@@ -2229,8 +2229,8 @@ return await c.replyWithDocument(
       return tempReply(
         ctx,
         db.deductBalance(uid, nom)
-          ? `âœ… Saldo <code>${esc(uid)}</code> dikurangi <b>${rp(nom)}</b>.`
-          : 'âŒ Saldo user tidak mencukupi.',
+          ? `✅ Saldo <code>${esc(uid)}</code> dikurangi <b>${rp(nom)}</b>.`
+          : '❌ Saldo user tidak mencukupi.',
         { parse_mode: 'HTML' }
       );
     }
@@ -2248,7 +2248,7 @@ return await c.replyWithDocument(
 
     if (sp.tokens === 2 && tokens.length < 2) {
       await deleteCtxMessage(ctx);
-      return tempReply(ctx, `âŒ Format tujuan: ${sp.placeholder}`);
+      return tempReply(ctx, `❌ Format tujuan: ${sp.placeholder}`);
     }
 
     if (s.promptMessageId) {
