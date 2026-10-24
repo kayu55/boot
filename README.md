@@ -1,7 +1,9 @@
+## Lama
+
 ````
 wget -q https://raw.githubusercontent.com/kayu55/boot/main/botvpn/install.sh && chmod +x install.sh && ./install.sh
 ````
-## Instal 2
+## Instal 2 baru
 
 ````
 wget -q https://raw.githubusercontent.com/kayu55/boot/main/botvpn/install1.sh && chmod +x install1.sh && ./install1.sh
