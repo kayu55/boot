@@ -12674,7 +12674,7 @@ const qrMessage = await ctx.replyWithPhoto(
 
 🆔 ʀᴇꜰꜰ : \`${payment.order_id}\`
 ⏳ ᴇxᴘɪʀᴇᴅ : *${expiredz}*
-⏳ ϙʀɪs ᴀᴋᴛɪғ : 15 ᴍᴇɴɪᴛ*
+⏳ ϙʀɪs ᴀᴋᴛɪғ : *15 ᴍᴇɴɪᴛ*
 
 ⚠️ ᴛʀᴀɴꜱꜰᴇʀ ʜᴀʀᴜꜱ ꜱᴇꜱᴜᴀɪ *TOTAL BAYAR*
     `,
@@ -13102,7 +13102,7 @@ async function processDepositShopeePay(ctx, amount) {
 
 🆔 ʀᴇꜰꜰ : \`${orderSn}\`
 ⏳ ᴇxᴘɪʀᴇᴅ : *${expiredz}*
-⏳ ϙʀɪs ᴀᴋᴛɪғ : 15 ᴍᴇɴɪᴛ*
+⏳ ϙʀɪs ᴀᴋᴛɪғ : *15 ᴍᴇɴɪᴛ*
 
 ⚠️ ᴛʀᴀɴꜱꜰᴇʀ ʜᴀʀᴜꜱ ꜱᴇꜱᴜᴀɪ *TOTAL BAYAR*
           `,
