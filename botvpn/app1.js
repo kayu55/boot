@@ -4360,27 +4360,22 @@ case "ssh": {
 ├ 👤 ᴜꜱᴇʀɴᴀᴍᴇ : \`${sshData.username}\`
 ├ 🔑 ᴘᴀꜱꜱᴡᴏʀᴅ : \`${sshData.password}\`
 ├ 📅 ᴇxᴘɪʀᴇᴅ  : \`${sshData.expired || account.expired_at}\`
-├ 🌐 ɪᴘ ʟɪᴍɪᴛ : \`${sshData.ip_limit}\`
+├ 🌐 ɪᴘ ʟɪᴍɪᴛ : \`2 IP\`
 └ 🟢 ꜱᴛᴀᴛᴜꜱ   : \`${account.status.toUpperCase()}\`
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
 ┌〔 🌍 *ꜱᴇʀᴠᴇʀ* 〕
 ├ 🌐 ᴅᴏᴍᴀɪɴ      : \`${sshData.domain}\`
-├ ☁️ ᴄʟᴏᴜᴅꜰʀᴏɴᴛ  : \`${server.cloudfront || "-"}\`
-├ 🌍 ɴᴀᴍᴇꜱᴇʀᴠᴇʀ  : \`${sshData.ns_domain}\`
-└ 🔑 ᴘᴜʙ ᴋᴇʏ     : \`${sshData.pubkey}\`
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
 ┌〔 🔌 *ᴘᴏʀᴛ* 〕
-├ 🔐 ᴛʟꜱ        : \`443,8443\`
-├ 🌐 ʜᴛᴛᴘ       : \`80,8080,2086,8880\`
+├ 🔐 ᴛʟꜱ        : \`443,8443,2087,2096,2053,2083\`
+├ 🌐 ʜᴛᴛᴘ       : \`80,8080,8880,2082,2086,2052,2095\`
 ├ ⚡ ᴏᴘᴇɴꜱꜱʜ    : \`22\`
-├ 🚀 ᴜᴅᴘꜱꜱʜ      : \`1-65535\`
-├ 🌍 ᴅɴꜱ        : \`53,2222\`
-├ 📡 ᴅʀᴏᴘʙᴇᴀʀ   : \`109,110\`
-└ 🎮 ʙᴀᴅᴠᴘɴ      : \`7300\`
+├ 📡 ᴅʀᴏᴘʙᴇᴀʀ   : \`109,143\`
+└ 🎮 ʙᴀᴅᴠᴘɴ      : \`7100-7300\`
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
@@ -4392,13 +4387,11 @@ case "ssh": {
 
 📄 *ᴘᴀʏʟᴏᴀᴅ*
 
-\`GET /cdn-cgi/trace HTTP/1.1[crlf]Host: Bug_Kalian[crlf][crlf]GET-RAY / HTTP/1.1[crlf]Host: [host][crlf]Connection: Upgrade[crlf]User-Agent: [ua][crlf]Upgrade: websocket[crlf][crlf]\`
+\`GET / HTTP/1.1[crlf]Host: [host_port][crlf]Upgrade: Websocket[crlf]Connection: Keep-Alive[crlf][crlf]\`
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
-💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
-
-https://${sshData.domain}:81/ssh-${sshData.username}.txt
+💥 *ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ*
 `;
 
     return ctx.reply(msg, {
@@ -4429,18 +4422,17 @@ case "vmess": {
 ┌〔 📄 *ᴀᴄᴄᴏᴜɴᴛ ɪɴꜰᴏ* 〕
 ├ 👤 ᴜꜱᴇʀɴᴀᴍᴇ : \`${vmessData.username}\`
 ├ 🆔 ᴜᴜɪᴅ      : \`${vmessData.uuid}\`
-├ 📅 ᴇxᴘɪʀᴇᴅ   : \`${vmessData.expired || account.expired_at}\`
+├ 📅 ᴇxᴘɪʀᴇᴅ   : \`${vmessData.expired}\`
 ├ 📦 Qᴜᴏᴛᴀ     : \`${vmessData.quota === '0 GB' ? 'Unlimited' : vmessData.quota}\`
-├ 🌐 ɪᴘ ʟɪᴍɪᴛ  : \`${vmessData.ip_limit === '0' ? 'Unlimited' : vmessData.ip_limit} IP\`
-└ 🟢 ꜱᴛᴀᴛᴜꜱ    : \`${account.status.toUpperCase()}\`
+├ 🌐 ɪᴘ ʟɪᴍɪᴛ  : \`2 IP\`
+└ 🟢 ꜱᴛᴀᴛᴜꜱ    : \`ACTIVE\`
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
 ┌〔 🌍 *ꜱᴇʀᴠᴇʀ* 〕
 ├ 🌐 ᴅᴏᴍᴀɪɴ      : \`${vmessData.domain}\`
-├ ☁️ ᴄʟᴏᴜᴅꜰʀᴏɴᴛ  : \`${server.cloudfront || "-"}\`
-├ 🔐 ᴛʟꜱ ᴘᴏʀᴛ    : \`443,8443\`
-├ 🌍 ʜᴛᴛᴘ ᴘᴏʀᴛ   : \`80,8080,2086,8880\`
+├ 🔐 ᴛʟꜱ ᴘᴏʀᴛ    : \`443,8443,2087,2096,2053,2083\`
+├ 🌍 ʜᴛᴛᴘ ᴘᴏʀᴛ   : \`8080,8880,2082,2086,2052,2095\`
 ├ 🔒 ꜱᴇᴄᴜʀɪᴛʏ    : \`Auto\`
 ├ 📂 ᴘᴀᴛʜ        : \`/vmess\`
 └ 🚀 ɢʀᴘᴄ ᴘᴀᴛʜ   : \`vmess-grpc\`
@@ -4471,9 +4463,7 @@ ${vmessData.vmess_grpc_link}
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
-💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
-
-https://${vmessData.domain}:81/vmess-${vmessData.username}.txt
+💥 *ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ*
 `;
 
     return ctx.reply(msg, {
@@ -4509,16 +4499,15 @@ case "vless": {
 ├ 🆔 ᴜᴜɪᴅ      : \`${vlessData.uuid}\`
 ├ 📅 ᴇxᴘɪʀᴇᴅ   : \`${vlessData.expired || account.expired_at}\`
 ├ 📦 Qᴜᴏᴛᴀ     : \`${vlessData.quota === '0 GB' ? 'Unlimited' : vlessData.quota}\`
-├ 🌐 ɪᴘ ʟɪᴍɪᴛ  : \`${vlessData.ip_limit === '0' ? 'Unlimited' : vlessData.ip_limit} IP\`
+├ 🌐 ɪᴘ ʟɪᴍɪᴛ  : \`2 IP\`
 └ 🟢 ꜱᴛᴀᴛᴜꜱ    : \`${account.status.toUpperCase()}\`
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
 ┌〔 🌍 *ꜱᴇʀᴠᴇʀ* 〕
 ├ 🌐 ᴅᴏᴍᴀɪɴ      : \`${vlessData.domain}\`
-├ ☁️ ᴄʟᴏᴜᴅꜰʀᴏɴᴛ  : \`${server.cloudfront || "-"}\`
-├ 🔐 ᴛʟꜱ ᴘᴏʀᴛ    : \`443,8443\`
-├ 🌍 ʜᴛᴛᴘ ᴘᴏʀᴛ   : \`80,8080,2086,8880\`
+├ 🔐 ᴛʟꜱ ᴘᴏʀᴛ    : \`443,8443,2087,2096,2053,2083\`
+├ 🌍 ʜᴛᴛᴘ ᴘᴏʀᴛ   : \`8080,8880,2082,2086,2052,2095\`
 ├ 📂 ᴘᴀᴛʜ        : \`/vless\`
 └ 🚀 ɢʀᴘᴄ ᴘᴀᴛʜ   : \`vless-grpc\`
 
@@ -4548,9 +4537,7 @@ ${vlessData.vless_grpc_link}
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
-💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
-
-https://${vlessData.domain}:81/vless-${vlessData.username}.txt
+💥 *ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ*
 `;
 
     return ctx.reply(msg, {
@@ -4585,16 +4572,15 @@ case "trojan": {
 ├ 🆔 ᴜᴜɪᴅ      : \`${trojanData.uuid}\`
 ├ 📅 ᴇxᴘɪʀᴇᴅ   : \`${trojanData.expired || account.expired_at}\`
 ├ 📦 Qᴜᴏᴛᴀ     : \`${trojanData.quota === '0 GB' ? 'Unlimited' : trojanData.quota}\`
-├ 🌐 ɪᴘ ʟɪᴍɪᴛ  : \`${trojanData.ip_limit === '0' ? 'Unlimited' : trojanData.ip_limit} IP\`
+├ 🌐 ɪᴘ ʟɪᴍɪᴛ  : \`2 IP\`
 └ 🟢 ꜱᴛᴀᴛᴜꜱ    : \`${account.status.toUpperCase()}\`
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
 ┌〔 🌍 *ꜱᴇʀᴠᴇʀ* 〕
 ├ 🌐 ᴅᴏᴍᴀɪɴ      : \`${trojanData.domain}\`
-├ ☁️ ᴄʟᴏᴜᴅꜰʀᴏɴᴛ  : \`${server.cloudfront || "-"}\`
-├ 🔐 ᴛʟꜱ ᴘᴏʀᴛ    : \`443,8443\`
-├ 🌍 ʜᴛᴛᴘ ᴘᴏʀᴛ   : \`80,8080,2086,8880\`
+├ 🔐 ᴛʟꜱ ᴘᴏʀᴛ    : \`443,8443,2087,2096,2053,2083\`
+├ 🌍 ʜᴛᴛᴘ ᴘᴏʀᴛ   : \`8080,8880,2082,2086,2052,2095\`
 ├ 📂 ᴘᴀᴛʜ        : \`/trojan-ws\`
 └ 🚀 ɢʀᴘᴄ ᴘᴀᴛʜ   : \`trojan-grpc\`
 
@@ -4616,9 +4602,7 @@ ${trojanData.trojan_grpc_link}
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
-💾 *ꜱᴀᴠᴇ ᴀᴄᴄᴏᴜɴᴛ*
-
-https://${trojanData.domain}:81/trojan-${trojanData.username}.txt
+💥 *ᵁᴾᴸᴼᴬᴰ ᴮʸ ᴬᴿʸᴬ ᴮᴸᴵᵀᴬᴿ*
 `;
 
     return ctx.reply(msg, {
