@@ -201,7 +201,7 @@ const groupId = vars.GROUP_CHAT_ID;
 
 
 // ---------- Store ----------
-const NAMA_STORE = vars.NAMA_STORE || 'XWANSTORE';
+const NAMA_STORE = vars.NAMA_STORE || 'ARYASTORE';
 
 
 // ---------- Admin ----------
@@ -6831,7 +6831,7 @@ bot.action('menu_topup', async (ctx) => {
       logger.warn(`⚠️ Gagal ambil username admin: ${e.message}`);
     }
 
-    const namaStore = vars?.NAMA_STORE || 'XWANSTORE';
+    const namaStore = vars?.NAMA_STORE || 'ARYASTORE';
     const config = typeof loadButtonConfig === 'function'
       ? loadButtonConfig()
       : {
