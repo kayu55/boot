@@ -4030,9 +4030,8 @@ bot.action('menu_vpn', async (ctx) => {
     if (!userId || !chatId) return;
 
     const text = `
-<blockquote>♛ <b>ANSENDANTVPN · VIP ACCESS</b>
-<code>BLACK & GOLD EDITION</code>
-Pilih layanan VPN yang ingin kamu gunakan.</blockquote>
+<blockquote><b>💠 MENU TRIAL AKUN</b>
+<code>Uji coba akun VPN sebelum membeli</code></blockquote>
 
 ┏━━━━━━━━━━━━━━━━━━━━━┓
 ┃ ✦ <b>TRIAL ACCESS</b>
