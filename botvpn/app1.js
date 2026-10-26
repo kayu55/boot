@@ -3923,14 +3923,13 @@ async function sendMainMenu(ctx) {
 ┃ 🖥️ ꜱᴇʀᴠᴇʀ: <code>${jumlahServer}</code> | 👥 ᴜꜱᴇʀ: <code>${jumlahPengguna}</code>
 ┃ ⏱️ <b>ʙᴏᴛ ᴀᴋᴛɪꜰ:</b> <code>${uptimeFormatted}</code>
 ┗━━━━━━━━━━━━━━━━━━━━━┛
-
-😘 ssʜ ɢʀᴀᴛɪs sɪʟᴀʜᴋᴀɴ ᴘɪʟɪʜ ᴛʀɪᴀʟ sᴀʏᴀɴɢᴋᴜ
+</b>ssʜ ɢʀᴀᴛɪs sɪʟᴀʜᴋᴀɴ ᴘɪʟɪʜ ᴛʀɪᴀʟ sᴀʏᴀɴɢᴋᴜ
 ғʀᴇᴇ ᴛʀɪᴀʟ ᴋʜᴜsᴜs ssʜ ᴡsᴏᴋᴇᴛ 24ᴊᴀᴍ
 ᴠʀᴀʏ 30ᴍᴇɴɪᴛ
-ʟɪᴍɪᴛ 10 ᴀᴄᴄᴏᴜɴᴛ ᴘᴇʀ ᴜsᴇʀ
+ʟɪᴍɪᴛ 10 ᴀᴄᴄᴏᴜɴᴛ ᴘᴇʀ ᴜsᴇʀ</b>
 
-ᴊɪᴋᴀ ᴍᴀᴜ ʏᴀɴɢ ʀᴇsᴍɪ sᴇʀᴠᴇʀ ɪɴᴅᴏ ᴅɪ sɪɴɪ ɢᴜs
-@Aryablitarpro77_bot
+</b>ᴊɪᴋᴀ ᴍᴀᴜ ʏᴀɴɢ ʀᴇsᴍɪ sᴇʀᴠᴇʀ ɪɴᴅᴏ ᴅɪ sɪɴɪ ɢᴜs
+@Aryablitarpro77_bot</b>
 
 ☎️ <b>ʜᴜʙᴜɴɢɪ ᴀᴅᴍɪɴ</b>
 <a href="https://t.me/${adminUsername}">╰📨 @${adminUsername}</a>
