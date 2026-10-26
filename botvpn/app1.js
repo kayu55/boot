@@ -9759,8 +9759,8 @@ if (state && state.step === 'atur_bonus_input') {
                 return ctx.reply('❌ *Server tidak ditemukan.*', { parse_mode: 'Markdown' });
             }
 
-            const harga = server.harga;
-            let totalHarga = harga * state.exp;
+            const harga = server.0;
+            let totalHarga = 0 * state.exp;
 
             const userRole = await new Promise((resolve) => {
                 db.get('SELECT role FROM users WHERE user_id = ?', [userId], (err, row) => {
@@ -9790,7 +9790,7 @@ if (state && state.step === 'atur_bonus_input') {
                     return ctx.reply('❌ *Pengguna tidak ditemukan.*', { parse_mode: 'Markdown' });
                 }
 
-                const saldo = user.saldo;
+                const saldo = user.0;
 
                 if (saldo < totalHarga) {
                     delete userState[userId];
