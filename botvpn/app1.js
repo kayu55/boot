@@ -3924,13 +3924,13 @@ async function sendMainMenu(ctx) {
 ┃ ⏱️ <b>ʙᴏᴛ ᴀᴋᴛɪꜰ:</b> <code>${uptimeFormatted}</code>
 ┗━━━━━━━━━━━━━━━━━━━━━┛
 
-😘 <b>ssʜ ɢʀᴀᴛɪs sɪʟᴀʜᴋᴀɴ ᴘɪʟɪʜ ᴛʀɪᴀʟ sᴀʏᴀɴɢᴋᴜ</b>
-<b>ғʀᴇᴇ ᴛʀɪᴀʟ ᴋʜᴜsᴜs ssʜ ᴡsᴏᴋᴇᴛ 24ᴊᴀᴍ</b>
-<b>ᴠʀᴀʏ 30ᴍᴇɴɪᴛ</b>
-<b>ʟɪᴍɪᴛ 10 ᴀᴄᴄᴏᴜɴᴛ ᴘᴇʀ ᴜsᴇʀ</b>
+😘 ssʜ ɢʀᴀᴛɪs sɪʟᴀʜᴋᴀɴ ᴘɪʟɪʜ ᴛʀɪᴀʟ sᴀʏᴀɴɢᴋᴜ
+ғʀᴇᴇ ᴛʀɪᴀʟ ᴋʜᴜsᴜs ssʜ ᴡsᴏᴋᴇᴛ 24ᴊᴀᴍ
+ᴠʀᴀʏ 30ᴍᴇɴɪᴛ
+ʟɪᴍɪᴛ 10 ᴀᴄᴄᴏᴜɴᴛ ᴘᴇʀ ᴜsᴇʀ
 
-<b>ᴊɪᴋᴀ ᴍᴀᴜ ʏᴀɴɢ ʀᴇsᴍɪ sᴇʀᴠᴇʀ ɪɴᴅᴏ ᴅɪ sɪɴɪ ɢᴜs</b>
-</code>@Aryablitarpro77_bot</code>
+ᴊɪᴋᴀ ᴍᴀᴜ ʏᴀɴɢ ʀᴇsᴍɪ sᴇʀᴠᴇʀ ɪɴᴅᴏ ᴅɪ sɪɴɪ ɢᴜs
+@Aryablitarpro77_bot
 
 ☎️ <b>ʜᴜʙᴜɴɢɪ ᴀᴅᴍɪɴ</b>
 <a href="https://t.me/${adminUsername}">╰📨 @${adminUsername}</a>
