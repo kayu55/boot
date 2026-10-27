@@ -3910,7 +3910,7 @@ async function sendMainMenu(ctx) {
 
 🧭 <b>ɪɴꜰᴏʀᴍᴀꜱɪ ᴀᴋᴜɴ</b>
 ┏━━━━━━━━━━━━━━━━━━━━━┓
-┃ 💰 <b>ꜱᴀʟᴅᴏ:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>
+┃ 💰 <b>ꜱᴀʟᴅᴏ:</b> <code>Rp.0('id-ID')}</code>
 ┃ ${statusText}
 ┃ 🌐 <b>ᴜꜱᴇʀɴᴀᴍᴇ:</b> ${userName}
 ┃ 🆔 <b>ɪᴅ ᴘᴇɴɢɢᴜɴᴀ:</b> <code>${userId}</code>
@@ -3924,10 +3924,7 @@ async function sendMainMenu(ctx) {
 ┃ ⏱️ <b>ʙᴏᴛ ᴀᴋᴛɪꜰ:</b> <code>${uptimeFormatted}</code>
 ┗━━━━━━━━━━━━━━━━━━━━━┛
 
-ssʜ ɢʀᴀᴛɪs sɪʟᴀʜᴋᴀɴ ᴘɪʟɪʜ ᴛʀɪᴀʟ sᴀʏᴀɴɢᴋᴜ
-ғʀᴇᴇ ᴛʀɪᴀʟ ssʜ ᴡsᴏᴋᴇᴛ 2ʜᴀʀɪ
-ᴠᴍᴇss 2ʜᴀʀɪ
-ʟɪᴍɪᴛ 10 ᴀᴄᴄᴏᴜɴᴛ ᴘᴇʀ ᴜsᴇʀ
+📢 ᴀᴋᴜɴssʜ ɢʀᴀᴛɪs sɪʟᴀʜᴋᴀɴ ᴄʀᴇᴀᴛ sᴇᴘᴜᴀsɴʏᴀ
 
 ᴊɪᴋᴀ ᴍᴀᴜ ʏᴀɴɢ ʀᴇsᴍɪ sᴇʀᴠᴇʀ ɪɴᴅᴏ ᴅɪ sɪɴɪ ɢᴜs
 @Aryablitarpro77_bot
