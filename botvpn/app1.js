@@ -9791,7 +9791,7 @@ if (state && state.step === 'atur_bonus_input') {
 
                 if (saldo < totalHarga) {
                     delete userState[userId];
-                    return ctx.reply(`❌ *Saldo Anda tidak mencukupi untuk melakukan transaksi ini. Saldo Anda: Rp0, Harga: Rp0`, { parse_mode: 'Markdown' });
+                    return ctx.reply(`❌ *Saldo Anda tidak mencukupi untuk melakukan transaksi ini. Saldo Anda: Rp0, Harga: Rp0*`, { parse_mode: 'Markdown' });
                 }
 
 let result;
