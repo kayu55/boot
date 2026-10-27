@@ -3910,7 +3910,7 @@ async function sendMainMenu(ctx) {
 
 🧭 <b>ɪɴꜰᴏʀᴍᴀꜱɪ ᴀᴋᴜɴ</b>
 ┏━━━━━━━━━━━━━━━━━━━━━┓
-┃ 💰 <b>ꜱᴀʟᴅᴏ:</b> <code>Rp.0('id-ID')}</code>
+┃ 💰 <b>ꜱᴀʟᴅᴏ:</b> <code>Rp.0</code>
 ┃ ${statusText}
 ┃ 🌐 <b>ᴜꜱᴇʀɴᴀᴍᴇ:</b> ${userName}
 ┃ 🆔 <b>ɪᴅ ᴘᴇɴɢɢᴜɴᴀ:</b> <code>${userId}</code>
