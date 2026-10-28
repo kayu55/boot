@@ -3910,7 +3910,7 @@ async function sendMainMenu(ctx) {
 
 🧭 <b>ɪɴꜰᴏʀᴍᴀꜱɪ ᴀᴋᴜɴ</b>
 ┏━━━━━━━━━━━━━━━━━━━━━┓
-┃ 💰 <b>ꜱᴀʟᴅᴏ:</b> <code>Rp.0</code>
+┃ 💰 <b>ꜱᴀʟᴅᴏ:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>
 ┃ ${statusText}
 ┃ 🌐 <b>ᴜꜱᴇʀɴᴀᴍᴇ:</b> ${userName}
 ┃ 🆔 <b>ɪᴅ ᴘᴇɴɢɢᴜɴᴀ:</b> <code>${userId}</code>
@@ -3923,11 +3923,6 @@ async function sendMainMenu(ctx) {
 ┃ 🖥️ ꜱᴇʀᴠᴇʀ: <code>${jumlahServer}</code> | 👥 ᴜꜱᴇʀ: <code>${jumlahPengguna}</code>
 ┃ ⏱️ <b>ʙᴏᴛ ᴀᴋᴛɪꜰ:</b> <code>${uptimeFormatted}</code>
 ┗━━━━━━━━━━━━━━━━━━━━━┛
-
-📢 ᴀᴋᴜɴssʜ ɢʀᴀᴛɪs sɪʟᴀʜᴋᴀɴ ᴄʀᴇᴀᴛ sᴇᴘᴜᴀsɴʏᴀ
-
-ᴊɪᴋᴀ ᴍᴀᴜ ʏᴀɴɢ ʀᴇsᴍɪ sᴇʀᴠᴇʀ ɪɴᴅᴏ ᴅɪ sɪɴɪ ɢᴜs
-@Aryablitarpro77_bot
 
 ☎️ <b>ʜᴜʙᴜɴɢɪ ᴀᴅᴍɪɴ</b>
 <a href="https://t.me/${adminUsername}">╰📨 @${adminUsername}</a>
@@ -4027,8 +4022,8 @@ bot.action('menu_vpn', async (ctx) => {
     if (!userId || !chatId) return;
 
     const text = `
-<blockquote><b>💠 MENU TRIAL AKUN</b>
-<code>Uji coba akun VPN sebelum membeli</code></blockquote>
+<blockquote><b>🌐 MENU VPN PREMIUM</b>
+<code>Pilih kategori layanan VPN yang ingin kamu akses</code></blockquote>
 
 ┏━━━━━━━━━━━━━━━━━━━━━┓
 ┃ ✦ <b>TRIAL ACCESS</b>
@@ -9050,8 +9045,8 @@ bot.action(/^(create|renew|trial)_username_(vmess|vless|trojan|shadowsocks|ssh)_
 
         const isUnlimited = result != null;
 
-        if (!isUnlimited && trialCount >= 10) {
-          return ctx.reply('⚠️ *Kamu sudah trial hari ini sayank,, Gass Order Di @Aryablitarpro77_bot* 😍', { parse_mode: 'Markdown' });
+        if (!isUnlimited && trialCount >= 1) {
+          return ctx.reply('⚠️ *Kamu sudah trial hari ini sayank,, Gass Order* 😍', { parse_mode: 'Markdown' });
         }
 
         await handleTrial(ctx, type, serverId);
@@ -9791,7 +9786,7 @@ if (state && state.step === 'atur_bonus_input') {
 
                 if (saldo < totalHarga) {
                     delete userState[userId];
-                    return ctx.reply(`❌ *Saldo Anda tidak mencukupi untuk melakukan transaksi ini. Saldo Anda: Rp0, Harga: Rp0*`, { parse_mode: 'Markdown' });
+                    return ctx.reply(`❌ *Saldo Anda tidak mencukupi untuk melakukan transaksi ini. Saldo Anda: Rp${saldo.toLocaleString('id-ID')}, Harga: Rp${totalHarga.toLocaleString('id-ID')}*`, { parse_mode: 'Markdown' });
                 }
 
 let result;
