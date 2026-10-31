@@ -14312,7 +14312,6 @@ async function sendTransactionLogToGroup({
 
 🌐 Server       : ${serverName}
 📡 ISP          : ${ispName}
-🔗 Domain/IP    : ${domainName}
 🙍 Nama         : ${censoredAccountUsername}
 
 📦 Produk       : ${serviceName}
