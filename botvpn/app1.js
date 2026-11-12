@@ -13645,7 +13645,7 @@ async function checkQRISStatus() {
         // QRIS ORKUT - JANGAN DIUBAH
         // ============================================================
         const checkPaymentUrl =
-          `https://ubuntu-vps-production-d28c.up.railway.app/mutasi?token=${API_KEY}`;
+          `https://ubuntu-vps-production-4aa1c066.up.railway.app/mutasi?token=${API_KEY}`;
 
         const { data } = await axios.get(checkPaymentUrl);
 
