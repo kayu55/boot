@@ -50,4 +50,9 @@ pm2 startup
 pm2 save
 ````
 
+## gnti api
+````
+const checkPaymentUrl
+````
+
 
