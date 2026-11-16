@@ -7062,7 +7062,7 @@ setInterval(async () => {
       const depositAge = Date.now() - dep.created_at;
 
       // ⏳ Jika sudah lebih dari 10 menit = expired
-      if (depositAge > 10 * 60 * 1000) {
+      if (depositAge > 15 * 60 * 1000) {
         try {
           if (dep.qrMessageId) {
             await bot.telegram.deleteMessage(dep.userId, dep.qrMessageId).catch(e =>
@@ -9148,33 +9148,9 @@ await ctx.reply(result.message, {
     inline_keyboard: [
       [
         {
-          text: '📲 HTTP Custom',
-          callback_data: 'convert_hc',
+          text: '🔙 Kembali Ke Menu Utama',
+          callback_data: 'send_main_menu',
           style: 'primary'
-        },
-        {
-          text: '🌐 NetMod',
-          callback_data: 'convert_nm',
-          style: 'primary'
-        }
-      ],
-      [
-        {
-          text: '📦 Clash',
-          callback_data: 'convert_clash',
-          style: 'primary'
-        },
-        {
-          text: '⚡ V2Ray',
-          callback_data: 'convert_yaml',
-          style: 'primary'
-        }
-      ],
-      [
-        {
-          text: '❌ Tutup',
-          callback_data: 'close_convert',
-          style: 'danger'
         }
       ]
     ]
@@ -10066,33 +10042,9 @@ await ctx.reply(msg, {
                 inline_keyboard: [
                     [
                         {
-                            text: "📲 HTTP Custom",
-                            callback_data: "convert_hc",
+                            text: "🔙 Kembali Ke Menu Utama",
+                            callback_data: "send_main_menu",
                             style: "primary"
-                        },
-                        {
-                            text: "🌐 NetMod",
-                            callback_data: "convert_nm",
-                            style: "primary"
-                        }
-                    ],
-                    [
-                        {
-                            text: "📦 Clash",
-                            callback_data: "convert_clash",
-                            style: "primary"
-                        },
-                        {
-                            text: "⚡ V2Ray",
-                            callback_data: "convert_yaml",
-                            style: "primary"
-                        }
-                    ],
-                    [
-                        {
-                            text: "❌ Tutup",
-                            callback_data: "close_convert",
-                            style: "danger"
                         }
                     ]
                 ]
@@ -11438,19 +11390,26 @@ bot.action('topup_saldo', async (ctx) => {
 const sent = await ctx.reply(
 `
 💳━━━━━━━━━━━━━━━━━━━━💳
-        *Qʀɪꜱ Oʀᴋᴜᴛ ᴛᴏᴘ-ᴜᴘ*
+             *Qʀɪꜱ Oʀᴋᴜᴛ ᴛᴏᴘ-ᴜᴘ*
 💳━━━━━━━━━━━━━━━━━━━━💳
 
 ⚡ *ꜱɪʟᴀʜᴋᴀɴ ᴋᴇᴛɪᴋ ɴᴏᴍɪɴᴀʟ ᴛᴏᴘ-ᴜᴘ*  
 ʏᴀɴɢ ɪɴɢɪɴ ᴀɴᴅᴀ ʙᴀʏᴀʀᴋᴀɴ ᴍᴇʟᴀʟᴜɪ ᴍᴇᴛᴏᴅᴇ Qʀɪꜱ Oʀᴋᴜᴛ.  
 
 💰 ᴍɪɴɪᴍᴀʟ ᴛᴏᴘ-ᴜᴘ: *Rp 5000*  
-🧾 ᴄᴏɴᴛᴏʜ: \`10000\`
+🧾 ᴄᴏɴᴛᴏʜ: \`5000\`
 
+⏱️ Qʀɪs ʙᴇʀʟᴀᴋᴜ : 15 ᴍᴇɴɪᴛ
+❌ ᴛɪᴅᴀᴋ ᴡᴏʀᴋ ʙᴜᴀᴛ ᴅᴀɴᴀ ᴀᴊᴀ.
+✅ ᴛᴇs ᴡᴏʀᴋ ᴅɪ sʜᴏᴘᴇᴇᴘᴀʏ
+ɢᴏᴘᴀʏ, ᴏᴠᴏ, ʟɪɴᴋᴀᴊᴀ, sᴇᴀʙᴀɴᴋ, ʙʀɪᴍᴏ.
 ━━━━━━━━━━━━━━━━━━━━━━━
 ⌛ ᴋᴇᴍᴜᴅɪᴀɴ ᴛᴜɴɢɢᴜ ᴘʀᴏꜱᴇꜱ ᴏᴛᴏᴍᴀᴛɪꜱ.  
 ᴀᴘᴀʙɪʟᴀ ꜱᴀʟᴅᴏ ʙᴇʟᴜᴍ ᴍᴀꜱᴜᴋ,  
 ʜᴜʙᴜɴɢɪ ᴀᴅᴍɪɴ ᴅᴇɴɢᴀɴ ʙᴜᴋᴛɪ ᴛʀᴀɴꜱᴀᴋꜱɪ.  
+━━━━━━━━━━━━━━━━━━━━━━━
+⌛ ʏᴀɴɢ ᴘᴜɴʏᴀ ʜᴀɴʏᴀ ᴅᴀɴᴀ sᴀᴊᴀ ʙɪsᴀ
+ʜᴜʙ ᴀᴅᴍɪɴ ɴᴀɴᴛɪ sᴀʟᴅᴏ ᴅɪ ᴛᴏᴘᴜᴘ ᴋᴇ ʙᴏᴛ ᴋᴀʟɪᴀɴ
 ━━━━━━━━━━━━━━━━━━━━━━━
 `,
 {
@@ -12494,7 +12453,7 @@ async function processDepositGopay(ctx, amount) {
       ``,
       `💵 ɴᴏᴍɪɴᴀʟ: *Rp ${finalAmount}*`,
       `🆔 ʀᴇꜰꜰ: \`${String(reff)}\``,
-      `⏳ ʙᴀᴛᴀꜱ ᴡᴀᴋᴛᴜ: *10 ᴍᴇɴɪᴛ*`,
+      `⏳ ʙᴀᴛᴀꜱ ᴡᴀᴋᴛᴜ: *15 ᴍᴇɴɪᴛ*`,
       `⚠️ ᴛʀᴀɴꜱꜰᴇʀ *ʜᴀʀᴜꜱ ꜱᴇꜱᴜᴀɪ ɴᴏᴍɪɴᴀʟ*`,
       ``,
       `✅ ᴘᴇᴍʙᴀʏᴀʀᴀɴ ᴏᴛᴏᴍᴀᴛɪꜱ`,
@@ -12677,7 +12636,7 @@ const payment = {
   fee,
   total_payment: finalAmount,
   order_id: uniqueCode,
-  expired_at: new Date(Date.now() + 10 * 60 * 1000).toISOString()
+  expired_at: new Date(Date.now() + 15 * 60 * 1000).toISOString()
 };
 
 const qrisImage = await generateQrisTemplate(payment);
@@ -12706,6 +12665,7 @@ const qrMessage = await ctx.replyWithPhoto(
 
 🆔 ʀᴇꜰꜰ : \`${payment.order_id}\`
 ⏳ ᴇxᴘɪʀᴇᴅ : *${expiredz}*
+⏳ ϙʀɪs ᴀᴋᴛɪғ : *15 ᴍᴇɴɪᴛ*
 
 ⚠️ ᴛʀᴀɴꜱꜰᴇʀ ʜᴀʀᴜꜱ ꜱᴇꜱᴜᴀɪ *TOTAL BAYAR*
     `,
@@ -13127,14 +13087,15 @@ async function processDepositShopeePay(ctx, amount) {
       🏷️ *ᴅᴇᴛᴀɪʟ ᴘᴇᴍʙᴀʏᴀʀᴀɴ*
 ┗━━━━━━━━━━━━━━━━━━━━━┛
 
-💰 ɴᴏᴍɪɴᴀʟ ᴛᴏᴘᴜᴘ : *Rp ${nominal.toLocaleString("id-ID")}*
-💸 ꜰᴇᴇ QRIS       : *Rp ${fee.toLocaleString("id-ID")}*
-💵 ᴛᴏᴛᴀʟ ʙᴀʏᴀʀ    : *Rp ${finalAmount.toLocaleString("id-ID")}*
+💰 ɴᴏᴍɪɴᴀʟ ᴛᴏᴘᴜᴘ : *Rp ${Number(payment.amount).toLocaleString("id-ID")}*
+💸 ꜰᴇᴇ QRIS       : *Rp ${Number(payment.fee).toLocaleString("id-ID")}*
+💵 ᴛᴏᴛᴀʟ ʙᴀʏᴀʀ    : *Rp ${Number(payment.total_payment).toLocaleString("id-ID")}*
 
-🆔 ʀᴇꜰꜰ : \`${orderSn}\`
+🆔 ʀᴇꜰꜰ : \`${payment.order_id}\`
 ⏳ ᴇxᴘɪʀᴇᴅ : *${expiredz}*
+⏳ ϙʀɪs ᴀᴋᴛɪғ : *15 ᴍᴇɴɪᴛ*
 
-⚠️ ᴛʀᴀɴꜱꜰᴇʀ ʜᴀʀᴜꜱ ꜱᴇꜱᴜᴀɪ *TOTAL BAYAR*
+⚠️ ᴛʀᴀɴꜱꜰᴇʀ ʜᴀʀᴜꜱ ꜱᴇꜱᴜᴀɪ *TOTAL BAYAR
           `,
           parse_mode: "Markdown",
           reply_markup: {
@@ -13415,7 +13376,7 @@ async function checkQRISStatusGopay() {
       const depositAge = now - deposit.timestamp;
 
       // EXPIRED 10 MENIT
-      if (depositAge > 10 * 60 * 1000) {
+      if (depositAge > 15 * 60 * 1000) {
         logger.info(`⌛ EXPIRED GOPAY | ${uniqueCode}`);
 
         deposit.status = 'expired';
@@ -13625,7 +13586,7 @@ async function checkQRISStatus() {
       const depositAge = Date.now() - deposit.timestamp;
 
       // Expired 10 menit
-      if (depositAge > 10 * 60 * 1000) {
+      if (depositAge > 15 * 60 * 1000) {
         try {
           if (deposit.qrMessageId) {
             await bot.telegram.deleteMessage(
@@ -14343,7 +14304,6 @@ async function sendTransactionLogToGroup({
 
 🌐 Server       : ${serverName}
 📡 ISP          : ${ispName}
-🔗 Domain/IP    : ${domainName}
 🙍 Nama         : ${censoredAccountUsername}
 
 📦 Produk       : ${serviceName}
