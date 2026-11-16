@@ -11391,7 +11391,7 @@ const sent = await ctx.reply(
 💰 ᴍɪɴɪᴍᴀʟ ᴛᴏᴘ-ᴜᴘ: *Rp 5000*  
 🧾 ᴄᴏɴᴛᴏʜ: \`5000\`
 
-⏱️ Qʀɪs ʙᴇʀʟᴀᴋᴜ : 10 ᴍᴇɴɪᴛ
+⏱️ Qʀɪs ʙᴇʀʟᴀᴋᴜ : 15 ᴍᴇɴɪᴛ
 ❌ ᴛɪᴅᴀᴋ ᴡᴏʀᴋ ʙᴜᴀᴛ ᴅᴀɴᴀ ᴀᴊᴀ.
 ✅ ᴛᴇs ᴡᴏʀᴋ ᴅɪ sʜᴏᴘᴇᴇᴘᴀʏ
 ɢᴏᴘᴀʏ, ᴏᴠᴏ, ʟɪɴᴋᴀᴊᴀ, sᴇᴀʙᴀɴᴋ, ʙʀɪᴍᴏ.
@@ -12628,7 +12628,7 @@ const payment = {
   fee,
   total_payment: finalAmount,
   order_id: uniqueCode,
-  expired_at: new Date(Date.now() + 10 * 60 * 1000).toISOString()
+  expired_at: new Date(Date.now() + 15 * 60 * 1000).toISOString()
 };
 
 const qrisImage = await generateQrisTemplate(payment);
@@ -12651,12 +12651,13 @@ const qrMessage = await ctx.replyWithPhoto(
       🏷️ *ᴅᴇᴛᴀɪʟ ᴘᴇᴍʙᴀʏᴀʀᴀɴ*
 ┗━━━━━━━━━━━━━━━━━━━━━┛
 
-💰 ɴᴏᴍɪɴᴀʟ ᴛᴏᴘᴜᴘ : *Rp ${Number(payment.amount).toLocaleString("id-ID")}*
-💸 ꜰᴇᴇ QRIS       : *Rp ${Number(payment.fee).toLocaleString("id-ID")}*
-💵 ᴛᴏᴛᴀʟ ʙᴀʏᴀʀ    : *Rp ${Number(payment.total_payment).toLocaleString("id-ID")}*
+💰 ɴᴏᴍɪɴᴀʟ ᴛᴏᴘᴜᴘ : *Rp ${nominal.toLocaleString("id-ID")}*
+💸 ꜰᴇᴇ QRIS       : *Rp ${fee.toLocaleString("id-ID")}*
+💵 ᴛᴏᴛᴀʟ ʙᴀʏᴀʀ    : *Rp ${finalAmount.toLocaleString("id-ID")}*
 
-🆔 ʀᴇꜰꜰ : \`${payment.order_id}\`
+🆔 ʀᴇꜰꜰ : \`${orderSn}\`
 ⏳ ᴇxᴘɪʀᴇᴅ : *${expiredz}*
+⏳ ϙʀɪs ᴀᴋᴛɪғ : *15 ᴍᴇɴɪᴛ*
 
 ⚠️ ᴛʀᴀɴꜱꜰᴇʀ ʜᴀʀᴜꜱ ꜱᴇꜱᴜᴀɪ *TOTAL BAYAR*
     `,
