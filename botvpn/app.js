@@ -3970,14 +3970,6 @@ finalKeyboard.push([
 
 finalKeyboard.push([
   {
-    text: '📡 Ayo Cek Kuota XL/AXIS',
-    callback_data: 'menu_cek_kuota',
-    style: 'primary'
-  }
-]);
-
-finalKeyboard.push([
-  {
     text: '💰 TopUp Saldo',
     callback_data: 'menu_topup',
     style: 'success'
