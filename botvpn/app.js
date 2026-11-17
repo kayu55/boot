@@ -15609,38 +15609,84 @@ process.on('unhandledRejection', (reason, p) => {
     console.error(reason && (reason.stack || reason));
   }
 });
-// backup otomatis sellvpn.db
+// =========================================================
+// AUTO BACKUP DATABASE
+// =========================================================
+
 function startAutoBackup() {
 
-    setInterval(async () => {
+  let lastBackupDate = '';
 
-        const now = new Date();
+  setInterval(
+    async () => {
 
-        if (
-            now.getHours() === 0 &&
-            now.getMinutes() === 0
-        ) {
+      const now = new Date();
 
-            try {
+      const dateKey =
+        `${now.getFullYear()}-` +
+        `${String(
+          now.getMonth() + 1
+        ).padStart(2, '0')}-` +
+        `${String(
+          now.getDate()
+        ).padStart(2, '0')}`;
 
-                const backup = await createDatabaseBackup();
+      // Hanya backup sekali setiap hari
+      if (
+        now.getHours() !== 0 ||
+        now.getMinutes() !== 0
+      ) {
+        return;
+      }
 
-                await sendBackupToAdmin(
-                    backup.path,
-                    backup.name
-                );
+      if (
+        lastBackupDate === dateKey
+      ) {
+        return;
+      }
 
-            } catch (err) {
+      lastBackupDate = dateKey;
 
-                logger.error(err);
+      try {
 
-            }
+        logger.info(
+          '🗄️ Membuat backup database otomatis...'
+        );
 
-        }
+        const backup =
+          await createDatabaseBackup();
 
-    }, 60000);
+        await sendBackupToAdmin(
+          backup.path,
+          backup.name
+        );
+
+        logger.info(
+          `✅ Backup otomatis berhasil: ${backup.name}`
+        );
+
+      } catch (err) {
+
+        logger.error(
+          `❌ Backup otomatis gagal: ${
+            err?.stack ||
+            err?.message ||
+            err
+          }`
+        );
+
+      }
+
+    },
+    60 * 1000
+  );
 
 }
+
+
+// =========================================================
+// START AUTO BACKUP
+// =========================================================
 
 startAutoBackup();
 
